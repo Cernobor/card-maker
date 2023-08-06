@@ -8,8 +8,7 @@ packages = [{include = "card_maker_api"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.101.0"
-uvicorn = "^0.23.2"
+flask = "^2.3.2"
 
 
 [build-system]
