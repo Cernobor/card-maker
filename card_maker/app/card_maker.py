@@ -65,17 +65,21 @@ class Card:
         if self.title:
             raise TitleAlreadySetExeption("title already set")
 
-        text_width = self.draw.textlength(
-            text=title, font=self.fonts_bold["title"])
-        x_position = int(self.image_width - text_width) / 2
-        self.draw.text(
-            (x_position, self.y_position),
-            title,
-            fill=(0, 0, 0),
-            font=self.fonts_bold["title"],
-        )
+        characters = self.ratio * 30
+        lines = textwrap.wrap(title, characters)
+        for line in lines:
+            print(line)
+            text_width = self.draw.textlength(
+                text=line, font=self.fonts_bold["title"])
+            x_position = int(self.image_width - text_width) / 2
+            self.draw.text(
+                (x_position, self.y_position),
+                line,
+                fill=(0, 0, 0),
+                font=self.fonts_bold["title"],
+            )
 
-        self.y_position += self.blank_line_height
+            self.y_position += self.blank_line_height
 
         self.title = title.replace(" ", "_")
 
@@ -133,7 +137,7 @@ class Card:
             self.y_position += self.line_height
 
             if self.y_position > self.image_height - self.space_bottom:
-                raise CharacterLimitExceededError("text too long")
+                raise CharacterLimitExceededError(f"text too long: {self.title}")
 
             self.draw.text(
                 (x_position, self.y_position), line, fill=(0, 0, 0), font=font
@@ -197,7 +201,7 @@ def parse_path() -> Tuple[str]:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    default_path = os.path.join(RELPATH_TO_FILE, "data", "artefakty.csv")
+    default_path = os.path.join(RELPATH_TO_FILE, "data", "labyrint.csv")
 
     parser.add_argument(
         "--csv_path",
@@ -209,7 +213,7 @@ def parse_path() -> Tuple[str]:
     parser.add_argument(
         "--card_type",
         type=str,
-        default="magical-items",
+        default="maze-cards",
         help="magical-items or maze-cards (default: magical-items)",
     )
 
@@ -270,7 +274,21 @@ def create_magical_item(item: Dict[str, str]) -> None:
 
 
 def create_maze_card(item: Dict[str, str]) -> None:
-    ...
+    """format maze card
+
+    Args:
+        item (Dict[str, str]): description of maze card
+    """
+    frame_path = os.path.join(RELPATH_TO_FILE, "frames", "maze_card.png")
+    space_top = 20
+    space_bottom = 20
+    card = Card(frame_path, space_top, space_bottom)
+    card.add_text('Karta Skalního Labyrintu', 'italic', 'normal')
+    card.add_title(item["nazev"])
+    if item["fluff"]:
+        card.add_text(item["fluff"], 'italic')
+    card.add_text(item["efekt"])
+    card.save_into_file()
 
 
 def create_aspekt_card(item: Dict[str, str | int]) -> None:
