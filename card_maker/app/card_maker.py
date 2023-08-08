@@ -6,30 +6,35 @@ import textwrap
 import os
 from typing import Dict, Tuple
 
+RELPATH_TO_FILE = os.path.dirname(os.path.realpath(__file__))
+
 
 class Card:
-    def __init__(self, frame_path: str, space: int) -> None:
+    def __init__(self, frame_path: str, space_top: int = 20, space_bottom: int = 50) -> None:
         """set initial properties
 
         Args:
             frame_path (str): path to frame for the card
-            space (int): free space in pixels after the last line
+            space_top (int): free space in pixels before the first line
+            space_bottom (int): free space in pixels after the last line
         """
-        self.space = space
         self.img = Image.open(frame_path)
         self.image_width, self.image_height = self.img.size
         self.ratio = self.image_width / self.image_height
         self.draw = ImageDraw.Draw(self.img)
-        self.set_fonts()
-        self.y_position = 20
+        self._set_fonts()
+        self.y_position = space_top
         self.line_height = 30
         self.blank_line_height = 40
         self.title = ""
+        self.space_bottom = space_bottom + self.line_height
 
-    def set_fonts(self) -> None:
+    def _set_fonts(self) -> None:
         """create various font objects"""
-        montserrat_path = os.path.join("fonts", "montserrat.ttf")
-        montserrat_italic_path = os.path.join("fonts", "montserrat_italic.ttf")
+        montserrat_path = os.path.join(
+            RELPATH_TO_FILE, "fonts", "montserrat.ttf")
+        montserrat_italic_path = os.path.join(
+            "card_maker", "app", "fonts", "montserrat_italic.ttf")
 
         text_sizes = {"title": 40, "large": 30, "normal": 25, "small": 20}
         self.fonts_bold = {}
@@ -60,7 +65,8 @@ class Card:
         if self.title:
             raise TitleAlreadySetExeption("title already set")
 
-        text_width, _ = self.draw.textsize(title, font=self.fonts_bold["title"])
+        text_width = self.draw.textlength(
+            text=title, font=self.fonts_bold["title"])
         x_position = int(self.image_width - text_width) / 2
         self.draw.text(
             (x_position, self.y_position),
@@ -73,7 +79,7 @@ class Card:
 
         self.title = title.replace(" ", "_")
 
-    def choose_font(self, text: str, style: str, size: str) -> ImageFont:
+    def _choose_font(self, text: str, style: str, size: str) -> ImageFont:
         """choose italic/bold and large/normal/medium and set limits
 
         Args:
@@ -92,7 +98,8 @@ class Card:
         elif style == "italic":
             font_dict = self.fonts_italic
         else:
-            raise UnknownFontStyleExeption(f"font style {style} does not exist")
+            raise UnknownFontStyleExeption(
+                f"font style {style} does not exist")
 
         if len(text) > int(150 * self.ratio) or size == "small":
             characters = int(50 * self.ratio)
@@ -117,15 +124,15 @@ class Card:
         Raises:
             CharacterLimitExceededError: raised when text is too long
         """
-        font, characters = self.choose_font(text, style, size)
+        font, characters = self._choose_font(text, style, size)
 
         lines = textwrap.wrap(text, characters)
         for line in lines:
-            text_width, _ = self.draw.textsize(line, font=font)
+            text_width = self.draw.textlength(text=line, font=font)
             x_position = int((self.image_width - text_width) / 2)
             self.y_position += self.line_height
 
-            if self.y_position > self.image_height - self.space:
+            if self.y_position > self.image_height - self.space_bottom:
                 raise CharacterLimitExceededError("text too long")
 
             self.draw.text(
@@ -141,8 +148,7 @@ class Card:
             folder_path (str, optional): path to folder for saving the image. Defaults to 'cards'.
         """
         img_name = f"card_{self.title}.png"
-        img_path = os.path.join(folder_path, img_name)
-        print(img_path)
+        img_path = os.path.join(RELPATH_TO_FILE, folder_path, img_name)
 
         try:
             self.img.save(img_path)
@@ -191,7 +197,7 @@ def parse_path() -> Tuple[str]:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    default_path = os.path.join("data", "artefakty.csv")
+    default_path = os.path.join(RELPATH_TO_FILE, "data", "artefakty.csv")
 
     parser.add_argument(
         "--csv_path",
@@ -227,7 +233,7 @@ def process_csv(csv_path: str, card_type: str) -> None:
         raise UnknownCardTypeException(f"card type {card_type} does not exist")
 
     try:
-        csv_file = open(csv_path)
+        csv_file = open(csv_path, encoding="utf8")
         print("success")
     except OSError:
         print(f"cannot open file: {csv_path}")
@@ -245,11 +251,13 @@ def create_magical_item(item: Dict[str, str]) -> None:
     """format magical item card
 
     Args:
-        row (str): description of one magical item
+        item (Dict[str, str]): description of one magical item
     """
-    frame_path = os.path.join("frames", "frame_magical_item.png")
-    space = 100
-    card = Card(frame_path, space)
+    frame_path = os.path.join(
+        RELPATH_TO_FILE, "frames", "frame_magical_item.png")
+    space_bottom = 100
+    card = Card(frame_path, space_bottom=space_bottom)
+
     card.add_text("Magický předmět", "italic", "normal")
     card.add_title(item["Jméno"])
     if item["InSet"] == "1":
@@ -265,8 +273,34 @@ def create_maze_card(item: Dict[str, str]) -> None:
     ...
 
 
-def create_aspekt_card(aspekt: Dict[str, str | int]) -> None:
-    ...
+def create_aspekt_card(item: Dict[str, str | int]) -> None:
+    """format free aspect card
+
+    Args:
+        item (Dict[str, str]): description of free aspect
+    """
+    if item["frame"] == 'normal':
+        frame_name = 'frame_aspect.png'
+    elif item["frame"] == 'large':
+        frame_name = 'frame_aspect_bigger.png'
+    else:
+        raise UnknownCardTypeException('wrong size of the frame')
+    frame_path = os.path.join(RELPATH_TO_FILE, "frames", frame_name)
+    space_top = 100
+    space_bottom = 100
+    card = Card(frame_path, space_top, space_bottom)
+    card.add_text('Volný aspekt', 'italic', 'normal')
+    card.add_title(item["Jméno aspektu"])
+    if item["Fluff"]:
+        card.add_text(item["Fluff"], 'italic')
+    card.add_text(item["Efekt"])
+    if item["Aktivace"]:
+        card.add_text(f'Aktivace: {item["Aktivace"]}')
+    if item["Zrušení"]:
+        card.add_text(f'Zrušení: {item["Zrušení"]}')
+    if item["Efekty"]:
+        card.add_text(f'Efekty:\n{item["Efekty"]}')
+    card.save_into_file()
 
 
 if __name__ == "__main__":
