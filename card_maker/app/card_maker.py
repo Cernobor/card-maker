@@ -8,8 +8,9 @@ from typing import Dict, Tuple
 
 RELPATH_TO_FILE = os.path.dirname(os.path.realpath(__file__))
 
+
 class Card:
-    def __init__(self, frame_path: str, space_top: int=20, space_bottom: int=50) -> None:
+    def __init__(self, frame_path: str, space_top: int = 20, space_bottom: int = 50) -> None:
         """set initial properties
 
         Args:
@@ -30,8 +31,10 @@ class Card:
 
     def _set_fonts(self) -> None:
         """create various font objects"""
-        montserrat_path = os.path.join(RELPATH_TO_FILE ,"fonts", "montserrat.ttf")
-        montserrat_italic_path = os.path.join("card_maker", "app", "fonts", "montserrat_italic.ttf")
+        montserrat_path = os.path.join(
+            RELPATH_TO_FILE, "fonts", "montserrat.ttf")
+        montserrat_italic_path = os.path.join(
+            "card_maker", "app", "fonts", "montserrat_italic.ttf")
 
         text_sizes = {"title": 40, "large": 30, "normal": 25, "small": 20}
         self.fonts_bold = {}
@@ -62,7 +65,8 @@ class Card:
         if self.title:
             raise TitleAlreadySetExeption("title already set")
 
-        text_width = self.draw.textlength(text=title, font=self.fonts_bold["title"])
+        text_width = self.draw.textlength(
+            text=title, font=self.fonts_bold["title"])
         x_position = int(self.image_width - text_width) / 2
         self.draw.text(
             (x_position, self.y_position),
@@ -94,7 +98,8 @@ class Card:
         elif style == "italic":
             font_dict = self.fonts_italic
         else:
-            raise UnknownFontStyleExeption(f"font style {style} does not exist")
+            raise UnknownFontStyleExeption(
+                f"font style {style} does not exist")
 
         if len(text) > int(150 * self.ratio) or size == "small":
             characters = int(50 * self.ratio)
@@ -248,7 +253,8 @@ def create_magical_item(item: Dict[str, str]) -> None:
     Args:
         item (Dict[str, str]): description of one magical item
     """
-    frame_path = os.path.join(RELPATH_TO_FILE, "frames", "frame_magical_item.png")
+    frame_path = os.path.join(
+        RELPATH_TO_FILE, "frames", "frame_magical_item.png")
     space_bottom = 100
     card = Card(frame_path, space_bottom=space_bottom)
 
