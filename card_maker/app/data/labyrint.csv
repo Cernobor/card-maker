@@ -1,4 +1,4 @@
-nazev,efekt,default,zpusob ziskani,fluff,počet
+name,effect,default,zpusob ziskani,fluff,number
 Skřítci,"Hoď si kostkou. Pokud ti padlo 1 nebo 2, skřítky pobouřilo, že jste je vyrušili z jejich klidu a začali po vás házet kameny. První tři z vás jsou zraněni za jeden život. Pokud ti padlo 3 nebo 4, skřítci si vás nevšímají. Pokud ti padlo 5 nebo 6, skřítci mají dobrou náladu a prvním třem z vás vyléčí jeden život.",1,,Vešli jste do jeskyně osvětlené září plamene. Kolem ohniště odpočívají tři drobné postavy.,2
 Raraši,"Za každého z vás se rozhodněte, jestli bude pokousán rarachy a bude chroptět, nebo za něj odhodíte jednu kartu.",1,,"Z ničeho nic uslyšíte zlomyslný smích a ze stropu a stěn na vás vyskočí hromada zelených mužíků. Začnou vás škrábat, kousat, škrtit, pohlcuje vás zoufalství.",1
 Bludička,Ztratili jste se ve změti tunelů. Bez vyhodnocování odhoďte 5 karet.,1,,"V tunelu před vámi se objeví mihotající se světlo. Poletuje nahoru a dolů, zhasíná se a rozsvěcí. Zvědavě ho následujete dál do hlubin jeskyně.",1
