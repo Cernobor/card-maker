@@ -10,6 +10,7 @@ packages = [{include = "card_maker"}]
 python = "^3.10"
 flask = "^2.3.2"
 pillow = "^10.0.0"
+flask-wtf = "^1.1.1"
 
 
 [build-system]
