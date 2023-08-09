@@ -60,35 +60,6 @@ class Card:
             self.fonts_normal[key].get_variation_names()
             self.fonts_normal[key].set_variation_by_name("Medium")
 
-    def add_title(self, title: str) -> None:
-        """write title into card object
-
-        Args:
-            title (str): text to be writen
-
-        Raises:
-            TitleAlreadySetExeption: raised if title is already writen
-        """
-        if self.title:
-            raise TitleAlreadySetExeption("title already set")
-
-        characters = self.ratio * 30
-        lines = textwrap.wrap(title, characters)
-        for line in lines:
-            text_width = self.draw.textlength(
-                text=line, font=self.fonts_bold["title"])
-            x_position = int(self.image_width - text_width) / 2
-            self.draw.text(
-                (x_position, self.y_position),
-                line,
-                fill=(0, 0, 0),
-                font=self.fonts_bold["title"],
-            )
-
-            self.y_position += self.blank_line_height
-
-        self.title = title.replace(" ", "_")
-
     def _choose_font(self, text: str, style: str, size: str) -> ImageFont:
         """choose italic/bold and large/normal/medium and set limits
 
@@ -124,25 +95,23 @@ class Card:
             font = font_dict["normal"]
 
         return font, characters
-
-    def add_text(self, text: str, style: str = "bold", size: str = "large") -> None:
-        """write text block into the image
+    
+    def _write_wrapped_text(self, lines, font):
+        """write lines into the image
 
         Args:
-            text (str): block of text to be writen
-            style (str, optional): style of text - bold or italic. Defaults to 'bold'.
-            size (str, optional): size of font - small, normal or large. Defaults to 'large'.
+            lines (List[str]): text to be writen splited to lines
 
         Raises:
             CharacterLimitExceededError: raised when text is too long
         """
-        font, characters = self._choose_font(text, style, size)
-
-        lines = textwrap.wrap(text, characters)
         for line in lines:
             text_width = self.draw.textlength(text=line, font=font)
             x_position = int((self.image_width - text_width) / 2)
-            self.y_position += self.line_height
+            if font != self.fonts_bold['title']:
+                self.y_position += self.line_height
+            else:
+                self.y_position += self.blank_line_height
 
             if self.y_position > self.image_height - self.space_bottom:
                 raise CharacterLimitExceededError(f"text too long: {self.title}")
@@ -151,6 +120,37 @@ class Card:
                 (x_position, self.y_position), line, fill=(0, 0, 0), font=font
             )
 
+    def add_title(self, title: str) -> None:
+        """write title into card object
+
+        Args:
+            title (str): text to be writen
+
+        Raises:
+            TitleAlreadySetExeption: raised if title is already writen
+        """
+        if self.title:
+            raise TitleAlreadySetExeption("title already set")
+
+        characters = self.ratio * 30
+        lines = textwrap.wrap(title, characters)
+        self._write_wrapped_text(lines, self.fonts_bold['title'])
+
+        self.y_position += self.blank_line_height
+
+        self.title = title.replace(" ", "_")
+
+    def add_text(self, text: str, style: str = "bold", size: str = "large") -> None:
+        """write text block into the image
+
+        Args:
+            text (str): block of text to be writen
+            style (str, optional): style of text - bold or italic. Defaults to 'bold'.
+            size (str, optional): size of font - small, normal or large. Defaults to 'large'.
+        """
+        font, characters = self._choose_font(text, style, size)
+        lines = textwrap.wrap(text, characters)
+        self._write_wrapped_text(lines, font)
         self.y_position += self.blank_line_height
 
     def add_list(self, title: str, text: List[str], style: str = "bold", size: str = "large") -> None:
@@ -184,17 +184,7 @@ class Card:
             item = f'- {item}'
             font, characters = self._choose_font(item, style, size)
             lines = textwrap.wrap(item, characters)
-            for line in lines:
-                text_width = self.draw.textlength(text=line, font=font)
-                x_position = int((self.image_width - text_width) / 2)
-                self.y_position += self.line_height
-
-                if self.y_position > self.image_height - self.space_bottom:
-                    raise CharacterLimitExceededError(f"text too long: {self.title}")
-
-                self.draw.text(
-                    (x_position, self.y_position), line, fill=(0, 0, 0), font=font
-                )
+            self._write_wrapped_text(lines, font)
 
             self.y_position += int(self.blank_line_height/2)
 
