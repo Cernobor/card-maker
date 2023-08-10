@@ -294,7 +294,7 @@ def process_csv(csv_path: str, card_type: str) -> None:
     items = list(csv_reader)
 
     for item in items:
-        create_card(item)
+        create_card(**item)
 
     csv_file.close()
 
@@ -359,15 +359,15 @@ class FreeAspect(TypedDict):
     additional_effects: str|None
     frame: str
 
-def create_free_aspect(item: FreeAspect) -> None:
+def create_free_aspect(name:str, effect:str, frame:str, fluff:str|None = None, activation:str|None = None, inactivation:str|None=None,additional_effects:str|None = None ) -> None:
     """format free aspect card
 
     Args:
         item (Dict[str, str]): description of free aspect
     """
-    if item["frame"] == 'normal':
+    if frame == 'normal':
         frame_name = 'frame_aspect.png'
-    elif item["frame"] == 'large':
+    elif frame == 'large':
         frame_name = 'frame_aspect_bigger.png'
     else:
         raise UnknownCardTypeException('wrong size of the frame')
@@ -376,16 +376,16 @@ def create_free_aspect(item: FreeAspect) -> None:
     space_bottom = 100
     card = Card(frame_path, space_top, space_bottom)
     card.add_text('Volný aspekt', style='italic', size='normal')
-    card.add_title(item["name"])
-    if item["fluff"]:
-        card.add_text(item["fluff"], style='italic')
-    card.add_text(item["effect"])
-    if item["activation"]:
-        card.add_list('Aktivace', [item["activation"]], style='normal')
-    if item["inactivation"]:
-        card.add_list('Zrušení', [item["inactivation"]], style='normal')
-    if item["additional_effects"]:
-        card.add_list('Efekty', item['additional_effects'], style='normal')
+    card.add_title(name)
+    if fluff:
+        card.add_text(fluff, style='italic')
+    card.add_text(effect)
+    if activation:
+        card.add_list('Aktivace', [activation], style='normal')
+    if inactivation:
+        card.add_list('Zrušení', [inactivation], style='normal')
+    if additional_effects:
+        card.add_list('Efekty', additional_effects, style='normal')
 
     return card.save_into_file(card_type='volny_aspekt')
 
