@@ -10,7 +10,11 @@ packages = [{include = "card_maker"}]
 python = "^3.10"
 flask = "^2.3.2"
 flask-wtf = "^1.1.1"
+pillow = "9.5"
 
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "^2.0.2"
 
 [build-system]
 requires = ["poetry-core"]

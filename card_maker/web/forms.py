@@ -7,6 +7,6 @@ class AspektForm(FlaskForm):
     """
     Form for creating aspekt
     """
-    username = StringField(label="Username", validators=[DataRequired()])
+    aspect_name = StringField(label="Username", validators=[DataRequired()])
     password = PasswordField(label="Password", validators=[DataRequired()])
     submit = SubmitField(label='Login')
