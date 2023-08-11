@@ -8,11 +8,7 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '1292023cdb7b8e39f924afab' # change to environ => dockerfile
 
-@app.route("/")
-def test_base():
-    return render_template("base.html")
-
-@app.route("/aspekt", methods=["GET","POST"])
+@app.route("/", methods=["GET","POST"])
 def aspekt_create():
     form = AspektForm()
 
@@ -69,11 +65,6 @@ def aspekt_create():
 
     
     return render_template("aspekt.html", form=form)
-    
-@app.route("/preview", methods=["GET"])
-def card_preview():
-    img_source = r"/home/jakub-rutrle/code_main/card-maker/card_maker/web/static/default.png"
-    return render_template("preview.html", img_source=img_source)
 
 
 def clean_cards_directory():

@@ -9,6 +9,4 @@ COPY . /web_app
 RUN poetry export -f requirements.txt --output requirements.txt
 RUN pip3 install -r requirements.txt
 
-
-
-CMD ["gunicorn", "-w", "4", "card_maker:web:routes:app"]
+CMD ["gunicorn", "-w", "4",  "-b", "0.0.0.0:8000", "card_maker.web.routes:app"]
