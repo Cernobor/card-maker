@@ -19,8 +19,6 @@ def aspekt_create():
         inactivation = form.inactivation.data
         additional_effect = form.additional_effect.data
         aspekt = create_free_aspect(name, effect, frame, fluff, activation, inactivation, additional_effect)
-        print(aspekt)
-        print(type(aspekt))
         return send_file(aspekt, mimetype="image/png", as_attachment=True)
 
 

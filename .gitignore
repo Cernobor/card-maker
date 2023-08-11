@@ -1,5 +1,5 @@
 .venv
 __pycache__
 artefakty.csv
-cards/*
-!cards/default.png
+card_maker/app/cards/*
+!card_maker/app/ccards/default.png
