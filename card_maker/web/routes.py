@@ -28,7 +28,7 @@ def aspekt_create():
 
     if form.errors != {}:
         for err_msg in form.errors.values():
-            flash(f'Toto jste podělali: {err_msg[0]}', category='danger')
+            flash(f'Vyskytl se problém: {err_msg[0]}', category='danger')
     
 
 
