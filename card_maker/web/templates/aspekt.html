@@ -5,19 +5,19 @@ Aspekt creation
 {% endblock title %}
 
 {% block content %}
-    <h1>Tvoření aspektu</h1>
+    <h1>Tvoření kartičky aspektu</h1>
     <hr>
     <form action="{{ url_for('aspekt_create') }}" method="POST">
       {{form.hidden_tag()}}
-      {{form.name.label(class="col-form-label-lg")}}
-      {{form.name(class="form-control",placeholder="Jméno aspektu")}}
+      {{form.name.label(class="col-form-label-lg")}}*
+      {{form.name(class="form-control",placeholder="fialová kletba")}}
 
-      {{form.effect.label(class="col-form-label-lg")}}
-      {{form.effect(class="form-control",placeholder="Efekt aspektu")}}
+      {{form.effect.label(class="col-form-label-lg")}}*
+      {{form.effect(class="form-control", rows=4, placeholder="Jsi proklet fialovou kletbou, někdy se ti stane něco nepěkného... možná")}}
 
-      {{form.frame.label(class="col-form-label-lg")}}
+      {{form.frame.label(class="col-form-label-lg")}}*
+
       {% for subfield in form.frame %}
-
       <div class="form-check">
         {{subfield(class="form-check-input")}}
         {{subfield.label(class="form-check-label")}}
@@ -25,20 +25,26 @@ Aspekt creation
       {% endfor %}
 
       <hr>
-
+      <p><small>položky označené hvězdičkou * jsou povinné</small></p>
+      <br>
       {{form.fluff.label(class="col-form-label-lg")}}
-      {{form.fluff(class="form-control",placeholder="Fluff/lore k aspektu")}}
+      {{form.fluff(class="form-control", rows=4, placeholder="Tato kletba se objevuje maximálně jednou za 20 let")}}
 
       {{form.activation.label(class="col-form-label-lg")}}
-      {{form.activation(class="form-control",placeholder="aktivace aspektu")}}
+      {{form.activation(class="form-control", rows=4, placeholder="Kletba je aktivována pokaždé když si na ní vzpomeneš")}}
 
       {{form.inactivation.label(class="col-form-label-lg")}}
-      {{form.inactivation(class="form-control",placeholder="deaktivace aspektu")}}
+      {{form.inactivation(class="form-control", rows=4,placeholder="Fialové kletby se nedá zbavit.. nikdy, nijak")}}
 
       {{form.additional_effect.label(class="col-form-label-lg")}}
-      {{form.additional_effect(class="form-control",placeholder="další efekty aspektu")}}    
+
+      {% for subfield in form.additional_effect %}
+        {{subfield(class="form-control",  placeholder="efekt")}}
+        <br>
+      {% endfor %}
       <br>
 
-      {{form.submit(class="btn btn-lg btn-block btn-primary")}}
+      {{form.submit(class="btn btn-lg btn-block btn-primary" )}}
     </form>
+
 {% endblock %}
