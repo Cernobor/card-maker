@@ -1,7 +1,32 @@
 <!doctype html>
-<title>Hello from Flask</title>
-{% if name %}
-  <h1>Hello {{ name }}!</h1>
-{% else %}
-  <h1>Hello, World!</h1>
-{% endif %}
+<title>Aspekt creation</title>
+
+{% block content %}
+    <h1>Tvoření aspektu</h1>
+    <form action="{{ url_for('aspekt_create') }}" method="POST">
+      {{form.hidden_tag()}}
+      {{form.name.label(class="col-form-label-lg")}}
+      {{form.name(class="form-control",placeholder="Jméno aspektu")}}
+
+      {{form.effect.label(class="col-form-label-lg")}}
+      {{form.effect(class="form-control",placeholder="Efekt aspektu")}}
+
+      {{form.frame.label(class="col-form-label-lg")}}
+      {{form.frame(class="form-control")}}
+
+      {{form.fluff.label(class="col-form-label-lg")}}
+      {{form.fluff(class="form-control",placeholder="Fluff/lore k aspektu")}}
+
+      {{form.activation.label(class="col-form-label-lg")}}
+      {{form.activation(class="form-control",placeholder="aktivace aspektu")}}
+
+      {{form.inactivation.label(class="col-form-label-lg")}}
+      {{form.inactivation(class="form-control",placeholder="deaktivace aspektu")}}
+
+      {{form.additional_effect.label(class="col-form-label-lg")}}
+      {{form.additional_effect(class="form-control",placeholder="další efekty aspektu")}}    
+      <br>
+
+      {{form.submit(class="btn btn-lg btn-block btn-primary")}}
+    </form>
+{% endblock %}

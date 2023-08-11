@@ -370,7 +370,7 @@ def create_free_aspect(name:str, effect:str, frame:str, fluff:str|None = None, a
     elif frame == 'large':
         frame_name = 'frame_aspect_bigger.png'
     else:
-        raise UnknownCardTypeException('wrong size of the frame')
+        raise UnknownCardTypeException(f'wrong size of the frame {frame}')
     frame_path = os.path.join(RELPATH_TO_FILE, "frames", frame_name)
     space_top = 100
     space_bottom = 100

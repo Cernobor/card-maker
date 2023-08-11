@@ -1,12 +1,18 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField
 
 
 class AspektForm(FlaskForm):
     """
     Form for creating aspekt
     """
-    aspect_name = StringField(label="Username", validators=[DataRequired()])
-    password = PasswordField(label="Password", validators=[DataRequired()])
-    submit = SubmitField(label='Login')
+    name = StringField('Jméno aspektu', validators=[DataRequired()])
+    effect = TextAreaField('Efekt aspektu', validators=[DataRequired()])
+    frame = SelectField('Velikost kartičky', choices=[('normal', 'normal'), ('large', 'large')])
+    fluff = StringField('Fluff')
+    activation = StringField('Aktivace')
+    inactivation = StringField('Inactivation')
+    additional_effect = StringField('Additional Effect')
+    submit = SubmitField('Submit')
+
