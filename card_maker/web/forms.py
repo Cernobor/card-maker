@@ -14,5 +14,5 @@ class AspektForm(FlaskForm):
     activation = TextAreaField('Aktivace')
     inactivation = TextAreaField('Inactivation')
     additional_effect = FieldList(StringField(''), min_entries=4)
-    submit = SubmitField('Submit')
+    submit = SubmitField('Vytvořit & stáhnout')
 

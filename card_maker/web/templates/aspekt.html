@@ -46,5 +46,9 @@ Aspekt creation
 
       {{form.submit(class="btn btn-lg btn-block btn-primary" )}}
     </form>
+    {% if img_source %}
 
-{% endblock %}
+    <img src="{{ url_for('static', filename='created_cards/' + img_source) }}" alt="{{ url_for('static', filename='created_cards/' + img_source) }}" class = "center p-5"></img>
+    {% endif %}
+
+    {% endblock %}
