@@ -1,6 +1,12 @@
-<!doctype html>
-<title>Aspekt preview</title>
+{% extends 'base.html' %}
+
+
+
+{% block title %}
+Aspekt preview
+{% endblock title %}
+
 
 {% block content %}
-<img src="{{ url_for('static', filename='default.png') }}"  alt="Preview"></img>
+<img src="{{ url_for('static', filename='default.png') }}" alt="Preview" width="874" height="1240"></img>
 {% endblock content %}

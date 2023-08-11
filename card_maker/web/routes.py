@@ -6,6 +6,10 @@ from card_maker.web.forms import AspektForm
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '1292023cdb7b8e39f924afab' # change to environ => dockerfile
 
+@app.route("/")
+def test_base():
+    return render_template("base.html")
+
 @app.route("/aspekt", methods=["GET","POST"])
 def aspekt_create():
     form = AspektForm()
