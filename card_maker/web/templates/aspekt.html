@@ -6,6 +6,7 @@ Aspekt creation
 
 {% block content %}
     <h1>Tvoření aspektu</h1>
+    <hr>
     <form action="{{ url_for('aspekt_create') }}" method="POST">
       {{form.hidden_tag()}}
       {{form.name.label(class="col-form-label-lg")}}
@@ -15,7 +16,15 @@ Aspekt creation
       {{form.effect(class="form-control",placeholder="Efekt aspektu")}}
 
       {{form.frame.label(class="col-form-label-lg")}}
-      {{form.frame(class="form-control")}}
+      {% for subfield in form.frame %}
+
+      <div class="form-check">
+        {{subfield(class="form-check-input")}}
+        {{subfield.label(class="form-check-label")}}
+      </div>
+      {% endfor %}
+
+      <hr>
 
       {{form.fluff.label(class="col-form-label-lg")}}
       {{form.fluff(class="form-control",placeholder="Fluff/lore k aspektu")}}

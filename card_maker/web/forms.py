@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
-from wtforms import StringField, SubmitField, SelectField, TextAreaField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField, RadioField
 
 
 class AspektForm(FlaskForm):
@@ -9,7 +9,7 @@ class AspektForm(FlaskForm):
     """
     name = StringField('Jméno aspektu', validators=[DataRequired()])
     effect = TextAreaField('Efekt aspektu', validators=[DataRequired()])
-    frame = SelectField('Velikost kartičky', choices=[('normal', 'normal'), ('large', 'large')])
+    frame = RadioField('Velikost kartičky', choices=[('normal', 'normální'), ('large', 'velká')], default="normal")
     fluff = StringField('Fluff')
     activation = StringField('Aktivace')
     inactivation = StringField('Inactivation')
