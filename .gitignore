@@ -2,4 +2,4 @@
 __pycache__
 artefakty.csv
 card_maker/app/cards/*
-!card_maker/app/ccards/default.png
+!card_maker/app/cards/default.png

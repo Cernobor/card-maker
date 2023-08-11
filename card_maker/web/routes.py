@@ -30,3 +30,7 @@ def aspekt_create():
 
     return render_template("aspekt.html", form=form)
     
+@app.route("/preview", methods=["GET"])
+def card_preview():
+    img_source = r"/home/jakub-rutrle/code_main/card-maker/card_maker/web/static/default.png"
+    return render_template("preview.html", img_source=img_source)
