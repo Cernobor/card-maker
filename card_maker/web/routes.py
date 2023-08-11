@@ -18,7 +18,7 @@ def aspekt_create():
 
     clean_cards_directory()
 
-    if form.validate_on_submit() and request.form['action'] == 'Vytvořit & stáhnout':
+    if form.validate_on_submit() and request.form['action'] == 'Vytvořit a stáhnout':
         name = form.name.data
         effect = form.effect.data
         frame = form.frame.data
