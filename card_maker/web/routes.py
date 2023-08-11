@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_file, flash, url_for
+from flask import Flask, render_template, send_file, flash, url_for, after_this_request
 from time import sleep
 from card_maker.app.card_maker import create_free_aspect
 from card_maker.web.forms import AspektForm
@@ -17,7 +17,7 @@ def test_base():
 def aspekt_create():
     form = AspektForm()
 
-    
+    img_basename = "default.png"
     
     
 
@@ -33,8 +33,18 @@ def aspekt_create():
 
         aspekt_path = create_free_aspect(name, effect, frame, fluff, activation, inactivation, additional_effect)
 
-        new_path = os.path.join(os.path.dirname(__file__),"static",os.path.basename(aspekt_path))
+        new_path = os.path.join(os.path.dirname(__file__),"static","created_cards", os.path.basename(aspekt_path))
         shutil.move(aspekt_path, new_path)
+
+        img_basename = os.path.basename(aspekt_path)
+
+        @after_this_request
+        def delete_file(response):
+            try:
+                os.remove(new_path)
+            except Exception as error:
+                app.logger.error("Error removing or closing downloaded file handle", error)
+            return response
 
         return send_file(new_path, mimetype="image/png", as_attachment=True)
 
@@ -44,7 +54,7 @@ def aspekt_create():
             flash(f'Vyskytl se problém: {err_msg[0]}', category='danger', )
     
 
-    img_basename = "default.png"
+    
     return render_template("aspekt.html", form=form, img_source=img_basename)
     
 @app.route("/preview", methods=["GET"])
