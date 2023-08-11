@@ -9,7 +9,9 @@ packages = [{include = "card_maker"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 flask = "^2.3.2"
+flask-wtf = "^1.1.1"
 pillow = "9.5"
+gunicorn = "^21.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
