@@ -2,7 +2,7 @@
     
     import Card from './Card.svelte';
     //import logo from "$lib.assets/images/cb_logo_white.png";
-    let cardTypes = ["Magický předmět", "Volný aspekt", "lokace"]
+    let cardTypes = ["Magický předmět", "Volný aspekt", "Lokace"]
     let card = {
         name: 'Card Name',
         type: 'Magický předmět',
@@ -11,6 +11,8 @@
         nonRemovable: true,
         inSet: false,
         setName: "Jméno setu",
+        inAspectFamils: false,
+        aspectFamilyName: "Jméno setu",
         tags:[]
     }
     let cardComponent;
@@ -48,6 +50,16 @@
                     <input type="text" bind:value={card.setName} id="setName">
                 {/if}
                 
+            {/if}
+
+            {#if card.type == "Volný aspekt"}
+            <label for="aspectFamily">V rodině apektů:</label>                
+            <input type="checkbox" bind:checked={card.inSet} id="aspectFamily">
+            {#if card.inSet }
+                <label for="aspectFamilyName">Jméno rodiny aspektů:</label>
+                <input type="text" bind:value={card.setName} id="aspectFamilyName">
+            {/if}
+            
             {/if}
 
             <button on:click={cardComponent.saveCard}>Save</button>
