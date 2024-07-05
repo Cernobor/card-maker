@@ -14,16 +14,7 @@
 </script>
 
 <div class="body">
-    <div class="header">
-        <h1>Card <img src="/images/cb_logo_black.png"  width="50px"/> maker</h1>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">vytvoř kartu</a>
-            <a href="#">databáze karet</a>
-            <p>Uživatel XY</p>
-        </nav>
 
-    </div>
     <div class="inputs">
         <form class = "form">
             <input type="text" placeholder="Name" bind:value={curent_card.name} />
@@ -41,12 +32,3 @@
 </div>
 
 
-<style>
-
-    .header {
-        text-align: center;
-    }
-
-
-
-</style>
