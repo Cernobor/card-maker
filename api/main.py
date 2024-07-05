@@ -1,9 +1,12 @@
-import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+"""
+App for creating summer camp cards and saving them in database.
+"""
 
+import uvicorn
 from cardmaker import endpoints
 from create_db import create_db
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="cardmaker")
 app.include_router(endpoints.router, prefix="/cardmaker")

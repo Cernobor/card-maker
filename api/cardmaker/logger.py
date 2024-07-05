@@ -1,14 +1,21 @@
+"""
+Script for python logger setup.
+"""
+
 import logging
 import sys
 
-def setup_logger(name, log_file, level=logging.INFO):
-    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 
-    # logging into file
+def setup_logger(name, log_file, level=logging.INFO):
+    """
+    Setup for python logger.
+    All messages are logged into file and stdout.
+    """
+    formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
+
     file_handler = logging.FileHandler(log_file)
     file_handler.setFormatter(formatter)
 
-    # logging into stdout
     stream_handler = logging.StreamHandler(sys.stdout)
     stream_handler.setFormatter(formatter)
 

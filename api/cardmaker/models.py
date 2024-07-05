@@ -1,3 +1,7 @@
+"""
+ORM models for 'Cardmaker' database and models for fastapi endpoints.
+"""
+
 from datetime import datetime
 from typing import Optional
 
@@ -6,7 +10,8 @@ from sqlmodel import Field, Relationship, SQLModel
 
 class User(SQLModel, table=True):
     """
-    TODO docstring
+    Author of the card.
+    Each Card instance has foreign key to User
     """
 
     __tablename__ = "users"
@@ -17,7 +22,7 @@ class User(SQLModel, table=True):
 
 class CardTypeSizeRelationship(SQLModel, table=True):
     """
-    TODO docstring
+    Link model for CardType and Size.
     """
 
     __tablename__ = "cards_type_size_relationship"
@@ -30,7 +35,8 @@ class CardTypeSizeRelationship(SQLModel, table=True):
 
 class Size(SQLModel, table=True):
     """
-    TODO docstring
+    Defined sizes of particular card types.
+    width and height are defined in px.
     """
 
     __tablename__ = "sizes"
@@ -47,7 +53,8 @@ class Size(SQLModel, table=True):
 
 class CardType(SQLModel, table=True):
     """
-    TODO docstring
+    Type of card, which means for example Location or Magical item.
+    Each Card has foreign key to CardType.
     """
 
     __tablename__ = "card_types"
@@ -62,7 +69,7 @@ class CardType(SQLModel, table=True):
 
 class CardTagRelationship(SQLModel, table=True):
     """
-    TODO docstring
+    Link model for Card and Tag models.
     """
 
     __tablename__ = "cards_tags_relationship"
@@ -73,7 +80,8 @@ class CardTagRelationship(SQLModel, table=True):
 
 class Card(SQLModel, table=True):
     """
-    TODO docstring
+    Main item of the app.
+    Each Card instance has author (User) and type (CardType).
     """
 
     __tablename__ = "cards"
@@ -92,7 +100,9 @@ class Card(SQLModel, table=True):
 
 class Tag(SQLModel, table=True):
     """
-    TODO docstring
+    Tag, which can be attached to any Card instance.
+    Tag can be anything, for example year of creation
+    of something, which can help with filtering.
     """
 
     __tablename__ = "tags"

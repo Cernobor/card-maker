@@ -1,3 +1,7 @@
+"""
+API endpoints.
+"""
+
 import logging
 import os
 from datetime import datetime
@@ -15,6 +19,10 @@ from .logger import setup_logger
 
 
 class CreateCard(BaseModel):
+    """
+    Fields of request body of POST '/cardmaker/create/card'.
+    If no user ID provided, user is set to default user (Anonymous).
+    """
     name: str
     fluff: Optional[str]
     effect: Optional[str]
@@ -24,12 +32,21 @@ class CreateCard(BaseModel):
 
 
 router = APIRouter()
-engine = create_engine("mysql+mysqlconnector://root:root@db:3306/Cardmaker")
+engine = create_engine(os.getenv("DATABASE_URL"))
 logger = setup_logger("my_logger", "app.log")
 
 
 @router.get("/users")
 async def get_users():
+    """
+    Get list of all users and their ids.
+
+    Returns:
+        json response: list of all users
+
+    Raises:
+        HTTP 500: database error
+    """
     try:
         with Session(engine) as session:
             statement = select(models.User)
@@ -44,6 +61,15 @@ async def get_users():
 
 @router.get("/card-types")
 async def get_card_types():
+    """
+    Get list of all card types and their ids.
+
+    Returns:
+        json response: list of all card types
+
+    Raises:
+        HTTP 500: database error
+    """
     try:
         with Session(engine) as session:
             statement = select(models.CardType)
@@ -53,11 +79,20 @@ async def get_card_types():
             return JSONResponse(content=json_data)
     except Exception as e:
         logger.error(f"Database error: {e} in '/card-types'")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database error: {e})")
 
 
 @router.get("/tags")
 async def get_tags():
+    """
+    Get list of all tags and their ids.
+
+    Returns:
+        json response: list of all tags
+
+    Raises:
+        HTTP 500: database error
+    """
     try:
         with Session(engine) as session:
             statement = select(models.Tag)
@@ -67,7 +102,7 @@ async def get_tags():
             return JSONResponse(content=json_data, status_code=200)
     except Exception as e:
         logger.error(f"Database error: {e} in '/tags'")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
 @router.get("/cards")
@@ -76,6 +111,20 @@ async def get_cards(
     card_type: int = None,
     tags: str = None,
 ):
+    """
+    Get list of cards filtered by query parameters.
+
+    Args:
+        user (int | default: None): user ID (model User)
+        card_type (int | default: None): card type ID (model CardType)
+        tags (str | default: None): tag names splitted by ','
+
+    Returns:
+        json response: filtered list of cards
+
+    Raises:
+        HTTP 500: database error
+    """
     try:
         with Session(engine) as session:
             statement = select(models.Card)
@@ -90,11 +139,24 @@ async def get_cards(
             logger.info(f"Cards requested, response successful.")
             return JSONResponse(content=json_data, status_code=200)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
 @router.post("/create/card")
 async def create_card(card_data: CreateCard):
+    """
+    Create new card and save it into database.
+
+    Args:
+        card_data (CreateCard): json request body, field are defined in CreateCard
+
+    Returns:
+        json response: success message and ID of created card
+
+    Raises:
+        HTTP 500: database error
+        HTTP 404: invalid user ID or card type ID
+    """
     try:
         with Session(engine) as session:
             statement = (
@@ -105,16 +167,22 @@ async def create_card(card_data: CreateCard):
             user = session.exec(statement).first()
             if not user:
                 logger.warning(f"Invalid user id {card_data.user_id}.")
-                raise HTTPException(status_code=404, detail=f"User with id {card_data.user_id} does not exist!")
-            
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"User with id {card_data.user_id} does not exist!",
+                )
+
             statement = select(models.CardType).where(
                 models.CardType.id == card_data.card_type_id
             )
             card_type = session.exec(statement).first()
             if not card_type:
                 logger.warning(f"Invalid card type id {card_data.card_type_id}.")
-                raise HTTPException(status_code=404, detail=f"Card type with id {card_data.card_type_id} does not exist!")
-            
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Card type with id {card_data.card_type_id} does not exist!",
+                )
+
             card = models.Card(
                 name=card_data.name,
                 fluff=card_data.fluff,
@@ -128,7 +196,9 @@ async def create_card(card_data: CreateCard):
             except Exception as e:
                 session.rollback()
                 logger.error(f"Database error: {e}")
-                raise HTTPException(status_code=500, detail=f"An exception occurred: {e}")
+                raise HTTPException(
+                    status_code=500, detail=f"An exception occurred: {e}"
+                )
             session.refresh(card)
 
             card_data.tags.append(str(datetime.now().year))
@@ -145,27 +215,40 @@ async def create_card(card_data: CreateCard):
                     except Exception as e:
                         logger.error(f"Database error: {e}")
                         session.rollback()
-                        raise HTTPException(status_code=500, detail=f"An exception occurred: {e}")
-                
+                        raise HTTPException(
+                            status_code=500, detail=f"An exception occurred: {e}"
+                        )
+
                 logger.info(f"tag: {tag_instance}")
-                card_tag_relationship = models.CardTagRelationship(card_id=card.id, tag_id=tag_instance.id)
+                card_tag_relationship = models.CardTagRelationship(
+                    card_id=card.id, tag_id=tag_instance.id
+                )
                 session.add(card_tag_relationship)
 
             session.commit()
 
-            response = {
-                "status": "success",
-                "card_id": card.id
-            }
+            response = {"status": "success", "card_id": card.id}
             logger.info(f"New card {card.name} created!")
             return JSONResponse(content=response, status_code=200)
     except Exception as e:
         logger.error(f"Database error: {e} in '/create/card'")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
 @router.post("/create/user")
 async def create_user(username: str):
+    """
+    Create new user and save it into database.
+
+    Args:
+        username (str): name of new created user
+
+    Returns:
+        json response: success message and ID of created user
+
+    Raises:
+        HTTP 500: database error
+    """
     try:
         with Session(engine) as session:
             statement = select(models.User).where(models.User.name == username)
@@ -181,12 +264,9 @@ async def create_user(username: str):
                 logger.error(f"Database error: {e}")
                 return HTTPException(f"An exeption occured: {e}")
             session.refresh(user)
-            response = {
-                "status": "success",
-                "card_id": user.id
-            }
+            response = {"status": "success", "card_id": user.id}
             logger.info(f"New user {user.name} created!")
             return JSONResponse(content=response, status_code=200)
     except Exception as e:
         logger.error(f"Database error: {e} in '/create/user'")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
