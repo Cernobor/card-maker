@@ -16,8 +16,23 @@ engine = create_engine(os.getenv(DATABASE_URL))
 async def get_users():
     with Session(engine) as session:
         statement = select(models.User)
-        users = session.exec(statement)
-        json_data = jsonable_encoder(users)
+        json_data = jsonable_encoder(session.exec(statement))
+        return JSONResponse(content=json_data)
+
+
+@roter.get("card-types")
+async def get_tags():
+    with Session(engine) as session:
+        statement = select(models.CardType)
+        json_data = jsonable_encoder(session.exec(statement))
+        return JSONResponse(content=json_data)
+
+
+@roter.get("tags")
+async def get_tags():
+    with Session(engine) as session:
+        statement = select(models.Tag)
+        json_data = jsonable_encoder(session.exec(statement))
         return JSONResponse(content=json_data)
 
 
@@ -35,7 +50,5 @@ async def get_cards(
             statement = statement.where(models.Card.card_type_id == card_type)
         if tags:
             ...
-        cards = session.exec(statement)
-        json_data = jsonable_encoder(cards)
+        json_data = jsonable_encoder(session.exec(statement))
         return JSONResponse(content=json_data)
-
