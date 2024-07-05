@@ -1,6 +1,6 @@
 """
 Script for reinitializing of database.
-This script can be used just for debugging purposes!
+This script will be used just in development.
 """
 
 import json
