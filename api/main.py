@@ -1,3 +1,7 @@
+"""
+App for creating summer camp cards and saving them in database.
+"""
+
 import uvicorn
 from cardmaker import endpoints
 from create_db import create_db

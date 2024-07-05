@@ -1,3 +1,8 @@
+"""
+Script for reinitializing of database.
+This script can be used just for debugging purposes!
+"""
+
 import json
 import os
 
@@ -10,6 +15,12 @@ logger = setup_logger("my_logger", "app.log")
 
 
 def save_card_types(card_types: list):
+    """
+    Save card types and card sizes into database.
+
+    Args:
+        card_types (list): list of dictionaries
+    """
     with Session(engine) as session:
         for card_type in card_types:
             card_type_instance = models.CardType(name=card_type["name"])
@@ -52,6 +63,12 @@ def save_card_types(card_types: list):
 
 
 def save_users(users: list):
+    """
+    Save default users into database.
+
+    Args:
+        users (list): list of dictionaries
+    """
     with Session(engine) as session:
         for user in users:
             try:
@@ -65,6 +82,12 @@ def save_users(users: list):
 
 
 def save_tags(tags: list):
+    """
+    Save default tags into database.
+
+    Args:
+        tags (list): list of dictionaries
+    """
     with Session(engine) as session:
         for tag in tags:
             try:
@@ -78,6 +101,12 @@ def save_tags(tags: list):
 
 
 def json_to_db(json_path: str) -> list:
+    """
+    Read json data and save them into database.
+
+    Args:
+        json_path (str): path to the json file
+    """
     with open(json_path, "r") as json_file:
         data = json.load(json_file)
 
@@ -92,6 +121,10 @@ def json_to_db(json_path: str) -> list:
 
 
 def create_db():
+    """
+    Reinitialize database - drop all tables and create new tables
+    This is just for debugging purposes! It will be removed.
+    """
     SQLModel.metadata.drop_all(engine)
     logger.warning(f"Database dropped")
     SQLModel.metadata.create_all(engine)
