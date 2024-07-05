@@ -34,12 +34,7 @@
 	}
 
 	function pf_filter(text) {
-		// Actions
-		// text = text.replace(/\(A\)/gi, '<img class="activity" src="/imgs/one.webp" alt="One action">')
-		//   .replace(/\(AA\)/gi, '<img class="activity" src="/imgs/two.webp" alt="Two actions">')
-		//   .replace(/\(AAA\)/gi, '<img class="activity" src="/imgs/three.webp" alt="Three action">')
-		//   .replace(/\(R\)/gi, '<img class="activity" src="/imgs/reaction.webp" alt="Reaction">')
-		//   .replace(/\(F\)/gi, '<img class="activity" src="/imgs/free.webp" alt="Free action">');
+		// TODO: přefiltruj text a naházej symoboly/bold text tam kam patří
 		return text;
 	}
 </script>

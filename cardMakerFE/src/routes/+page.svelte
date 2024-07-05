@@ -2,33 +2,65 @@
     
     import Card from './Card.svelte';
     //import logo from "$lib.assets/images/cb_logo_white.png";
-    let curent_card = {
+    let cardTypes = ["Magický předmět", "Volný aspekt", "lokace"]
+    let card = {
         name: 'Card Name',
-        type: 'Card Type',
+        type: 'Magický předmět',
         fluff: 'Card Fluff',
-        effect: 'Card Effect',
+        effect: 'Efekt/pravidla karty',
+        nonRemovable: true,
+        inSet: false,
+        setName: "Jméno setu",
         tags:[]
     }
     let cardComponent;
 
 </script>
 
-<div class="body">
+<div class="cardmaker-body">
 
     <div class="inputs">
-        <form class = "form">
-            <input type="text" placeholder="Name" bind:value={curent_card.name} />
-            <input type="text" placeholder="Type" bind:value={curent_card.type} />
-            <textarea bind:value={curent_card.fluff} placeholder="Fluff"></textarea>
-            <textarea bind:value={curent_card.effect} placeholder="Fluff"></textarea>
+        <form class = "card-input-form">
+            <label for="name">Jméno:</label>
+            
+            <input type="text" placeholder="Name" id="name" bind:value={card.name} />
+            <label for="type">Typ:</label>
+                <select bind:value={card.type}>
+                    {#each cardTypes as type (type)}
+                        <option value={type}>{type}</option>
+                    {/each}
+                </select>
+
+            <label for="fluff">Fluff:</label>
+
+            <textarea bind:value={card.fluff} placeholder="fluff" id="fluff"/>
+            <label for="efect">Efekt/pravidla:</label>
+            <textarea bind:value={card.effect} placeholder="efekt" id=efect/>
+
+            {#if card.type == "Magický předmět"}
+                <label for="nonremovable">Neodložitelný:</label>                
+                <input type="checkbox" bind:checked={card.nonRemovable} id="nonremovable">
+
+                <label for="inSet">V setu:</label>                
+                <input type="checkbox" bind:checked={card.inSet} id="inSet">
+                {#if card.inSet }
+                    <label for="setName">Jméno setu:</label>
+                    <input type="text" bind:value={card.setName} id="setName">
+                {/if}
+                
+            {/if}
+
+            <button on:click={cardComponent.saveCard}>Save</button>
+
         </form>
         
     </div>
+
     <div class="card-view">
-        <Card bind:card={curent_card} bind:this={cardComponent}/>
+        <Card bind:card bind:this={cardComponent}/>
     </div>
 
-    <button on:click={cardComponent.saveCard}>Save</button>
+    
 </div>
 
 
