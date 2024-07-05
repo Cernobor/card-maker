@@ -1,7 +1,16 @@
 <script lang="ts">
   import DOMPurify from "isomorphic-dompurify";
-  export let card = {}
+  export let card = {
+    tags: [],
+  }
   export let name:string, type, tags = [], attributes:string, description:string;
+
+  export function saveCard(){
+        html2canvas(document.querySelector("#capture")).then(canvas => {
+            var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
+            window.location.href=image;     
+        });
+    }
 
   function pf_filter(text) {
     // Actions
@@ -83,13 +92,13 @@
 </style>
 
 
-<div class="card">
+<div class="card" id="capture">
   <section class="header">
-    <div class="name">{name}</div>
-    <div class="type">{type}</div>
+    <div class="name">{card.name}</div>
+    <div class="type">{card.type}</div>
   </section>
   <section class="tags">
-    {#each tags as tag}
+    {#each card.tags as tag}
       {#if tag.toLowerCase() == "uncommon" }
 	<div class="tag uncommon">{tag}</div>
       {:else if tag.toLowerCase() == "rare" }
@@ -103,10 +112,10 @@
   </section>
   <section class="content">
     <div class="attributes">
-      {@html pf_filter(DOMPurify.sanitize(attributes))}
+      {@html pf_filter(DOMPurify.sanitize(card.attributes))}
     </div>
     <div class="description">
-      {@html pf_filter(DOMPurify.sanitize(description))}
+      {@html pf_filter(DOMPurify.sanitize(card.description))}
     </div>
   </section>
 </div>
