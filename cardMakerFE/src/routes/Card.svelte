@@ -1,5 +1,6 @@
 <script lang="ts">
   import DOMPurify from "isomorphic-dompurify";
+  export let card = {}
   export let name:string, type, tags = [], attributes:string, description:string;
 
   function pf_filter(text) {

@@ -1,5 +1,6 @@
 <script>
     import Card from './Card.svelte';
+    //import logo from "$lib.assets/images/cb_logo_white.png";
     let card = {
         name: 'Card Name',
         type: 'Card Type',
@@ -10,7 +11,7 @@
 
 <div class="body">
     <div class="header">
-        <h1>Card maker</h1>
+        <h1>Card <img src="/images/cb_logo_black.png"  width="50px"/> maker</h1>
     </div>
     <div class="inputs">
 
