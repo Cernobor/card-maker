@@ -45,6 +45,13 @@
 <div class="{cardTypeClass} card" id="capture">
   <section class="card-header">
 		<div class="card-name">{card.name}</div>
+    <div class="card-set">
+      {#if card.type == 'Magický předmět'}
+      <div class="card-in-set">{card.inSet ? card.setName : ""}</div>
+      {:else if card.type == 'Volný aspekt'}
+      <div class="card-in-set">{card.inAspectFamily ? card.aspectFamilyName : ""}</div>
+      {/if}
+      </div>
 		<div class="card-type">{card.type}</div>
     {#if card.type == 'Magický předmět'}
     <div class="irremovable">{card.nonRemovable ? 'Neodložitelný' : ""}</div>
@@ -54,23 +61,18 @@
     {/if}
 	</section>
 
+  <div class="card-body">
+    <section class="card-content">
+      <div class="card-fluff">
+        {@html pf_filter(DOMPurify.sanitize(card.fluff))}
+      </div>
+      <div class="card-effect">
+        {@html pf_filter(DOMPurify.sanitize(card.effect))}
+      </div>
+    </section>
 
+  </div>
 
-	<section class="content">
-		<div class="card-fluff">
-			{@html pf_filter(DOMPurify.sanitize(card.fluff))}
-		</div>
-		<div class="card-effect">
-			{@html pf_filter(DOMPurify.sanitize(card.effect))}
-		</div>
-	</section>
-  <section clas="card-set">
-  {#if card.type == 'Magický předmět'}
-  <div class="card-in-set">{card.inSet ? card.setName : ""}</div>
-  {:else if card.type == 'Volný aspekt'}
-  <div class="card-in-set">{card.inAspectFamily ? card.aspectFamilyName : ""}</div>
-  {/if}
-  </section>
 </div>
 
 
@@ -85,6 +87,7 @@
 		page-break-after: auto;
 		page-break-inside: avoid;
     background-color: white;
+    
 	}
 
   .card-magical-item {
@@ -105,7 +108,7 @@
     align-items: center;
     text-align: center;
 		border-bottom: 2px solid black;
-		padding: 0 4pt;
+    gap: 2px;
 	}
 	.card-name{
 		font-family: "Inknut Antiqua", serif;
@@ -115,29 +118,28 @@
 	}
 	.card-type {
 		font-family: "Montserrat", sans-serif;
-		font-size: 10pt;
+		font-size: 8pt;
 		font-weight: 8;
 	}
+  .card-content div {
+		padding: 5px;
+    text-align: justify;  
+    text-align-last: center;  
+	}
+  .card-fluff{
+    font-style: italic;
+    font-weight: lighter;
+  }
+  .card-set{
+    text-align: center;
+    font-size: 6pt;
 
-	.content {
-		margin-top: 1pt;
-	}
-	.content div {
-		padding: 0 4pt;
-	}
+  }
 	:global(section.content p) {
 		padding-bottom: 2pt;
 		margin: 0;
 	}
-	.description {
-		border-top: 1pt solid black;
-		text-align: justify;
-	}
 	:global(img.activity) {
 		max-height: 8pt;
-	}
-	.description :global(img :not(.activity)) {
-		display: block;
-		margin: auto;
 	}
 </style>

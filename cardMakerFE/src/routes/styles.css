@@ -28,6 +28,7 @@ nav {
 .navbar {
     display: flex;
     justify-content: space-between;
+    padding: 0px 200px;
 }
 
 .card-input-form {
@@ -35,6 +36,7 @@ nav {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap:8px;
 }
 
 .cardmaker-body{

@@ -62,7 +62,7 @@
             
             {/if}
 
-            <button on:click={cardComponent.saveCard}>Save</button>
+            
 
         </form>
         
@@ -70,9 +70,24 @@
 
     <div class="card-view">
         <Card bind:card bind:this={cardComponent}/>
+
+        <button on:click={cardComponent.saveCard} style="width:80px; height:30px">Save</button>
     </div>
+    
 
     
 </div>
 
+<style>
+    textarea {
+        width: 400px;
+        height: 100px;
+    }
 
+    .card-view {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap:20px;
+    }
+</style>
