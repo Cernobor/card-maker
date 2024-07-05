@@ -15,3 +15,12 @@
 
 
 <slot/>
+
+<style>
+    
+    .header-block{  /* not working no idea why, also nothing in styles.css */
+    font-family: "Montserrat-Regular"; 
+    font-weight: bold;
+    src: local("fonts/Montserrat/Montserrat-Regular.ttf") format("truetype");
+}
+</style>
