@@ -1,0 +1,528 @@
+2024-07-05 18:19:36,091 WARNING Database dropped
+2024-07-05 18:19:36,091 WARNING Database dropped
+2024-07-05 18:20:19,801 WARNING Database dropped
+2024-07-05 18:20:19,801 WARNING Database dropped
+2024-07-05 18:20:20,216 INFO Database successfully initialized
+2024-07-05 18:20:20,216 INFO Database successfully initialized
+2024-07-05 18:20:20,231 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:20:20,231 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:20:20,241 INFO Card size Malá inserted into db.
+2024-07-05 18:20:20,241 INFO Card size Malá inserted into db.
+2024-07-05 18:20:20,252 INFO Card type size relationship inserted into db.
+2024-07-05 18:20:20,252 INFO Card type size relationship inserted into db.
+2024-07-05 18:20:20,260 INFO Card size Velká inserted into db.
+2024-07-05 18:20:20,260 INFO Card size Velká inserted into db.
+2024-07-05 18:20:20,270 INFO Card type size relationship inserted into db.
+2024-07-05 18:20:20,270 INFO Card type size relationship inserted into db.
+2024-07-05 18:20:20,278 INFO Card type Lokace inserted into db.
+2024-07-05 18:20:20,278 INFO Card type Lokace inserted into db.
+2024-07-05 18:20:20,285 INFO Card size Velká inserted into db.
+2024-07-05 18:20:20,285 INFO Card size Velká inserted into db.
+2024-07-05 18:20:20,292 INFO Card type size relationship inserted into db.
+2024-07-05 18:20:20,292 INFO Card type size relationship inserted into db.
+2024-07-05 18:20:20,298 INFO Card size Malá inserted into db.
+2024-07-05 18:20:20,298 INFO Card size Malá inserted into db.
+2024-07-05 18:20:20,306 INFO Card type size relationship inserted into db.
+2024-07-05 18:20:20,306 INFO Card type size relationship inserted into db.
+2024-07-05 18:20:20,314 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:20:20,314 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:20:20,321 INFO Card size Normální inserted into db.
+2024-07-05 18:20:20,321 INFO Card size Normální inserted into db.
+2024-07-05 18:20:20,332 INFO Card type size relationship inserted into db.
+2024-07-05 18:20:20,332 INFO Card type size relationship inserted into db.
+2024-07-05 18:20:20,341 INFO User Anonymous inserted into db.
+2024-07-05 18:20:20,341 INFO User Anonymous inserted into db.
+2024-07-05 18:20:20,348 INFO Tag 2024 inserted into db.
+2024-07-05 18:20:20,348 INFO Tag 2024 inserted into db.
+2024-07-05 18:20:34,104 ERROR Database error: 'Logger' object has no attribute 'infp' in '/users'
+2024-07-05 18:20:34,104 ERROR Database error: 'Logger' object has no attribute 'infp' in '/users'
+2024-07-05 18:22:00,234 WARNING Database dropped
+2024-07-05 18:22:00,234 WARNING Database dropped
+2024-07-05 18:22:00,541 INFO Database successfully initialized
+2024-07-05 18:22:00,541 INFO Database successfully initialized
+2024-07-05 18:22:00,555 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:22:00,555 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:22:00,566 INFO Card size Malá inserted into db.
+2024-07-05 18:22:00,566 INFO Card size Malá inserted into db.
+2024-07-05 18:22:00,576 INFO Card type size relationship inserted into db.
+2024-07-05 18:22:00,576 INFO Card type size relationship inserted into db.
+2024-07-05 18:22:00,585 INFO Card size Velká inserted into db.
+2024-07-05 18:22:00,585 INFO Card size Velká inserted into db.
+2024-07-05 18:22:00,593 INFO Card type size relationship inserted into db.
+2024-07-05 18:22:00,593 INFO Card type size relationship inserted into db.
+2024-07-05 18:22:00,601 INFO Card type Lokace inserted into db.
+2024-07-05 18:22:00,601 INFO Card type Lokace inserted into db.
+2024-07-05 18:22:00,610 INFO Card size Velká inserted into db.
+2024-07-05 18:22:00,610 INFO Card size Velká inserted into db.
+2024-07-05 18:22:00,621 INFO Card type size relationship inserted into db.
+2024-07-05 18:22:00,621 INFO Card type size relationship inserted into db.
+2024-07-05 18:22:00,628 INFO Card size Malá inserted into db.
+2024-07-05 18:22:00,628 INFO Card size Malá inserted into db.
+2024-07-05 18:22:00,636 INFO Card type size relationship inserted into db.
+2024-07-05 18:22:00,636 INFO Card type size relationship inserted into db.
+2024-07-05 18:22:00,646 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:22:00,646 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:22:00,656 INFO Card size Normální inserted into db.
+2024-07-05 18:22:00,656 INFO Card size Normální inserted into db.
+2024-07-05 18:22:00,666 INFO Card type size relationship inserted into db.
+2024-07-05 18:22:00,666 INFO Card type size relationship inserted into db.
+2024-07-05 18:22:00,674 INFO User Anonymous inserted into db.
+2024-07-05 18:22:00,674 INFO User Anonymous inserted into db.
+2024-07-05 18:22:00,682 INFO Tag 2024 inserted into db.
+2024-07-05 18:22:00,682 INFO Tag 2024 inserted into db.
+2024-07-05 18:22:10,540 INFO Users requested, response successful.
+2024-07-05 18:22:10,540 INFO Users requested, response successful.
+2024-07-05 18:22:38,958 INFO Card types requested, response successful.
+2024-07-05 18:22:38,958 INFO Card types requested, response successful.
+2024-07-05 18:22:44,776 INFO Tags requested, response successful.
+2024-07-05 18:22:44,776 INFO Tags requested, response successful.
+2024-07-05 18:24:44,653 WARNING Database dropped
+2024-07-05 18:24:44,653 WARNING Database dropped
+2024-07-05 18:24:45,011 INFO Database successfully initialized
+2024-07-05 18:24:45,011 INFO Database successfully initialized
+2024-07-05 18:24:45,030 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:24:45,030 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:24:45,042 INFO Card size Malá inserted into db.
+2024-07-05 18:24:45,042 INFO Card size Malá inserted into db.
+2024-07-05 18:24:45,054 INFO Card type size relationship inserted into db.
+2024-07-05 18:24:45,054 INFO Card type size relationship inserted into db.
+2024-07-05 18:24:45,066 INFO Card size Velká inserted into db.
+2024-07-05 18:24:45,066 INFO Card size Velká inserted into db.
+2024-07-05 18:24:45,077 INFO Card type size relationship inserted into db.
+2024-07-05 18:24:45,077 INFO Card type size relationship inserted into db.
+2024-07-05 18:24:45,089 INFO Card type Lokace inserted into db.
+2024-07-05 18:24:45,089 INFO Card type Lokace inserted into db.
+2024-07-05 18:24:45,101 INFO Card size Velká inserted into db.
+2024-07-05 18:24:45,101 INFO Card size Velká inserted into db.
+2024-07-05 18:24:45,114 INFO Card type size relationship inserted into db.
+2024-07-05 18:24:45,114 INFO Card type size relationship inserted into db.
+2024-07-05 18:24:45,124 INFO Card size Malá inserted into db.
+2024-07-05 18:24:45,124 INFO Card size Malá inserted into db.
+2024-07-05 18:24:45,137 INFO Card type size relationship inserted into db.
+2024-07-05 18:24:45,137 INFO Card type size relationship inserted into db.
+2024-07-05 18:24:45,149 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:24:45,149 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:24:45,160 INFO Card size Normální inserted into db.
+2024-07-05 18:24:45,160 INFO Card size Normální inserted into db.
+2024-07-05 18:24:45,172 INFO Card type size relationship inserted into db.
+2024-07-05 18:24:45,172 INFO Card type size relationship inserted into db.
+2024-07-05 18:24:45,182 INFO User Anonymous inserted into db.
+2024-07-05 18:24:45,182 INFO User Anonymous inserted into db.
+2024-07-05 18:24:45,194 INFO Tag 2024 inserted into db.
+2024-07-05 18:24:45,194 INFO Tag 2024 inserted into db.
+2024-07-05 18:25:30,236 INFO Cards requested, response successful.
+2024-07-05 18:25:30,236 INFO Cards requested, response successful.
+2024-07-05 18:25:51,948 ERROR Database error: 'ScalarResult' object is not subscriptable in '/create/card'
+2024-07-05 18:25:51,948 ERROR Database error: 'ScalarResult' object is not subscriptable in '/create/card'
+2024-07-05 18:28:34,078 WARNING Database dropped
+2024-07-05 18:28:34,078 WARNING Database dropped
+2024-07-05 18:28:34,378 INFO Database successfully initialized
+2024-07-05 18:28:34,378 INFO Database successfully initialized
+2024-07-05 18:28:34,394 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:28:34,394 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:28:34,405 INFO Card size Malá inserted into db.
+2024-07-05 18:28:34,405 INFO Card size Malá inserted into db.
+2024-07-05 18:28:34,414 INFO Card type size relationship inserted into db.
+2024-07-05 18:28:34,414 INFO Card type size relationship inserted into db.
+2024-07-05 18:28:34,425 INFO Card size Velká inserted into db.
+2024-07-05 18:28:34,425 INFO Card size Velká inserted into db.
+2024-07-05 18:28:34,435 INFO Card type size relationship inserted into db.
+2024-07-05 18:28:34,435 INFO Card type size relationship inserted into db.
+2024-07-05 18:28:34,443 INFO Card type Lokace inserted into db.
+2024-07-05 18:28:34,443 INFO Card type Lokace inserted into db.
+2024-07-05 18:28:34,453 INFO Card size Velká inserted into db.
+2024-07-05 18:28:34,453 INFO Card size Velká inserted into db.
+2024-07-05 18:28:34,462 INFO Card type size relationship inserted into db.
+2024-07-05 18:28:34,462 INFO Card type size relationship inserted into db.
+2024-07-05 18:28:34,469 INFO Card size Malá inserted into db.
+2024-07-05 18:28:34,469 INFO Card size Malá inserted into db.
+2024-07-05 18:28:34,477 INFO Card type size relationship inserted into db.
+2024-07-05 18:28:34,477 INFO Card type size relationship inserted into db.
+2024-07-05 18:28:34,484 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:28:34,484 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:28:34,492 INFO Card size Normální inserted into db.
+2024-07-05 18:28:34,492 INFO Card size Normální inserted into db.
+2024-07-05 18:28:34,502 INFO Card type size relationship inserted into db.
+2024-07-05 18:28:34,502 INFO Card type size relationship inserted into db.
+2024-07-05 18:28:34,508 INFO User Anonymous inserted into db.
+2024-07-05 18:28:34,508 INFO User Anonymous inserted into db.
+2024-07-05 18:28:34,515 INFO Tag 2024 inserted into db.
+2024-07-05 18:28:34,515 INFO Tag 2024 inserted into db.
+2024-07-05 18:28:43,948 INFO tags: <sqlalchemy.engine.result.ScalarResult object at 0x713e18c79ae0>
+2024-07-05 18:28:43,948 INFO tags: <sqlalchemy.engine.result.ScalarResult object at 0x713e18c79ae0>
+2024-07-05 18:28:43,949 ERROR Database error: 'ScalarResult' object has no attribute 'id' in '/create/card'
+2024-07-05 18:28:43,949 ERROR Database error: 'ScalarResult' object has no attribute 'id' in '/create/card'
+2024-07-05 18:29:47,277 WARNING Database dropped
+2024-07-05 18:29:47,277 WARNING Database dropped
+2024-07-05 18:29:47,592 INFO Database successfully initialized
+2024-07-05 18:29:47,592 INFO Database successfully initialized
+2024-07-05 18:29:47,606 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:29:47,606 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:29:47,616 INFO Card size Malá inserted into db.
+2024-07-05 18:29:47,616 INFO Card size Malá inserted into db.
+2024-07-05 18:29:47,625 INFO Card type size relationship inserted into db.
+2024-07-05 18:29:47,625 INFO Card type size relationship inserted into db.
+2024-07-05 18:29:47,636 INFO Card size Velká inserted into db.
+2024-07-05 18:29:47,636 INFO Card size Velká inserted into db.
+2024-07-05 18:29:47,646 INFO Card type size relationship inserted into db.
+2024-07-05 18:29:47,646 INFO Card type size relationship inserted into db.
+2024-07-05 18:29:47,654 INFO Card type Lokace inserted into db.
+2024-07-05 18:29:47,654 INFO Card type Lokace inserted into db.
+2024-07-05 18:29:47,661 INFO Card size Velká inserted into db.
+2024-07-05 18:29:47,661 INFO Card size Velká inserted into db.
+2024-07-05 18:29:47,667 INFO Card type size relationship inserted into db.
+2024-07-05 18:29:47,667 INFO Card type size relationship inserted into db.
+2024-07-05 18:29:47,675 INFO Card size Malá inserted into db.
+2024-07-05 18:29:47,675 INFO Card size Malá inserted into db.
+2024-07-05 18:29:47,682 INFO Card type size relationship inserted into db.
+2024-07-05 18:29:47,682 INFO Card type size relationship inserted into db.
+2024-07-05 18:29:47,691 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:29:47,691 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:29:47,698 INFO Card size Normální inserted into db.
+2024-07-05 18:29:47,698 INFO Card size Normální inserted into db.
+2024-07-05 18:29:47,704 INFO Card type size relationship inserted into db.
+2024-07-05 18:29:47,704 INFO Card type size relationship inserted into db.
+2024-07-05 18:29:47,712 INFO User Anonymous inserted into db.
+2024-07-05 18:29:47,712 INFO User Anonymous inserted into db.
+2024-07-05 18:29:47,719 INFO Tag 2024 inserted into db.
+2024-07-05 18:29:47,719 INFO Tag 2024 inserted into db.
+2024-07-05 18:30:11,070 ERROR Database error: 'NoneType' object has no attribute 'id' in '/create/card'
+2024-07-05 18:30:11,070 ERROR Database error: 'NoneType' object has no attribute 'id' in '/create/card'
+2024-07-05 18:31:22,523 WARNING Database dropped
+2024-07-05 18:31:22,523 WARNING Database dropped
+2024-07-05 18:31:22,829 INFO Database successfully initialized
+2024-07-05 18:31:22,829 INFO Database successfully initialized
+2024-07-05 18:31:22,843 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:31:22,843 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:31:22,851 INFO Card size Malá inserted into db.
+2024-07-05 18:31:22,851 INFO Card size Malá inserted into db.
+2024-07-05 18:31:22,861 INFO Card type size relationship inserted into db.
+2024-07-05 18:31:22,861 INFO Card type size relationship inserted into db.
+2024-07-05 18:31:22,871 INFO Card size Velká inserted into db.
+2024-07-05 18:31:22,871 INFO Card size Velká inserted into db.
+2024-07-05 18:31:22,879 INFO Card type size relationship inserted into db.
+2024-07-05 18:31:22,879 INFO Card type size relationship inserted into db.
+2024-07-05 18:31:22,888 INFO Card type Lokace inserted into db.
+2024-07-05 18:31:22,888 INFO Card type Lokace inserted into db.
+2024-07-05 18:31:22,905 INFO Card size Velká inserted into db.
+2024-07-05 18:31:22,905 INFO Card size Velká inserted into db.
+2024-07-05 18:31:22,915 INFO Card type size relationship inserted into db.
+2024-07-05 18:31:22,915 INFO Card type size relationship inserted into db.
+2024-07-05 18:31:22,923 INFO Card size Malá inserted into db.
+2024-07-05 18:31:22,923 INFO Card size Malá inserted into db.
+2024-07-05 18:31:22,931 INFO Card type size relationship inserted into db.
+2024-07-05 18:31:22,931 INFO Card type size relationship inserted into db.
+2024-07-05 18:31:22,938 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:31:22,938 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:31:22,946 INFO Card size Normální inserted into db.
+2024-07-05 18:31:22,946 INFO Card size Normální inserted into db.
+2024-07-05 18:31:22,956 INFO Card type size relationship inserted into db.
+2024-07-05 18:31:22,956 INFO Card type size relationship inserted into db.
+2024-07-05 18:31:22,964 INFO User Anonymous inserted into db.
+2024-07-05 18:31:22,964 INFO User Anonymous inserted into db.
+2024-07-05 18:31:22,972 INFO Tag 2024 inserted into db.
+2024-07-05 18:31:22,972 INFO Tag 2024 inserted into db.
+2024-07-05 18:31:34,583 ERROR Database error: This result object is closed. in '/create/card'
+2024-07-05 18:31:34,583 ERROR Database error: This result object is closed. in '/create/card'
+2024-07-05 18:32:51,165 WARNING Database dropped
+2024-07-05 18:32:51,165 WARNING Database dropped
+2024-07-05 18:32:51,467 INFO Database successfully initialized
+2024-07-05 18:32:51,467 INFO Database successfully initialized
+2024-07-05 18:32:51,481 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:32:51,481 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:32:51,492 INFO Card size Malá inserted into db.
+2024-07-05 18:32:51,492 INFO Card size Malá inserted into db.
+2024-07-05 18:32:51,502 INFO Card type size relationship inserted into db.
+2024-07-05 18:32:51,502 INFO Card type size relationship inserted into db.
+2024-07-05 18:32:51,510 INFO Card size Velká inserted into db.
+2024-07-05 18:32:51,510 INFO Card size Velká inserted into db.
+2024-07-05 18:32:51,518 INFO Card type size relationship inserted into db.
+2024-07-05 18:32:51,518 INFO Card type size relationship inserted into db.
+2024-07-05 18:32:51,527 INFO Card type Lokace inserted into db.
+2024-07-05 18:32:51,527 INFO Card type Lokace inserted into db.
+2024-07-05 18:32:51,535 INFO Card size Velká inserted into db.
+2024-07-05 18:32:51,535 INFO Card size Velká inserted into db.
+2024-07-05 18:32:51,545 INFO Card type size relationship inserted into db.
+2024-07-05 18:32:51,545 INFO Card type size relationship inserted into db.
+2024-07-05 18:32:51,552 INFO Card size Malá inserted into db.
+2024-07-05 18:32:51,552 INFO Card size Malá inserted into db.
+2024-07-05 18:32:51,560 INFO Card type size relationship inserted into db.
+2024-07-05 18:32:51,560 INFO Card type size relationship inserted into db.
+2024-07-05 18:32:51,566 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:32:51,566 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:32:51,575 INFO Card size Normální inserted into db.
+2024-07-05 18:32:51,575 INFO Card size Normální inserted into db.
+2024-07-05 18:32:51,583 INFO Card type size relationship inserted into db.
+2024-07-05 18:32:51,583 INFO Card type size relationship inserted into db.
+2024-07-05 18:32:51,591 INFO User Anonymous inserted into db.
+2024-07-05 18:32:51,591 INFO User Anonymous inserted into db.
+2024-07-05 18:32:51,599 INFO Tag 2024 inserted into db.
+2024-07-05 18:32:51,599 INFO Tag 2024 inserted into db.
+2024-07-05 18:33:01,033 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:33:01,033 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:33:01,035 ERROR Database error: This result object is closed. in '/create/card'
+2024-07-05 18:33:01,035 ERROR Database error: This result object is closed. in '/create/card'
+2024-07-05 18:36:57,184 WARNING Database dropped
+2024-07-05 18:36:57,184 WARNING Database dropped
+2024-07-05 18:36:57,481 INFO Database successfully initialized
+2024-07-05 18:36:57,481 INFO Database successfully initialized
+2024-07-05 18:36:57,494 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:36:57,494 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:36:57,504 INFO Card size Malá inserted into db.
+2024-07-05 18:36:57,504 INFO Card size Malá inserted into db.
+2024-07-05 18:36:57,514 INFO Card type size relationship inserted into db.
+2024-07-05 18:36:57,514 INFO Card type size relationship inserted into db.
+2024-07-05 18:36:57,524 INFO Card size Velká inserted into db.
+2024-07-05 18:36:57,524 INFO Card size Velká inserted into db.
+2024-07-05 18:36:57,532 INFO Card type size relationship inserted into db.
+2024-07-05 18:36:57,532 INFO Card type size relationship inserted into db.
+2024-07-05 18:36:57,540 INFO Card type Lokace inserted into db.
+2024-07-05 18:36:57,540 INFO Card type Lokace inserted into db.
+2024-07-05 18:36:57,549 INFO Card size Velká inserted into db.
+2024-07-05 18:36:57,549 INFO Card size Velká inserted into db.
+2024-07-05 18:36:57,558 INFO Card type size relationship inserted into db.
+2024-07-05 18:36:57,558 INFO Card type size relationship inserted into db.
+2024-07-05 18:36:57,566 INFO Card size Malá inserted into db.
+2024-07-05 18:36:57,566 INFO Card size Malá inserted into db.
+2024-07-05 18:36:57,574 INFO Card type size relationship inserted into db.
+2024-07-05 18:36:57,574 INFO Card type size relationship inserted into db.
+2024-07-05 18:36:57,581 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:36:57,581 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:36:57,590 INFO Card size Normální inserted into db.
+2024-07-05 18:36:57,590 INFO Card size Normální inserted into db.
+2024-07-05 18:36:57,598 INFO Card type size relationship inserted into db.
+2024-07-05 18:36:57,598 INFO Card type size relationship inserted into db.
+2024-07-05 18:36:57,606 INFO User Anonymous inserted into db.
+2024-07-05 18:36:57,606 INFO User Anonymous inserted into db.
+2024-07-05 18:36:57,614 INFO Tag 2024 inserted into db.
+2024-07-05 18:36:57,614 INFO Tag 2024 inserted into db.
+2024-07-05 18:37:09,457 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:37:09,457 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:37:09,459 ERROR Database error: This result object is closed. in '/create/card'
+2024-07-05 18:37:09,459 ERROR Database error: This result object is closed. in '/create/card'
+2024-07-05 18:37:24,572 INFO Tags requested, response successful.
+2024-07-05 18:37:24,572 INFO Tags requested, response successful.
+2024-07-05 18:37:33,566 INFO Cards requested, response successful.
+2024-07-05 18:37:33,566 INFO Cards requested, response successful.
+2024-07-05 18:38:47,103 WARNING Database dropped
+2024-07-05 18:38:47,103 WARNING Database dropped
+2024-07-05 18:38:47,462 INFO Database successfully initialized
+2024-07-05 18:38:47,462 INFO Database successfully initialized
+2024-07-05 18:38:47,477 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:38:47,477 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:38:47,484 INFO Card size Malá inserted into db.
+2024-07-05 18:38:47,484 INFO Card size Malá inserted into db.
+2024-07-05 18:38:47,494 INFO Card type size relationship inserted into db.
+2024-07-05 18:38:47,494 INFO Card type size relationship inserted into db.
+2024-07-05 18:38:47,502 INFO Card size Velká inserted into db.
+2024-07-05 18:38:47,502 INFO Card size Velká inserted into db.
+2024-07-05 18:38:47,511 INFO Card type size relationship inserted into db.
+2024-07-05 18:38:47,511 INFO Card type size relationship inserted into db.
+2024-07-05 18:38:47,519 INFO Card type Lokace inserted into db.
+2024-07-05 18:38:47,519 INFO Card type Lokace inserted into db.
+2024-07-05 18:38:47,528 INFO Card size Velká inserted into db.
+2024-07-05 18:38:47,528 INFO Card size Velká inserted into db.
+2024-07-05 18:38:47,535 INFO Card type size relationship inserted into db.
+2024-07-05 18:38:47,535 INFO Card type size relationship inserted into db.
+2024-07-05 18:38:47,542 INFO Card size Malá inserted into db.
+2024-07-05 18:38:47,542 INFO Card size Malá inserted into db.
+2024-07-05 18:38:47,550 INFO Card type size relationship inserted into db.
+2024-07-05 18:38:47,550 INFO Card type size relationship inserted into db.
+2024-07-05 18:38:47,557 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:38:47,557 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:38:47,565 INFO Card size Normální inserted into db.
+2024-07-05 18:38:47,565 INFO Card size Normální inserted into db.
+2024-07-05 18:38:47,573 INFO Card type size relationship inserted into db.
+2024-07-05 18:38:47,573 INFO Card type size relationship inserted into db.
+2024-07-05 18:38:47,581 INFO User Anonymous inserted into db.
+2024-07-05 18:38:47,581 INFO User Anonymous inserted into db.
+2024-07-05 18:38:47,589 INFO Tag 2024 inserted into db.
+2024-07-05 18:38:47,589 INFO Tag 2024 inserted into db.
+2024-07-05 18:39:02,530 INFO Card types requested, response successful.
+2024-07-05 18:39:02,530 INFO Card types requested, response successful.
+2024-07-05 18:39:08,032 INFO Tags requested, response successful.
+2024-07-05 18:39:08,032 INFO Tags requested, response successful.
+2024-07-05 18:39:25,279 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:39:25,279 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:39:25,280 ERROR Database error: This result object is closed. in '/create/card'
+2024-07-05 18:39:25,280 ERROR Database error: This result object is closed. in '/create/card'
+2024-07-05 18:39:33,463 INFO Cards requested, response successful.
+2024-07-05 18:39:33,463 INFO Cards requested, response successful.
+2024-07-05 18:42:43,889 WARNING Database dropped
+2024-07-05 18:42:43,889 WARNING Database dropped
+2024-07-05 18:42:44,323 INFO Database successfully initialized
+2024-07-05 18:42:44,323 INFO Database successfully initialized
+2024-07-05 18:42:44,346 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:42:44,346 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:42:44,357 INFO Card size Malá inserted into db.
+2024-07-05 18:42:44,357 INFO Card size Malá inserted into db.
+2024-07-05 18:42:44,371 INFO Card type size relationship inserted into db.
+2024-07-05 18:42:44,371 INFO Card type size relationship inserted into db.
+2024-07-05 18:42:44,388 INFO Card size Velká inserted into db.
+2024-07-05 18:42:44,388 INFO Card size Velká inserted into db.
+2024-07-05 18:42:44,397 INFO Card type size relationship inserted into db.
+2024-07-05 18:42:44,397 INFO Card type size relationship inserted into db.
+2024-07-05 18:42:44,404 INFO Card type Lokace inserted into db.
+2024-07-05 18:42:44,404 INFO Card type Lokace inserted into db.
+2024-07-05 18:42:44,411 INFO Card size Velká inserted into db.
+2024-07-05 18:42:44,411 INFO Card size Velká inserted into db.
+2024-07-05 18:42:44,418 INFO Card type size relationship inserted into db.
+2024-07-05 18:42:44,418 INFO Card type size relationship inserted into db.
+2024-07-05 18:42:44,426 INFO Card size Malá inserted into db.
+2024-07-05 18:42:44,426 INFO Card size Malá inserted into db.
+2024-07-05 18:42:44,435 INFO Card type size relationship inserted into db.
+2024-07-05 18:42:44,435 INFO Card type size relationship inserted into db.
+2024-07-05 18:42:44,442 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:42:44,442 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:42:44,449 INFO Card size Normální inserted into db.
+2024-07-05 18:42:44,449 INFO Card size Normální inserted into db.
+2024-07-05 18:42:44,459 INFO Card type size relationship inserted into db.
+2024-07-05 18:42:44,459 INFO Card type size relationship inserted into db.
+2024-07-05 18:42:44,467 INFO User Anonymous inserted into db.
+2024-07-05 18:42:44,467 INFO User Anonymous inserted into db.
+2024-07-05 18:42:44,475 INFO Tag 2024 inserted into db.
+2024-07-05 18:42:44,475 INFO Tag 2024 inserted into db.
+2024-07-05 18:42:56,348 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:42:56,348 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:42:56,351 INFO tag: id=1 name='2024' visible=False
+2024-07-05 18:42:56,351 INFO tag: id=1 name='2024' visible=False
+2024-07-05 18:42:56,359 INFO New card string created!
+2024-07-05 18:42:56,359 INFO New card string created!
+2024-07-05 18:43:16,523 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:43:16,523 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:43:16,525 INFO tag: id=1 name='2024' visible=False
+2024-07-05 18:43:16,525 INFO tag: id=1 name='2024' visible=False
+2024-07-05 18:43:16,532 INFO New card string created!
+2024-07-05 18:43:16,532 INFO New card string created!
+2024-07-05 18:43:27,026 INFO Cards requested, response successful.
+2024-07-05 18:43:27,026 INFO Cards requested, response successful.
+2024-07-05 18:43:38,550 INFO Tags requested, response successful.
+2024-07-05 18:43:38,550 INFO Tags requested, response successful.
+2024-07-05 18:46:54,206 WARNING Database dropped
+2024-07-05 18:46:54,206 WARNING Database dropped
+2024-07-05 18:46:54,548 INFO Database successfully initialized
+2024-07-05 18:46:54,548 INFO Database successfully initialized
+2024-07-05 18:46:54,563 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:46:54,563 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:46:54,573 INFO Card size Malá inserted into db.
+2024-07-05 18:46:54,573 INFO Card size Malá inserted into db.
+2024-07-05 18:46:54,582 INFO Card type size relationship inserted into db.
+2024-07-05 18:46:54,582 INFO Card type size relationship inserted into db.
+2024-07-05 18:46:54,590 INFO Card size Velká inserted into db.
+2024-07-05 18:46:54,590 INFO Card size Velká inserted into db.
+2024-07-05 18:46:54,598 INFO Card type size relationship inserted into db.
+2024-07-05 18:46:54,598 INFO Card type size relationship inserted into db.
+2024-07-05 18:46:54,607 INFO Card type Lokace inserted into db.
+2024-07-05 18:46:54,607 INFO Card type Lokace inserted into db.
+2024-07-05 18:46:54,615 INFO Card size Velká inserted into db.
+2024-07-05 18:46:54,615 INFO Card size Velká inserted into db.
+2024-07-05 18:46:54,624 INFO Card type size relationship inserted into db.
+2024-07-05 18:46:54,624 INFO Card type size relationship inserted into db.
+2024-07-05 18:46:54,633 INFO Card size Malá inserted into db.
+2024-07-05 18:46:54,633 INFO Card size Malá inserted into db.
+2024-07-05 18:46:54,642 INFO Card type size relationship inserted into db.
+2024-07-05 18:46:54,642 INFO Card type size relationship inserted into db.
+2024-07-05 18:46:54,649 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:46:54,649 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:46:54,659 INFO Card size Normální inserted into db.
+2024-07-05 18:46:54,659 INFO Card size Normální inserted into db.
+2024-07-05 18:46:54,669 INFO Card type size relationship inserted into db.
+2024-07-05 18:46:54,669 INFO Card type size relationship inserted into db.
+2024-07-05 18:46:54,679 INFO User Anonymous inserted into db.
+2024-07-05 18:46:54,679 INFO User Anonymous inserted into db.
+2024-07-05 18:46:54,689 INFO Tag 2024 inserted into db.
+2024-07-05 18:46:54,689 INFO Tag 2024 inserted into db.
+2024-07-05 18:48:14,227 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:48:14,227 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:48:14,230 INFO tag: id=1 name='2024' visible=False
+2024-07-05 18:48:14,230 INFO tag: id=1 name='2024' visible=False
+2024-07-05 18:48:14,239 INFO New card string created!
+2024-07-05 18:48:14,239 INFO New card string created!
+2024-07-05 18:48:14,239 ERROR Database error: Object of type Card is not JSON serializable in '/create/card'
+2024-07-05 18:48:14,239 ERROR Database error: Object of type Card is not JSON serializable in '/create/card'
+2024-07-05 18:51:07,610 WARNING Database dropped
+2024-07-05 18:51:07,610 WARNING Database dropped
+2024-07-05 18:51:07,925 INFO Database successfully initialized
+2024-07-05 18:51:07,925 INFO Database successfully initialized
+2024-07-05 18:51:07,939 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:51:07,939 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:51:07,948 INFO Card size Malá inserted into db.
+2024-07-05 18:51:07,948 INFO Card size Malá inserted into db.
+2024-07-05 18:51:07,958 INFO Card type size relationship inserted into db.
+2024-07-05 18:51:07,958 INFO Card type size relationship inserted into db.
+2024-07-05 18:51:07,966 INFO Card size Velká inserted into db.
+2024-07-05 18:51:07,966 INFO Card size Velká inserted into db.
+2024-07-05 18:51:07,974 INFO Card type size relationship inserted into db.
+2024-07-05 18:51:07,974 INFO Card type size relationship inserted into db.
+2024-07-05 18:51:07,982 INFO Card type Lokace inserted into db.
+2024-07-05 18:51:07,982 INFO Card type Lokace inserted into db.
+2024-07-05 18:51:07,992 INFO Card size Velká inserted into db.
+2024-07-05 18:51:07,992 INFO Card size Velká inserted into db.
+2024-07-05 18:51:08,002 INFO Card type size relationship inserted into db.
+2024-07-05 18:51:08,002 INFO Card type size relationship inserted into db.
+2024-07-05 18:51:08,009 INFO Card size Malá inserted into db.
+2024-07-05 18:51:08,009 INFO Card size Malá inserted into db.
+2024-07-05 18:51:08,017 INFO Card type size relationship inserted into db.
+2024-07-05 18:51:08,017 INFO Card type size relationship inserted into db.
+2024-07-05 18:51:08,025 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:51:08,025 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:51:08,035 INFO Card size Normální inserted into db.
+2024-07-05 18:51:08,035 INFO Card size Normální inserted into db.
+2024-07-05 18:51:08,042 INFO Card type size relationship inserted into db.
+2024-07-05 18:51:08,042 INFO Card type size relationship inserted into db.
+2024-07-05 18:51:08,050 INFO User Anonymous inserted into db.
+2024-07-05 18:51:08,050 INFO User Anonymous inserted into db.
+2024-07-05 18:51:08,058 INFO Tag 2024 inserted into db.
+2024-07-05 18:51:08,058 INFO Tag 2024 inserted into db.
+2024-07-05 18:51:21,354 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:51:21,354 INFO tag: id=2 name='string' visible=False
+2024-07-05 18:51:21,357 INFO tag: id=1 name='2024' visible=False
+2024-07-05 18:51:21,357 INFO tag: id=1 name='2024' visible=False
+2024-07-05 18:51:21,365 INFO New card string created!
+2024-07-05 18:51:21,365 INFO New card string created!
+2024-07-05 18:51:33,068 ERROR Database error: 'User with username yuyjtc already exists!' is not a valid HTTPStatus in '/create/user'
+2024-07-05 18:51:33,068 ERROR Database error: 'User with username yuyjtc already exists!' is not a valid HTTPStatus in '/create/user'
+2024-07-05 18:51:34,500 ERROR Database error: 'User with username yuyjtc already exists!' is not a valid HTTPStatus in '/create/user'
+2024-07-05 18:51:34,500 ERROR Database error: 'User with username yuyjtc already exists!' is not a valid HTTPStatus in '/create/user'
+2024-07-05 18:51:43,147 ERROR Database error: 'User with username uyufykfy already exists!' is not a valid HTTPStatus in '/create/user'
+2024-07-05 18:51:43,147 ERROR Database error: 'User with username uyufykfy already exists!' is not a valid HTTPStatus in '/create/user'
+2024-07-05 18:51:47,783 ERROR Database error: 'User with username 123 already exists!' is not a valid HTTPStatus in '/create/user'
+2024-07-05 18:51:47,783 ERROR Database error: 'User with username 123 already exists!' is not a valid HTTPStatus in '/create/user'
+2024-07-05 18:52:29,348 WARNING Database dropped
+2024-07-05 18:52:29,348 WARNING Database dropped
+2024-07-05 18:52:29,675 INFO Database successfully initialized
+2024-07-05 18:52:29,675 INFO Database successfully initialized
+2024-07-05 18:52:29,692 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:52:29,692 INFO Card type Volný aspekt inserted into db.
+2024-07-05 18:52:29,703 INFO Card size Malá inserted into db.
+2024-07-05 18:52:29,703 INFO Card size Malá inserted into db.
+2024-07-05 18:52:29,712 INFO Card type size relationship inserted into db.
+2024-07-05 18:52:29,712 INFO Card type size relationship inserted into db.
+2024-07-05 18:52:29,722 INFO Card size Velká inserted into db.
+2024-07-05 18:52:29,722 INFO Card size Velká inserted into db.
+2024-07-05 18:52:29,729 INFO Card type size relationship inserted into db.
+2024-07-05 18:52:29,729 INFO Card type size relationship inserted into db.
+2024-07-05 18:52:29,738 INFO Card type Lokace inserted into db.
+2024-07-05 18:52:29,738 INFO Card type Lokace inserted into db.
+2024-07-05 18:52:29,744 INFO Card size Velká inserted into db.
+2024-07-05 18:52:29,744 INFO Card size Velká inserted into db.
+2024-07-05 18:52:29,751 INFO Card type size relationship inserted into db.
+2024-07-05 18:52:29,751 INFO Card type size relationship inserted into db.
+2024-07-05 18:52:29,760 INFO Card size Malá inserted into db.
+2024-07-05 18:52:29,760 INFO Card size Malá inserted into db.
+2024-07-05 18:52:29,768 INFO Card type size relationship inserted into db.
+2024-07-05 18:52:29,768 INFO Card type size relationship inserted into db.
+2024-07-05 18:52:29,775 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:52:29,775 INFO Card type Magický předmět inserted into db.
+2024-07-05 18:52:29,783 INFO Card size Normální inserted into db.
+2024-07-05 18:52:29,783 INFO Card size Normální inserted into db.
+2024-07-05 18:52:29,791 INFO Card type size relationship inserted into db.
+2024-07-05 18:52:29,791 INFO Card type size relationship inserted into db.
+2024-07-05 18:52:29,799 INFO User Anonymous inserted into db.
+2024-07-05 18:52:29,799 INFO User Anonymous inserted into db.
+2024-07-05 18:52:29,809 INFO Tag 2024 inserted into db.
+2024-07-05 18:52:29,809 INFO Tag 2024 inserted into db.
+2024-07-05 18:54:27,883 INFO New user gfdhndtyn created!
+2024-07-05 18:54:27,883 INFO New user gfdhndtyn created!
+2024-07-05 18:54:35,104 INFO Users requested, response successful.
+2024-07-05 18:54:35,104 INFO Users requested, response successful.
