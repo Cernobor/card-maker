@@ -1,7 +1,10 @@
 <script>
     import './styles.css';
+    
 </script>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
 
 <div class="header-block">
@@ -18,11 +21,10 @@
 <slot/>
 
 <style>
-    
-    @font-face{  /* not working no idea why, also nothing in styles.css */
-    font-family: "Montserrat-Regular"; 
-    font-weight: bold;
-    src: local("fonts/Montserrat/Montserrat-Regular.ttf") format("truetype");
+
+
+    .cardmaker-body, .header-block{
+
 }
 
 </style>

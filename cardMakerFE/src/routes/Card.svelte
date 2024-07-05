@@ -2,7 +2,6 @@
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
 	export let card = {
-		tags: []
 	};
 
 	function slugify(str) {
@@ -16,11 +15,6 @@
 			.replace(/-+/g, '-'); // remove consecutive hyphens
 	}
 
-	export let name: string,
-		type,
-		tags = [],
-		attributes: string,
-		description: string;
 
 	export function saveCard() {
 		html2canvas(document.querySelector('#capture')).then((canvas) => {
@@ -67,16 +61,18 @@
 	</section>
 </div>
 
+
+
 <style>
 	.card {
 		width: calc(2.5in - 4mm);
 		height: calc(3.5in - 4mm);
 		font-size: 8pt;
 		border: 2mm solid black;
-		/*background-image: url("/bg.webp");*/
 		background-clip: border-box;
 		page-break-after: auto;
 		page-break-inside: avoid;
+    background-color: white;
 	}
 	.card-header {
 		display: flex;
