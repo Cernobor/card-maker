@@ -3,8 +3,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from cardmaker import endpoints
+from create_db import create_db
 
-app = FastAPI()
+app = FastAPI(title="cardmaker")
 app.include_router(endpoints.router, prefix="/cardmaker")
 
 app.add_middleware(
@@ -16,4 +17,5 @@ app.add_middleware(
 )
 
 if __name__ == "__main__":
+    create_db()
     uvicorn.run(app, host="0.0.0.0", port=8000)

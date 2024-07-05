@@ -9,7 +9,6 @@ services:
       MYSQL_DATABASE: Cardmaker
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
-      DATABASE_URL: mysql+mysqlconnector://root:root@db:3306/Cardmaker
     ports:
       - "3306:3306"
 
@@ -21,6 +20,8 @@ services:
   api:
     build: ./api
     container_name: api
+    environment:
+      DATABASE_URL: "mysql+mysqlconnector://root:root@db:3306/Cardmaker"
     depends_on:
       - db
     volumes:
@@ -31,17 +32,6 @@ services:
       - cardmaker
     expose:
       - 8000
-
-  frontend:
-    build: ./cardMakerFE
-    container_name: frontend
-    ports:
-      - "127.0.0.1:3000:3000"
-    networks:
-      - cardmaker
-    restart: always
-    expose:
-      - 3000
 
 volumes:
   db_data:
