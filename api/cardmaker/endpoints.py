@@ -23,6 +23,7 @@ class CreateCard(BaseModel):
     Fields of request body of POST '/cardmaker/create/card'.
     If no user ID provided, user is set to default user (Anonymous).
     """
+
     name: str
     fluff: Optional[str]
     effect: Optional[str]
