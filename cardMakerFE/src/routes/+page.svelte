@@ -1,5 +1,5 @@
 <script>
-    import html2canvas from 'html2canvas';
+    
     import Card from './Card.svelte';
     //import logo from "$lib.assets/images/cb_logo_white.png";
     let curent_card = {
@@ -9,13 +9,8 @@
         effect: 'Card Effect',
         tags:[]
     }
+    let cardComponent;
 
-    function saveCard(){
-        html2canvas(document.querySelector("#capture")).then(canvas => {
-            var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
-            window.location.href=image;     
-        });
-    }
 </script>
 
 <div class="body">
@@ -31,10 +26,10 @@
         
     </div>
     <div class="card-view">
-        <Card bind:card={curent_card}/>
+        <Card bind:card={curent_card} bind:this={cardComponent}/>
     </div>
 
-    <button on:click={saveCard}>Save</button>
+    <button on:click={cardComponent.saveCard}>Save</button>
 </div>
 
 

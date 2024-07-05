@@ -1,4 +1,5 @@
 <script lang="ts">
+  import html2canvas from 'html2canvas';
   import DOMPurify from "isomorphic-dompurify";
   export let card = {
     tags: [],
