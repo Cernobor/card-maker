@@ -113,6 +113,7 @@
 	.card-name{
 		font-family: "Inknut Antiqua", serif;
 		font-size: 10pt;
+    line-height: 1.7em;
 		font-weight: bold;
     text-transform: capitalize;
 	}
