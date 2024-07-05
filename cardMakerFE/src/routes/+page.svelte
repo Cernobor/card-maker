@@ -10,9 +10,9 @@
         effect: 'Efekt/pravidla karty',
         nonRemovable: true,
         inSet: false,
-        setName: "Jméno setu",
-        inAspectFamils: false,
-        aspectFamilyName: "Jméno setu",
+        setName: "Jméno setu (počet itemů v setu)",
+        inAspectFamily: false,
+        aspectFamilyName: "Jméno rodiny aspektů",
         tags:[]
     }
     let cardComponent;
@@ -54,10 +54,10 @@
 
             {#if card.type == "Volný aspekt"}
             <label for="aspectFamily">V rodině apektů:</label>                
-            <input type="checkbox" bind:checked={card.inSet} id="aspectFamily">
-            {#if card.inSet }
+            <input type="checkbox" bind:checked={card.inAspectFamily} id="aspectFamily">
+            {#if card.inAspectFamily }
                 <label for="aspectFamilyName">Jméno rodiny aspektů:</label>
-                <input type="text" bind:value={card.setName} id="aspectFamilyName">
+                <input type="text" bind:value={card.aspectFamilyName} id="aspectFamilyName">
             {/if}
             
             {/if}

@@ -19,12 +19,3 @@
 
 
 <slot/>
-
-<style>
-
-
-    .cardmaker-body, .header-block{
-
-}
-
-</style>

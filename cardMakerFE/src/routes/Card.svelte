@@ -1,6 +1,8 @@
 <script lang="ts">
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
+
+  let cardTypeClass:string
 	export let card = {
 	};
 
@@ -20,7 +22,7 @@
 		html2canvas(document.querySelector('#capture')).then((canvas) => {
 			let a = document.createElement('a');
 			a.href = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'); // here is the most important part because if you dont replace you will get a DOM 18 exception.
-			a.download = slugify(card.name) + '.png';
+			a.download = slugify(card.name) + '-card.png';
 
 			document.body.appendChild(a);
 			a.click();
@@ -31,34 +33,44 @@
 		// TODO: přefiltruj text a naházej symoboly/bold text tam kam patří
 		return text;
 	}
+  $: if (card.type == 'Magický předmět') {
+  cardTypeClass = 'card-magical-item' 
+  } else if (card.type == 'Volný aspekt') {
+    cardTypeClass = 'card-free-aspect'
+  } else if (card.type == 'Lokace') {
+    cardTypeClass = 'card-location'
+  }
 </script>
 
-<div class="card" id="capture">
-	<section class="card-header">
-		<div class="name">{card.name}</div>
-		<div class="type">{card.type}</div>
+<div class="{cardTypeClass} card" id="capture">
+  <section class="card-header">
+		<div class="card-name">{card.name}</div>
+		<div class="card-type">{card.type}</div>
+    {#if card.type == 'Magický předmět'}
+    <div class="irremovable">{card.nonRemovable ? 'Neodložitelný' : ""}</div>
+
+
+
+    {/if}
 	</section>
-	<section class="tags">
-		{#each card.tags as tag}
-			{#if tag.toLowerCase() == 'uncommon'}
-				<div class="tag uncommon">{tag}</div>
-			{:else if tag.toLowerCase() == 'rare'}
-				<div class="tag rare">{tag}</div>
-			{:else if tag.toLowerCase() == 'unique'}
-				<div class="tag unique">{tag}</div>
-			{:else}
-				<div class="tag">{tag}</div>
-			{/if}
-		{/each}
-	</section>
+
+
+
 	<section class="content">
-		<div class="attributes">
-			{@html pf_filter(DOMPurify.sanitize(card.attributes))}
+		<div class="card-fluff">
+			{@html pf_filter(DOMPurify.sanitize(card.fluff))}
 		</div>
-		<div class="description">
-			{@html pf_filter(DOMPurify.sanitize(card.description))}
+		<div class="card-effect">
+			{@html pf_filter(DOMPurify.sanitize(card.effect))}
 		</div>
 	</section>
+  <section clas="card-set">
+  {#if card.type == 'Magický předmět'}
+  <div class="card-in-set">{card.inSet ? card.setName : ""}</div>
+  {:else if card.type == 'Volný aspekt'}
+  <div class="card-in-set">{card.inAspectFamily ? card.aspectFamilyName : ""}</div>
+  {/if}
+  </section>
 </div>
 
 
@@ -74,41 +86,39 @@
 		page-break-inside: avoid;
     background-color: white;
 	}
+
+  .card-magical-item {
+		height: calc(2.5in - 4mm);
+		width: calc(3.5in - 4mm);
+  }
+  .card-free-aspect {
+		width: calc(2.5in - 4mm);
+		height: calc(3.5in - 4mm);
+  }
+  .card-location {
+		height: calc(7in);
+		width: calc(10in);
+  }
 	.card-header {
 		display: flex;
-		justify-content: space-between;
+		flex-direction: column;
+    align-items: center;
+    text-align: center;
 		border-bottom: 2px solid black;
 		padding: 0 4pt;
 	}
-	.name,
-	.type {
-		font-family: serif;
+	.card-name{
+		font-family: "Inknut Antiqua", serif;
 		font-size: 10pt;
 		font-weight: bold;
+    text-transform: capitalize;
 	}
-	.tags {
-		padding: 1pt 4pt;
-		display: flex;
-		flex-wrap: wrap;
+	.card-type {
+		font-family: "Montserrat", sans-serif;
+		font-size: 10pt;
+		font-weight: 8;
 	}
-	.tag {
-		font-family: sans-serif;
-		font-size: 6pt;
-		font-variant: all-small-caps;
-		color: white;
-		background-color: #5e0000;
-		padding: 0.5pt 1pt;
-		border: 1pt solid #d9c484;
-	}
-	.uncommon {
-		background-color: #98513d;
-	}
-	.rare {
-		background-color: #002664;
-	}
-	.unique {
-		background-color: #54166e;
-	}
+
 	.content {
 		margin-top: 1pt;
 	}
