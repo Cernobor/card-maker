@@ -24,7 +24,7 @@ class CreateCard(BaseModel):
 
 
 router = APIRouter()
-engine = create_engine("mysql+mysqlconnector://root:root@db:3306/Cardmaker")
+engine = create_engine(os.getenv("DATABASE_URL"))
 logger = setup_logger("my_logger", "app.log")
 
 
