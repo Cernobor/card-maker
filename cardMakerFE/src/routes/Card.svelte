@@ -4,6 +4,7 @@
 	export let card = {
 		tags: []
 	};
+
 	function slugify(str) {
 		return String(str)
 			.normalize('NFKD') // split accented characters into their base characters and diacritical marks
@@ -44,7 +45,7 @@
 </script>
 
 <div class="card" id="capture">
-	<section class="header">
+	<section class="card-header">
 		<div class="name">{card.name}</div>
 		<div class="type">{card.type}</div>
 	</section>
@@ -82,7 +83,7 @@
 		page-break-after: auto;
 		page-break-inside: avoid;
 	}
-	.header {
+	.card-header {
 		display: flex;
 		justify-content: space-between;
 		border-bottom: 2px solid black;

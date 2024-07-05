@@ -16,13 +16,21 @@
 <div class="body">
     <div class="header">
         <h1>Card <img src="/images/cb_logo_black.png"  width="50px"/> maker</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">vytvoř kartu</a>
+            <a href="#">databáze karet</a>
+            <p>Uživatel XY</p>
+        </nav>
+
     </div>
     <div class="inputs">
-
-        <input type="text" placeholder="Name" bind:value={curent_card.name} />
-        <input type="text" placeholder="Type" bind:value={curent_card.type} />
-        <textarea bind:value={curent_card.fluff} placeholder="Fluff"></textarea>
-        <textarea bind:value={curent_card.effect} placeholder="Fluff"></textarea>
+        <form class = "form">
+            <input type="text" placeholder="Name" bind:value={curent_card.name} />
+            <input type="text" placeholder="Type" bind:value={curent_card.type} />
+            <textarea bind:value={curent_card.fluff} placeholder="Fluff"></textarea>
+            <textarea bind:value={curent_card.effect} placeholder="Fluff"></textarea>
+        </form>
         
     </div>
     <div class="card-view">
