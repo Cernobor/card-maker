@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0.33
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root 
+      MYSQL_DATABASE: Cardmaker
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+      DATABASE_URL: mysql+mysqlconnector://root:root@db:3306/Cardmaker
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - "db_data:/var/lib/mysql"
+    networks:
+      - cardmaker
+
+  api:
+    build: ./api
+    container_name: api
+    depends_on:
+      - db
+    volumes:
+      - ./api:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - cardmaker
+    expose:
+      - 8000
+
+  frontend:
+    build: ./cardMakerFE
+    container_name: frontend
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - cardmaker
+    restart: always
+    expose:
+      - 3000
+
+volumes:
+  db_data:
+
+networks:
+  cardmaker:
