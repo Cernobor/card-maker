@@ -1,6 +1,23 @@
 
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #EEEEEE;
+}
+nav {
+    background-color: #00ADB5;
+
+
+}
+
+
 .header-block {
     text-align: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
 }
 
 
