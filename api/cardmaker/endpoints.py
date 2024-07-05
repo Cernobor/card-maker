@@ -105,16 +105,22 @@ async def create_card(card_data: CreateCard):
             user = session.exec(statement).first()
             if not user:
                 logger.warning(f"Invalid user id {card_data.user_id}.")
-                raise HTTPException(status_code=404, detail=f"User with id {card_data.user_id} does not exist!")
-            
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"User with id {card_data.user_id} does not exist!",
+                )
+
             statement = select(models.CardType).where(
                 models.CardType.id == card_data.card_type_id
             )
             card_type = session.exec(statement).first()
             if not card_type:
                 logger.warning(f"Invalid card type id {card_data.card_type_id}.")
-                raise HTTPException(status_code=404, detail=f"Card type with id {card_data.card_type_id} does not exist!")
-            
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Card type with id {card_data.card_type_id} does not exist!",
+                )
+
             card = models.Card(
                 name=card_data.name,
                 fluff=card_data.fluff,
@@ -128,7 +134,9 @@ async def create_card(card_data: CreateCard):
             except Exception as e:
                 session.rollback()
                 logger.error(f"Database error: {e}")
-                raise HTTPException(status_code=500, detail=f"An exception occurred: {e}")
+                raise HTTPException(
+                    status_code=500, detail=f"An exception occurred: {e}"
+                )
             session.refresh(card)
 
             card_data.tags.append(str(datetime.now().year))
@@ -145,18 +153,19 @@ async def create_card(card_data: CreateCard):
                     except Exception as e:
                         logger.error(f"Database error: {e}")
                         session.rollback()
-                        raise HTTPException(status_code=500, detail=f"An exception occurred: {e}")
-                
+                        raise HTTPException(
+                            status_code=500, detail=f"An exception occurred: {e}"
+                        )
+
                 logger.info(f"tag: {tag_instance}")
-                card_tag_relationship = models.CardTagRelationship(card_id=card.id, tag_id=tag_instance.id)
+                card_tag_relationship = models.CardTagRelationship(
+                    card_id=card.id, tag_id=tag_instance.id
+                )
                 session.add(card_tag_relationship)
 
             session.commit()
 
-            response = {
-                "status": "success",
-                "card_id": card.id
-            }
+            response = {"status": "success", "card_id": card.id}
             logger.info(f"New card {card.name} created!")
             return JSONResponse(content=response, status_code=200)
     except Exception as e:
@@ -181,10 +190,7 @@ async def create_user(username: str):
                 logger.error(f"Database error: {e}")
                 return HTTPException(f"An exeption occured: {e}")
             session.refresh(user)
-            response = {
-                "status": "success",
-                "card_id": user.id
-            }
+            response = {"status": "success", "card_id": user.id}
             logger.info(f"New user {user.name} created!")
             return JSONResponse(content=response, status_code=200)
     except Exception as e:
