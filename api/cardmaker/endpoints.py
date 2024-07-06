@@ -6,7 +6,7 @@ import logging
 import os
 from datetime import datetime
 from enum import Enum, auto
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import APIRouter, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -16,6 +16,11 @@ from sqlmodel import Session, create_engine, select
 
 from . import models
 from .logger import setup_logger
+
+
+class CreateTag(BaseModel):
+    name: str
+    visible: bool = False
 
 
 class CreateCard(BaseModel):
@@ -28,7 +33,7 @@ class CreateCard(BaseModel):
     effect: Optional[str]
     user_id: Optional[int]
     card_type_id: int
-    tags: list["str"]
+    tags: List[CreateTag|None]
 
 
 router = APIRouter()
@@ -107,17 +112,17 @@ async def get_tags():
 
 @router.get("/cards")
 async def get_cards(
-    user: int = None,
-    card_type: int = None,
-    tags: str = None,
+    user: int|None = None,
+    card_type: int|None = None,
+    tags: str|None = None,
 ):
     """
     Get list of cards filtered by query parameters.
 
     Args:
-        user (int | default: None): user ID (model User)
-        card_type (int | default: None): card type ID (model CardType)
-        tags (str | default: None): tag names splitted by ','
+        user (int|None, default: None): user ID (model User)
+        card_type (int|None, default: None): card type ID (model CardType)
+        tags (str|None, default: None): tag names splitted by ','
 
     Returns:
         json response: filtered list of cards
@@ -133,8 +138,15 @@ async def get_cards(
             if card_type:
                 statement = statement.where(models.Card.card_type_id == card_type)
             if tags:
-                ...
+                for tag in tags.split(","):
+                    statement = statement.where(models.Tag.name == tag)
             result = session.execute(statement)
+            if not result.first():
+                logger.warning("Invalid value of one or more query params in '/cards'")
+                raise HTTPException(
+                    status_code=404,
+                    detail="Resource does not exist!",
+                )
             json_data = jsonable_encoder(result.scalars().all())
             logger.info(f"Cards requested, response successful.")
             return JSONResponse(content=json_data, status_code=200)
@@ -142,7 +154,7 @@ async def get_cards(
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
-@router.post("/create/card")
+@router.post("/cards")
 async def create_card(card_data: CreateCard):
     """
     Create new card and save it into database.
@@ -187,8 +199,8 @@ async def create_card(card_data: CreateCard):
                 name=card_data.name,
                 fluff=card_data.fluff,
                 effect=card_data.effect,
-                user_id=card_data.user_id,
-                card_type_id=card_data.card_type_id,
+                user_id=user.id,
+                card_type_id=card_type.id,
             )
             try:
                 session.add(card)
@@ -202,22 +214,24 @@ async def create_card(card_data: CreateCard):
             session.refresh(card)
 
             card_data.tags.append(str(datetime.now().year))
-            for tag in card_data.tags:
-                statement = select(models.Tag).where(models.Tag.name == tag)
-                tag_instance = session.exec(statement).first()
-                if not tag_instance:
-                    try:
-                        new_tag = models.Tag(name=tag, visible=False)
-                        session.add(new_tag)
-                        session.commit()
-                        session.refresh(new_tag)
-                        tag_instance = new_tag
-                    except Exception as e:
-                        logger.error(f"Database error: {e}")
-                        session.rollback()
-                        raise HTTPException(
-                            status_code=500, detail=f"An exception occurred: {e}"
-                        )
+            if card_data.tags:
+                for tag in card_data.tags:
+                    logger.info(f"aaaa dopice uz {tag.name}")
+                    statement = select(models.Tag).where(models.Tag.name == tag.name)
+                    tag_instance = session.exec(statement).first()
+                    if not tag_instance:
+                        try:
+                            new_tag = models.Tag(name=tag.name, visible=tag.visible)
+                            session.add(new_tag)
+                            session.commit()
+                            session.refresh(new_tag)
+                            tag_instance = new_tag
+                        except Exception as e:
+                            logger.error(f"Database error: {e}")
+                            session.rollback()
+                            raise HTTPException(
+                                status_code=500, detail=f"An exception occurred: {e}"
+                            )
 
                 logger.info(f"tag: {tag_instance}")
                 card_tag_relationship = models.CardTagRelationship(
@@ -230,12 +244,24 @@ async def create_card(card_data: CreateCard):
             response = {"status": "success", "card_id": card.id}
             logger.info(f"New card {card.name} created!")
             return JSONResponse(content=response, status_code=200)
+    except HTTPException as e:
+        raise e
     except Exception as e:
         logger.error(f"Database error: {e} in '/create/card'")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
-@router.post("/create/user")
+@router.put("/cards/{card_id}")
+def update_card():
+    ...
+
+
+@router.delete("/cards/{card_id}")
+def delete_card():
+    ...
+
+
+@router.post("/users")
 async def create_user(username: str):
     """
     Create new user and save it into database.
