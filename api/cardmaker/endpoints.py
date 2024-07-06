@@ -2,7 +2,6 @@
 API endpoints.
 """
 
-import logging
 from datetime import datetime
 from typing import Callable, List, Optional
 
@@ -13,6 +12,7 @@ from pydantic import BaseModel
 from sqlmodel import SQLModel
 
 from . import models, statements
+from .logger import Logger
 
 
 class CreateTag(BaseModel):
@@ -41,7 +41,7 @@ class CreateCard(BaseModel):
 
 
 router = APIRouter()
-logger = logging.getLogger()
+logger = Logger.get_instance()
 
 
 async def save_or_raise_500(instance: SQLModel) -> SQLModel:
@@ -97,7 +97,6 @@ async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
     """
     try:
         data = await get_function(*args)
-        logger.info("Users requested, response successful.")
         return data
     except Exception:
         logger.warning("Resource not found.")
@@ -116,6 +115,7 @@ async def get_users():
         HTTP 500: database error
     """
     json_data = jsonable_encoder(await get_or_raise_404(statements.get_users))
+    logger.info("Users requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
 
@@ -131,6 +131,7 @@ async def get_card_types():
         HTTP 500: database error
     """
     json_data = jsonable_encoder(await get_or_raise_404(statements.get_card_types))
+    logger.info("Card types requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
 
@@ -146,6 +147,7 @@ async def get_tags():
         HTTP 500: database error
     """
     json_data = jsonable_encoder(await get_or_raise_404(statements.get_tags))
+    logger.info("Tags requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
 
