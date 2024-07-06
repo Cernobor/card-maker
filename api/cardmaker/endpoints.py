@@ -8,7 +8,7 @@ from typing import Callable, List, Optional
 
 from fastapi import APIRouter, HTTPException
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel
 from sqlmodel import SQLModel
 
@@ -244,9 +244,8 @@ async def update_card(card_id: int, data: models.Card):
     card.in_set = data.in_set
     card.set_name = data.set_name
     await save_or_raise_500(card)
-    response = {"status": "successfully updated"}
     logger.info(f"New card {card.name} updated!")
-    return JSONResponse(content=response, status_code=204)
+    return Response(status_code=204)
 
 
 @router.delete("/cards/{card_id}")
@@ -266,9 +265,8 @@ async def delete_card(card_id: int):
     """
     card = await get_or_raise_404(statements.get_card_by_id, card_id)
     await delete_or_raise_500(card)
-    response = {"status": "successfully deleted"}
     logger.info(f"New card {card.name} deleted!")
-    return JSONResponse(content=response, status_code=204)
+    return Response(status_code=204)
 
 
 @router.post("/users")
