@@ -5,12 +5,13 @@ Script for python logger setup.
 import logging
 import sys
 
+
 class Logger(object):
-    
+
     _instance = None
 
     def __init__(self):
-        raise RuntimeError('Call get_instance() instead')
+        raise RuntimeError("Call get_instance() instead")
 
     @classmethod
     def get_instance(cls):

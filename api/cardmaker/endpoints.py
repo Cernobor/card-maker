@@ -95,12 +95,11 @@ async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
     Raises:
         HTTP 500: when cannot delete data in database
     """
-    try:
-        data = await get_function(*args)
-        return data
-    except Exception:
+    data = await get_function(*args)
+    if not data:
         logger.warning("Resource not found.")
         raise HTTPException(status_code=404, detail=f"Resource not found.")
+    return data
 
 
 @router.get("/users")
