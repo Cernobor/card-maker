@@ -6,7 +6,7 @@ import logging
 import os
 from datetime import datetime
 from enum import Enum, auto
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import APIRouter, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -18,9 +18,14 @@ from . import models
 from .logger import setup_logger
 
 
+class CreateTag(BaseModel):
+    name: str
+    visible: bool = False
+
+
 class CreateCard(BaseModel):
     """
-    Fields of request body of POST '/cardmaker/create/card'.
+    Fields of request body of POST '/cardmaker/cards'.
     If no user ID provided, user is set to default user (Anonymous).
     """
 
@@ -29,7 +34,7 @@ class CreateCard(BaseModel):
     effect: Optional[str]
     user_id: Optional[int]
     card_type_id: int
-    tags: list["str"]
+    tags: List[CreateTag|None]
 
 
 router = APIRouter()
@@ -43,7 +48,7 @@ async def get_users():
     Get list of all users and their ids.
 
     Returns:
-        json response: list of all users
+        json response with status code 200: list of all users
 
     Raises:
         HTTP 500: database error
@@ -56,7 +61,7 @@ async def get_users():
             logger.info(f"Users requested, response successful.")
             return JSONResponse(content=json_data, status_code=200)
     except Exception as e:
-        logger.error(f"Database error: {e} in '/users'")
+        logger.error(f"Database error: {e} in GET '/users'")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
@@ -66,7 +71,7 @@ async def get_card_types():
     Get list of all card types and their ids.
 
     Returns:
-        json response: list of all card types
+        json response with status code 200: list of all card types
 
     Raises:
         HTTP 500: database error
@@ -79,7 +84,7 @@ async def get_card_types():
             logger.info(f"Card types requested, response successful.")
             return JSONResponse(content=json_data)
     except Exception as e:
-        logger.error(f"Database error: {e} in '/card-types'")
+        logger.error(f"Database error: {e} in GET '/card-types'")
         raise HTTPException(status_code=500, detail=f"Database error: {e})")
 
 
@@ -89,7 +94,7 @@ async def get_tags():
     Get list of all tags and their ids.
 
     Returns:
-        json response: list of all tags
+        json response with status code 200: list of all tags
 
     Raises:
         HTTP 500: database error
@@ -102,26 +107,26 @@ async def get_tags():
             logger.info(f"Tags requested, response successful.")
             return JSONResponse(content=json_data, status_code=200)
     except Exception as e:
-        logger.error(f"Database error: {e} in '/tags'")
+        logger.error(f"Database error: {e} in GET '/tags'")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
 @router.get("/cards")
 async def get_cards(
-    user: int = None,
-    card_type: int = None,
-    tags: str = None,
+    user: int|None = None,
+    card_type: int|None = None,
+    tags: str|None = None,
 ):
     """
     Get list of cards filtered by query parameters.
 
     Args:
-        user (int | default: None): user ID (model User)
-        card_type (int | default: None): card type ID (model CardType)
-        tags (str | default: None): tag names splitted by ','
+        user (int|None, default: None): user ID (model User)
+        card_type (int|None, default: None): card type ID (model CardType)
+        tags (str|None, default: None): tag names splitted by ','
 
     Returns:
-        json response: filtered list of cards
+        json response with status code 200: filtered list of cards
 
     Raises:
         HTTP 500: database error
@@ -134,16 +139,26 @@ async def get_cards(
             if card_type:
                 statement = statement.where(models.Card.card_type_id == card_type)
             if tags:
-                ...
-            result = session.execute(statement)
-            json_data = jsonable_encoder(result.scalars().all())
+                for tag in tags.split(","):
+                    statement = statement.where(models.Tag.name == tag)
+            result = session.execute(statement).scalars().all()
+            if not result:
+                logger.warning("Invalid value of one or more query params in GET '/cards'")
+                raise HTTPException(
+                    status_code=404,
+                    detail="Resource does not exist!",
+                )
+            json_data = jsonable_encoder(result)
             logger.info(f"Cards requested, response successful.")
             return JSONResponse(content=json_data, status_code=200)
+    except HTTPException as e:
+        raise e
     except Exception as e:
+        logger.error(f"Database error: {e}")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
-@router.post("/create/card")
+@router.post("/cards")
 async def create_card(card_data: CreateCard):
     """
     Create new card and save it into database.
@@ -152,7 +167,7 @@ async def create_card(card_data: CreateCard):
         card_data (CreateCard): json request body, field are defined in CreateCard
 
     Returns:
-        json response: success message and ID of created card
+        json response with status code 201: success message and ID of created card
 
     Raises:
         HTTP 500: database error
@@ -188,8 +203,8 @@ async def create_card(card_data: CreateCard):
                 name=card_data.name,
                 fluff=card_data.fluff,
                 effect=card_data.effect,
-                user_id=card_data.user_id,
-                card_type_id=card_data.card_type_id,
+                user_id=user.id,
+                card_type_id=card_type.id,
             )
             try:
                 session.add(card)
@@ -202,13 +217,16 @@ async def create_card(card_data: CreateCard):
                 )
             session.refresh(card)
 
-            card_data.tags.append(str(datetime.now().year))
+            card_data.tags.append(models.Tag(
+                name = str(datetime.now().year),
+                visible = False
+            ))
             for tag in card_data.tags:
-                statement = select(models.Tag).where(models.Tag.name == tag)
+                statement = select(models.Tag).where(models.Tag.name == tag.name)
                 tag_instance = session.exec(statement).first()
                 if not tag_instance:
                     try:
-                        new_tag = models.Tag(name=tag, visible=False)
+                        new_tag = models.Tag(name=tag.name, visible=tag.visible)
                         session.add(new_tag)
                         session.commit()
                         session.refresh(new_tag)
@@ -220,7 +238,6 @@ async def create_card(card_data: CreateCard):
                             status_code=500, detail=f"An exception occurred: {e}"
                         )
 
-                logger.info(f"tag: {tag_instance}")
                 card_tag_relationship = models.CardTagRelationship(
                     card_id=card.id, tag_id=tag_instance.id
                 )
@@ -228,15 +245,111 @@ async def create_card(card_data: CreateCard):
 
             session.commit()
 
-            response = {"status": "success", "card_id": card.id}
+            response = {"status": "successfully created", "card_id": card.id}
             logger.info(f"New card {card.name} created!")
-            return JSONResponse(content=response, status_code=200)
+            return JSONResponse(content=response, status_code=201)
+    except HTTPException as e:
+        raise e
     except Exception as e:
-        logger.error(f"Database error: {e} in '/create/card'")
+        logger.error(f"Database error: {e} in POST '/cards'")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
-@router.post("/create/user")
+@router.put("/cards/{card_id}")
+def update_card(card_id: int, data: models.Card):
+    """
+    Update an existing card and save it into database.
+
+    Args:
+        card_data (Card): json request body, field are defined in models.Card
+
+    Returns:
+        json response with status code 204: success message
+
+    Raises:
+        HTTP 500: database error
+        HTTP 404: invalid card ID
+    """
+    try:
+        with Session(engine) as session:
+            statement = select(models.Card).where(models.Card.id == card_id)
+            result = session.exec(statement).first()
+            if not result:
+                logger.warning(f"Invalid resource requested: card {card_id}.")
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Invalid resource requested: card {card_id}."
+                )
+            result.name = data.name
+            result.fluff = data.fluff
+            result.effect = data.effect
+            try:
+                session.add(result)
+                session.commit()
+            except Exception as e:
+                session.rollback()
+                logger.error(f"Database error: {e}")
+                raise HTTPException(
+                    status_code=500, detail=f"An exception occurred: {e}"
+                )
+
+            response = {"status": "successfully updated"}
+            logger.info(f"New card {result.name} updated!")
+            return JSONResponse(content=response, status_code=204)
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        logger.error(f"Database error: {e} in PUT '/cards'")
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
+
+
+@router.delete("/cards/{card_id}")
+def delete_card(card_id: int):
+    """
+    Delete an existing card in the database.
+
+    Args:
+        card_data (Card): json request body, field are defined in models.Card
+
+    Returns:
+        json response with status code 204: success message
+
+    Raises:
+        HTTP 500: database error
+        HTTP 404: invalid card ID
+    """
+    try:
+        with Session(engine) as session:
+            statement = select(models.Card).where(models.Card.id == card_id)
+            result = session.exec(statement).first()
+            if not result:
+                logger.warning(f"Invalid resource requested: card {card_id}.")
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Invalid resource requested: card {card_id}."
+                )
+            try:
+                session.delete(result)
+                session.commit()
+            except Exception as e:
+                session.rollback()
+                logger.error(f"Database error: {e}")
+                raise HTTPException(
+                    status_code=500, detail=f"An exception occurred: {e}"
+                )
+            response = {"status": "successfully deleted"}
+            logger.info(f"New card {result.name} deleted!")
+            return JSONResponse(content=response, status_code=204)
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        logger.error(f"Database error: {e} in DELETE '/cards'")
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
+
+
+@router.post("/users")
 async def create_user(username: str):
     """
     Create new user and save it into database.
@@ -269,5 +382,5 @@ async def create_user(username: str):
             logger.info(f"New user {user.name} created!")
             return JSONResponse(content=response, status_code=200)
     except Exception as e:
-        logger.error(f"Database error: {e} in '/create/user'")
+        logger.error(f"Database error: {e} in POST '/users'")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
