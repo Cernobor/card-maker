@@ -5,22 +5,23 @@ API endpoints.
 import logging
 from datetime import datetime
 from enum import Enum, auto
-from typing import Optional, List, Callable
+from typing import Callable, List, Optional
 
 from fastapi import APIRouter, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sqlmodel import SQLModel
-from . import models
+
+from . import models, statements
 from .logger import setup_logger
-from . import statements
 
 
 class CreateTag(BaseModel):
     """
     Fields of tag of CreateCard model.
     """
+
     name: str
     visible: bool = False
 
@@ -30,12 +31,13 @@ class CreateCard(BaseModel):
     Fields of request body of POST '/cardmaker/cards'.
     If no user ID provided, user is set to default user (Anonymous).
     """
+
     name: str
     fluff: Optional[str]
     effect: Optional[str]
     user_id: Optional[int]
     card_type_id: int
-    tags: List[CreateTag|None]
+    tags: List[CreateTag | None]
 
 
 router = APIRouter()
@@ -59,9 +61,7 @@ async def save_or_raise_500(instance: SQLModel) -> SQLModel:
         return await statements.save_into_db(instance)
     except IOError as e:
         logger.error(f"Database error: {e}")
-        raise HTTPException(
-            status_code=500, detail=f"An exception occurred: {e}"
-        )
+        raise HTTPException(status_code=500, detail=f"An exception occurred: {e}")
 
 
 async def delete_or_raise_500(instance: SQLModel):
@@ -78,9 +78,7 @@ async def delete_or_raise_500(instance: SQLModel):
         await statements.delete_id_db(instance)
     except IOError as e:
         logger.error(f"Database error: {e}")
-        raise HTTPException(
-            status_code=500, detail=f"An exception occurred: {e}"
-        )
+        raise HTTPException(status_code=500, detail=f"An exception occurred: {e}")
 
 
 async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
@@ -103,9 +101,7 @@ async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
         return data
     except Exception:
         logger.warning("Resource not found.")
-        raise HTTPException(
-            status_code=404, detail=f"Resource not found."
-        )
+        raise HTTPException(status_code=404, detail=f"Resource not found.")
 
 
 @router.get("/users")
@@ -119,9 +115,7 @@ async def get_users():
     Raises:
         HTTP 500: database error
     """
-    json_data = jsonable_encoder(
-        await get_or_raise_404(statements.get_users)
-    )
+    json_data = jsonable_encoder(await get_or_raise_404(statements.get_users))
     return JSONResponse(content=json_data, status_code=200)
 
 
@@ -136,9 +130,7 @@ async def get_card_types():
     Raises:
         HTTP 500: database error
     """
-    json_data = jsonable_encoder(
-        await get_or_raise_404(statements.get_card_types)
-    )
+    json_data = jsonable_encoder(await get_or_raise_404(statements.get_card_types))
     return JSONResponse(content=json_data, status_code=200)
 
 
@@ -153,17 +145,15 @@ async def get_tags():
     Raises:
         HTTP 500: database error
     """
-    json_data = jsonable_encoder(
-        await get_or_raise_404(statements.get_tags)
-    )
+    json_data = jsonable_encoder(await get_or_raise_404(statements.get_tags))
     return JSONResponse(content=json_data, status_code=200)
 
 
 @router.get("/cards")
 async def get_cards(
-    user: int|None = None,
-    card_type: int|None = None,
-    tags: str|None = None,
+    user: int | None = None,
+    card_type: int | None = None,
+    tags: str | None = None,
 ):
     """
     Get list of cards filtered by query parameters.
@@ -179,7 +169,9 @@ async def get_cards(
     Raises:
         HTTP 500: database error
     """
-    cards = await statements.get_filtered_cards(user=user, card_type=card_type, tags=tags)
+    cards = await statements.get_filtered_cards(
+        user=user, card_type=card_type, tags=tags
+    )
     if not cards:
         logger.warning("Invalid value of one or more query params in GET '/cards'")
         raise HTTPException(
@@ -208,24 +200,21 @@ async def create_card(data: CreateCard):
     """
     user = await get_or_raise_404(statements.get_user_by_id_or_default, data.user_id)
     await get_or_raise_404(statements.get_card_type_by_id, data.card_type_id)
-    card = await save_or_raise_500(models.Card(
+    card = await save_or_raise_500(
+        models.Card(
             name=data.name,
             fluff=data.fluff,
             effect=data.effect,
             user_id=user.id,
             card_type_id=data.card_type_id,
-        ))
-    data.tags.append(models.Tag(
-        name = str(datetime.now().year),
-        visible = False
-    ))
+        )
+    )
+    data.tags.append(models.Tag(name=str(datetime.now().year), visible=False))
     try:
         await statements.connect_tags_with_card(data.tags, card.id)
     except IOError as e:
         logger.error(f"Database error: {e}")
-        raise HTTPException(
-            status_code=500, detail=f"An exception occurred: {e}"
-        )
+        raise HTTPException(status_code=500, detail=f"An exception occurred: {e}")
     response = {"status": "successfully created", "card_id": card.id}
     logger.info(f"New card {card.name} created!")
     return JSONResponse(content=response, status_code=201)
@@ -294,9 +283,8 @@ async def create_user(username: str):
     """
     if await statements.get_user_by_name(username):
         raise HTTPException(
-            status_code=403,
-            detail=f"User with name {username} already exists!"
-            )
+            status_code=403, detail=f"User with name {username} already exists!"
+        )
     user = await save_or_raise_500(models.User(name=username))
     logger.info(f"user {user}")
     response = {"status": "success", "user_id": user.id}
