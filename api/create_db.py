@@ -4,14 +4,14 @@ This script will be used just in development.
 """
 
 import json
+import logging
 import os
 
 from cardmaker import models
-from cardmaker.logger import setup_logger
 from sqlmodel import Session, SQLModel, create_engine
 
 engine = create_engine(os.getenv("DATABASE_URL"))
-logger = setup_logger("my_logger", "app.log")
+logger = logging.getLogger()
 
 
 def save_card_types(card_types: list):
@@ -91,7 +91,7 @@ def save_tags(tags: list):
     with Session(engine) as session:
         for tag in tags:
             try:
-                session.add(models.Tag(name=tag["name"], visible=tag["visible"]))
+                session.add(models.Tag(name=tag["name"], description=tag["description"]))
             except Exception as e:
                 session.rollback()
                 logger.error(f"Cannot save tag {tag["name"]} into db. {e}")
