@@ -1,6 +1,8 @@
 <script>
     
     import Card from './Card.svelte';
+
+
     //import logo from "$lib.assets/images/cb_logo_white.png";
     let cardTypes = ["Magický předmět", "Volný aspekt", "Lokace"]
     let card = {
@@ -16,6 +18,8 @@
         tags:[]
     }
     let cardComponent;
+
+  
 
 </script>
 
