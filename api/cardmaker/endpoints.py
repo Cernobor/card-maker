@@ -239,7 +239,7 @@ async def update_card(card_id: int, data: models.Card):
     card.effect = data.effect
     await save_or_raise_500(card)
     response = {"status": "successfully updated"}
-    logger.info(f"New card {result.name} updated!")
+    logger.info(f"New card {card.name} updated!")
     return JSONResponse(content=response, status_code=204)
 
 

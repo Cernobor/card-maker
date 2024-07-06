@@ -11,7 +11,6 @@ from sqlmodel import Session, SQLModel, create_engine, select
 from . import models
 
 engine = create_engine(os.getenv("DATABASE_URL"))
-logger = logging.getLogger()
 
 
 async def get_users() -> List[models.User | None]:
@@ -207,10 +206,9 @@ async def connect_tags_with_card(tags: List[models.Tag], card_id: int):
             statement = select(models.Tag).where(models.Tag.name == tag.name)
             tag_instance = session.exec(statement).first()
             if not tag_instance:
-                new_tag = await save_into_db(
+                tag_instance = await save_into_db(
                     models.Tag(name=tag.name, visible=tag.visible)
                 )
-
             await save_into_db(
-                models.CardTagRelationship(card_id=card_id, tag_id=new_tag.id)
+                models.CardTagRelationship(card_id=card_id, tag_id=tag_instance.id)
             )
