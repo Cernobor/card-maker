@@ -18,6 +18,9 @@ from . import statements
 
 
 class CreateTag(BaseModel):
+    """
+    Fields of tag of CreateCard model.
+    """
     name: str
     visible: bool = False
 
@@ -40,6 +43,18 @@ logger = setup_logger("my_logger", "app.log")
 
 
 async def save_or_raise_500(instance: SQLModel) -> SQLModel:
+    """
+    Save instance into database or raise HTTP exeption.
+
+    Args:
+        instance (SQLModel): instance of child class of SQLModel
+
+    Returns:
+        SQLModel: same child of SQLModel with updated parameters
+
+    Raises:
+        HTTP 500: when cannot save data into database
+    """
     try:
         return await statements.save_into_db(instance)
     except IOError as e:
@@ -50,6 +65,15 @@ async def save_or_raise_500(instance: SQLModel) -> SQLModel:
 
 
 async def delete_or_raise_500(instance: SQLModel):
+    """
+    Delete instance in database or raise HTTP exeption.
+
+    Args:
+        instance (SQLModel): instance of child class of SQLModel
+
+    Raises:
+        HTTP 500: when cannot delete data in database
+    """
     try:
         await statements.delete_id_db(instance)
     except IOError as e:
@@ -60,6 +84,19 @@ async def delete_or_raise_500(instance: SQLModel):
 
 
 async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
+    """
+    Get instance from databse or raise HTTP exeption.
+
+    Args:
+        get_function (Callable): function for getting data
+        args (): arguments for 'get_function'
+
+    Returns:
+        SQLModel: requested instance of child class of SQLModel
+
+    Raises:
+        HTTP 500: when cannot delete data in database
+    """
     try:
         data = await get_function(*args)
         logger.info("Users requested, response successful.")
