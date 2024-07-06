@@ -174,7 +174,7 @@ async def get_cards(
         user_id=user_id, card_type_id=card_type_id, tags=tags
     )
     if not cards:
-        logger.warning("Invalid value of one or more query params in GET '/cards'")
+        logger.warning("Invalid resource requested in GET '/cards'")
         raise HTTPException(
             status_code=404,
             detail="Resource does not exist!",
@@ -289,7 +289,6 @@ async def create_user(username: str):
             status_code=403, detail=f"User with name {username} already exists!"
         )
     user = await save_or_raise_500(models.User(name=username))
-    logger.info(f"user {user}")
     response = {"status": "success", "user_id": user.id}
     logger.info(f"New user {user.name} created!")
     return JSONResponse(content=response, status_code=200)
