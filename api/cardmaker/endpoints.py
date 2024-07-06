@@ -21,7 +21,7 @@ class CreateTag(BaseModel):
     """
 
     name: str
-    visible: bool = False
+    description: Optional[str]
 
 
 class CreateCard(BaseModel):
@@ -35,6 +35,8 @@ class CreateCard(BaseModel):
     effect: Optional[str]
     user_id: Optional[int]
     card_type_id: int
+    in_set: bool
+    set_name: Optional[str]
     tags: List[CreateTag | None]
 
 
@@ -205,9 +207,11 @@ async def create_card(data: CreateCard):
             effect=data.effect,
             user_id=user.id,
             card_type_id=data.card_type_id,
+            in_set=data.in_set,
+            set_name=data.set_name
         )
     )
-    data.tags.append(models.Tag(name=str(datetime.now().year), visible=False))
+    data.tags.append(models.Tag(name=str(datetime.now().year), description=None))
     try:
         await statements.connect_tags_with_card(data.tags, card.id)
     except IOError as e:
@@ -237,6 +241,8 @@ async def update_card(card_id: int, data: models.Card):
     card.name = data.name
     card.fluff = data.fluff
     card.effect = data.effect
+    card.in_set = data.in_set
+    card.set_name = data.set_name
     await save_or_raise_500(card)
     response = {"status": "successfully updated"}
     logger.info(f"New card {card.name} updated!")

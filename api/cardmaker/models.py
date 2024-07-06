@@ -92,6 +92,8 @@ class Card(SQLModel, table=True):
     effect: Optional[str]
     user_id: int = Field(foreign_key="users.id")
     card_type_id: int = Field(foreign_key="card_types.id")
+    in_set: bool
+    set_name: Optional[str]
 
     tags: list["Tag"] = Relationship(
         back_populates="cards", link_model=CardTagRelationship
@@ -109,7 +111,7 @@ class Tag(SQLModel, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
-    visible: bool
+    descriptioon: Optional[str]
 
     cards: list[Card] = Relationship(
         back_populates="tags", link_model=CardTagRelationship

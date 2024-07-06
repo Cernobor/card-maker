@@ -91,7 +91,7 @@ def save_tags(tags: list):
     with Session(engine) as session:
         for tag in tags:
             try:
-                session.add(models.Tag(name=tag["name"], visible=tag["visible"]))
+                session.add(models.Tag(name=tag["name"], description=tag["description"]))
             except Exception as e:
                 session.rollback()
                 logger.error(f"Cannot save tag {tag["name"]} into db. {e}")
