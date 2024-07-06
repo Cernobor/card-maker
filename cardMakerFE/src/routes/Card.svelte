@@ -16,7 +16,7 @@
 
 	let cardTypeClass: string;
 
-	export let card:Card = {};
+	export let card: Card = {};
 
 	function slugify(str) {
 		return String(str)
@@ -29,7 +29,7 @@
 			.replace(/-+/g, '-'); // remove consecutive hyphens
 	}
 
-	async function getCardTypes(){
+	async function getCardTypes() {
 		const url = PUBLIC_BASE_API_URL + '/cardmaker/card-types';
 		try {
 			const response = await fetch(url);
@@ -42,10 +42,7 @@
 		} catch (error) {
 			console.error(error.message);
 		}
-	
 	}
-
-	
 
 	export function saveCard() {
 		html2canvas(document.querySelector('#capture')).then((canvas) => {
@@ -58,7 +55,6 @@
 		});
 		sentCardToAPI();
 	}
-	
 
 	async function sentCardToAPI() {
 		let cardTypes = await getCardTypes();
@@ -77,13 +73,14 @@
 					card_type_id: cardTypeId,
 					in_set: card.inSet,
 					set_name: card.setName,
-					tags: card.tags,
+					tags: card.tags
 				})
 			});
 			if (!response.ok) {
-				alert('Něco se pokazilo, karta se neuložila do databáze, po odkliknutí tohoto okna si jí ale stále můžete alespoň stáhnout');
+				alert(
+					'Něco se pokazilo, karta se neuložila do databáze, po odkliknutí tohoto okna si jí ale stále můžete alespoň stáhnout'
+				);
 				throw new Error(`Response status: ${response.status}`);
-				
 			}
 
 			const json = await response.json();
@@ -97,8 +94,6 @@
 		// TODO: přefiltruj text a naházej symoboly/bold text tam kam patří
 		return text;
 	}
-
-	
 
 	$: if (card.type == 'Magický předmět') {
 		cardTypeClass = 'card-magical-item';
