@@ -4,7 +4,6 @@ API endpoints.
 
 import logging
 from datetime import datetime
-from enum import Enum, auto
 from typing import Callable, List, Optional
 
 from fastapi import APIRouter, HTTPException
