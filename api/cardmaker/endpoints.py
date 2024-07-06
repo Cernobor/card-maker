@@ -25,7 +25,7 @@ class CreateTag(BaseModel):
 
 class CreateCard(BaseModel):
     """
-    Fields of request body of POST '/cardmaker/create/card'.
+    Fields of request body of POST '/cardmaker/cards'.
     If no user ID provided, user is set to default user (Anonymous).
     """
     name: str
@@ -60,7 +60,7 @@ async def get_users():
             logger.info(f"Users requested, response successful.")
             return JSONResponse(content=json_data, status_code=200)
     except Exception as e:
-        logger.error(f"Database error: {e} in '/users'")
+        logger.error(f"Database error: {e} in GET '/users'")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
@@ -83,7 +83,7 @@ async def get_card_types():
             logger.info(f"Card types requested, response successful.")
             return JSONResponse(content=json_data)
     except Exception as e:
-        logger.error(f"Database error: {e} in '/card-types'")
+        logger.error(f"Database error: {e} in GET '/card-types'")
         raise HTTPException(status_code=500, detail=f"Database error: {e})")
 
 
@@ -106,7 +106,7 @@ async def get_tags():
             logger.info(f"Tags requested, response successful.")
             return JSONResponse(content=json_data, status_code=200)
     except Exception as e:
-        logger.error(f"Database error: {e} in '/tags'")
+        logger.error(f"Database error: {e} in GET '/tags'")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
@@ -142,7 +142,7 @@ async def get_cards(
                     statement = statement.where(models.Tag.name == tag)
             result = session.execute(statement)
             if not result.first():
-                logger.warning("Invalid value of one or more query params in '/cards'")
+                logger.warning("Invalid value of one or more query params in GET '/cards'")
                 raise HTTPException(
                     status_code=404,
                     detail="Resource does not exist!",
@@ -248,7 +248,7 @@ async def create_card(card_data: CreateCard):
     except HTTPException as e:
         raise e
     except Exception as e:
-        logger.error(f"Database error: {e} in '/create/card'")
+        logger.error(f"Database error: {e} in POST '/cards'")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
@@ -295,5 +295,5 @@ async def create_user(username: str):
             logger.info(f"New user {user.name} created!")
             return JSONResponse(content=response, status_code=200)
     except Exception as e:
-        logger.error(f"Database error: {e} in '/create/user'")
+        logger.error(f"Database error: {e} in POST '/users'")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
