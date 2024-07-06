@@ -11,13 +11,11 @@
 		nonRemovable: boolean;
 		inSet: boolean;
 		setName: string;
-		inAspectFamily: boolean;
-		aspectFamilyName: string;
 		tags: string[];
 	}
 
 	let cardTypeClass: string;
-	
+
 	export let card:Card = {};
 
 	function slugify(str) {
@@ -116,7 +114,7 @@
 			{#if card.type == 'Magický předmět'}
 				<div class="card-in-set">{card.inSet ? card.setName : ''}</div>
 			{:else if card.type == 'Volný aspekt'}
-				<div class="card-in-set">{card.inAspectFamily ? card.aspectFamilyName : ''}</div>
+				<div class="card-in-set">{card.inSet ? card.setName : ''}</div>
 			{/if}
 		</div>
 		<div class="card-type">{card.type}</div>

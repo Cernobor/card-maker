@@ -1,37 +1,52 @@
 <script>
     
     import Card from './Card.svelte';
+    
 
 
     //import logo from "$lib.assets/images/cb_logo_white.png";
     let cardTypes = ["Magický předmět", "Volný aspekt", "Lokace"]
     let card = {
         name: 'Card Name',
-        type: 'Magický předmět',
+        type: cardTypes[0],
         fluff: 'Card Fluff',
         effect: 'Efekt/pravidla karty',
         nonRemovable: true,
         inSet: false,
         setName: "Jméno setu (počet itemů v setu)",
-        inAspectFamily: false,
-        aspectFamilyName: "Jméno rodiny aspektů",
+        //inAspectFamily: false,
+        //aspectFamilyName: "Jméno rodiny aspektů",
         tags:[]
     }
     let cardComponent;
+    let cardTypeProp = card.type;
+    // let testCardType =  $state(card.type);
+    $ : {card.type = cardTypeProp;
+        if (cardTypeProp == "Magický předmět") {
+            card.inSet = false;
+            card.setName = "Jméno setu (počet itemů v setu)";
+        } else  if (cardTypeProp == "Volný aspekt") {
+            card.inSet = false;
+            card.setName = "Jméno rodiny aspektů";
+        }
+    }
+
+
+
 
   
 
 </script>
 
 <div class="cardmaker-body">
-
+<p>{card.type}</p>
     <div class="inputs">
         <form class = "card-input-form">
             <label for="name">Jméno:</label>
             
             <input type="text" placeholder="Name" id="name" bind:value={card.name} />
             <label for="type">Typ:</label>
-                <select bind:value={card.type}>
+                <select bind:value={cardTypeProp}>
                     {#each cardTypes as type (type)}
                         <option value={type}>{type}</option>
                     {/each}
@@ -58,10 +73,10 @@
 
             {#if card.type == "Volný aspekt"}
             <label for="aspectFamily">V rodině apektů:</label>                
-            <input type="checkbox" bind:checked={card.inAspectFamily} id="aspectFamily">
-            {#if card.inAspectFamily }
+            <input type="checkbox" bind:checked={card.inSet} id="aspectFamily">
+            {#if card.inSet }
                 <label for="aspectFamilyName">Jméno rodiny aspektů:</label>
-                <input type="text" bind:value={card.aspectFamilyName} id="aspectFamilyName">
+                <input type="text" bind:value={card.setName} id="aspectFamilyName">
             {/if}
             
             {/if}
