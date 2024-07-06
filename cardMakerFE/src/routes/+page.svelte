@@ -14,13 +14,12 @@
         nonRemovable: true,
         inSet: false,
         setName: "Jméno setu (počet itemů v setu)",
-        //inAspectFamily: false,
-        //aspectFamilyName: "Jméno rodiny aspektů",
+
         tags:[]
     }
     let cardComponent;
     let cardTypeProp = card.type;
-    // let testCardType =  $state(card.type);
+
     $ : {card.type = cardTypeProp;
         if (cardTypeProp == "Magický předmět") {
             card.inSet = false;
@@ -39,7 +38,6 @@
 </script>
 
 <div class="cardmaker-body">
-<p>{card.type}</p>
     <div class="inputs">
         <form class = "card-input-form">
             <label for="name">Jméno:</label>
