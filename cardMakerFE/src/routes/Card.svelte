@@ -3,8 +3,22 @@
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
 
+	interface Card {
+		name: string;
+		type: string;
+		fluff: string;
+		effect: string;
+		nonRemovable: boolean;
+		inSet: boolean;
+		setName: string;
+		inAspectFamily: boolean;
+		aspectFamilyName: string;
+		tags: string[];
+	}
+
 	let cardTypeClass: string;
-	export let card = {};
+	
+	export let card:Card = {};
 
 	function slugify(str) {
 		return String(str)
@@ -17,6 +31,24 @@
 			.replace(/-+/g, '-'); // remove consecutive hyphens
 	}
 
+	async function getCardTypes(){
+		const url = PUBLIC_BASE_API_URL + '/cardmaker/card-types';
+		try {
+			const response = await fetch(url);
+			if (!response.ok) {
+				throw new Error(`Response status: ${response.status}`);
+			}
+
+			const json = await response.json();
+			return json;
+		} catch (error) {
+			console.error(error.message);
+		}
+	
+	}
+
+	
+
 	export function saveCard() {
 		html2canvas(document.querySelector('#capture')).then((canvas) => {
 			let a = document.createElement('a');
@@ -28,8 +60,12 @@
 		});
 		sentCardToAPI();
 	}
+	
 
 	async function sentCardToAPI() {
+		let cardTypes = await getCardTypes();
+		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
+
 		const url = PUBLIC_BASE_API_URL + '/cardmaker/cards';
 		try {
 			const response = await fetch(url, {
@@ -39,14 +75,11 @@
 					name: card.name,
 					fluff: card.fluff,
 					effect: card.effect,
-					user_id: 1,
-					card_type_id: 1,
-					tags: [
-						{
-							name: 'string',
-							visible: false
-						}
-					]
+					user_id: 1, // TODO: get user id from session
+					card_type_id: cardTypeId,
+					in_set: card.inSet,
+					set_name: card.setName,
+					tags: card.tags,
 				})
 			});
 			if (!response.ok) {
