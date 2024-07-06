@@ -140,17 +140,20 @@ async def get_cards(
             if tags:
                 for tag in tags.split(","):
                     statement = statement.where(models.Tag.name == tag)
-            result = session.execute(statement)
-            if not result.first():
+            result = session.execute(statement).scalars().all()
+            if not result:
                 logger.warning("Invalid value of one or more query params in GET '/cards'")
                 raise HTTPException(
                     status_code=404,
                     detail="Resource does not exist!",
                 )
-            json_data = jsonable_encoder(result.scalars().all())
+            json_data = jsonable_encoder(result)
             logger.info(f"Cards requested, response successful.")
             return JSONResponse(content=json_data, status_code=200)
+    except HTTPException as e:
+        raise e
     except Exception as e:
+        logger.error(f"Database error: {e}")
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
@@ -234,7 +237,6 @@ async def create_card(card_data: CreateCard):
                             status_code=500, detail=f"An exception occurred: {e}"
                         )
 
-                logger.info(f"tag: {tag_instance}")
                 card_tag_relationship = models.CardTagRelationship(
                     card_id=card.id, tag_id=tag_instance.id
                 )
