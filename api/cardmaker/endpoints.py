@@ -213,25 +213,26 @@ async def create_card(card_data: CreateCard):
                 )
             session.refresh(card)
 
-            card_data.tags.append(str(datetime.now().year))
-            if card_data.tags:
-                for tag in card_data.tags:
-                    logger.info(f"aaaa dopice uz {tag.name}")
-                    statement = select(models.Tag).where(models.Tag.name == tag.name)
-                    tag_instance = session.exec(statement).first()
-                    if not tag_instance:
-                        try:
-                            new_tag = models.Tag(name=tag.name, visible=tag.visible)
-                            session.add(new_tag)
-                            session.commit()
-                            session.refresh(new_tag)
-                            tag_instance = new_tag
-                        except Exception as e:
-                            logger.error(f"Database error: {e}")
-                            session.rollback()
-                            raise HTTPException(
-                                status_code=500, detail=f"An exception occurred: {e}"
-                            )
+            card_data.tags.append(models.Tag(
+                name = str(datetime.now().year),
+                visible = False
+            ))
+            for tag in card_data.tags:
+                statement = select(models.Tag).where(models.Tag.name == tag.name)
+                tag_instance = session.exec(statement).first()
+                if not tag_instance:
+                    try:
+                        new_tag = models.Tag(name=tag.name, visible=tag.visible)
+                        session.add(new_tag)
+                        session.commit()
+                        session.refresh(new_tag)
+                        tag_instance = new_tag
+                    except Exception as e:
+                        logger.error(f"Database error: {e}")
+                        session.rollback()
+                        raise HTTPException(
+                            status_code=500, detail=f"An exception occurred: {e}"
+                        )
 
                 logger.info(f"tag: {tag_instance}")
                 card_tag_relationship = models.CardTagRelationship(
