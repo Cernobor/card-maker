@@ -81,7 +81,9 @@
 				})
 			});
 			if (!response.ok) {
+				alert('Něco se pokazilo, karta se neuložila do databáze, po odkliknutí tohoto okna si jí ale stále můžete alespoň stáhnout');
 				throw new Error(`Response status: ${response.status}`);
+				
 			}
 
 			const json = await response.json();
