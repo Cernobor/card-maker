@@ -4,14 +4,14 @@ This script will be used just in development.
 """
 
 import json
-import logging
 import os
 
 from cardmaker import models
+from cardmaker.logger import Logger
 from sqlmodel import Session, SQLModel, create_engine
 
 engine = create_engine(os.getenv("DATABASE_URL"))
-logger = logging.getLogger()
+logger = Logger.get_instance()
 
 
 def save_card_types(card_types: list):

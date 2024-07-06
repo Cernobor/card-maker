@@ -2,7 +2,6 @@
 API endpoints.
 """
 
-import logging
 from datetime import datetime
 from typing import Callable, List, Optional
 
@@ -13,6 +12,7 @@ from pydantic import BaseModel
 from sqlmodel import SQLModel
 
 from . import models, statements
+from .logger import Logger
 
 
 class CreateTag(BaseModel):
@@ -41,7 +41,7 @@ class CreateCard(BaseModel):
 
 
 router = APIRouter()
-logger = logging.getLogger()
+logger = Logger.get_instance()
 
 
 async def save_or_raise_500(instance: SQLModel) -> SQLModel:
@@ -95,13 +95,11 @@ async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
     Raises:
         HTTP 500: when cannot delete data in database
     """
-    try:
-        data = await get_function(*args)
-        logger.info("Users requested, response successful.")
-        return data
-    except Exception:
+    data = await get_function(*args)
+    if not data:
         logger.warning("Resource not found.")
         raise HTTPException(status_code=404, detail=f"Resource not found.")
+    return data
 
 
 @router.get("/users")
@@ -116,6 +114,7 @@ async def get_users():
         HTTP 500: database error
     """
     json_data = jsonable_encoder(await get_or_raise_404(statements.get_users))
+    logger.info("Users requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
 
@@ -131,6 +130,7 @@ async def get_card_types():
         HTTP 500: database error
     """
     json_data = jsonable_encoder(await get_or_raise_404(statements.get_card_types))
+    logger.info("Card types requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
 
@@ -146,6 +146,7 @@ async def get_tags():
         HTTP 500: database error
     """
     json_data = jsonable_encoder(await get_or_raise_404(statements.get_tags))
+    logger.info("Tags requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
 
@@ -173,7 +174,7 @@ async def get_cards(
         user_id=user_id, card_type_id=card_type_id, tags=tags
     )
     if not cards:
-        logger.warning("Invalid value of one or more query params in GET '/cards'")
+        logger.warning("Invalid resource requested in GET '/cards'")
         raise HTTPException(
             status_code=404,
             detail="Resource does not exist!",
@@ -288,7 +289,6 @@ async def create_user(username: str):
             status_code=403, detail=f"User with name {username} already exists!"
         )
     user = await save_or_raise_500(models.User(name=username))
-    logger.info(f"user {user}")
     response = {"status": "success", "user_id": user.id}
     logger.info(f"New user {user.name} created!")
     return JSONResponse(content=response, status_code=200)
