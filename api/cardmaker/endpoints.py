@@ -13,7 +13,6 @@ from pydantic import BaseModel
 from sqlmodel import SQLModel
 
 from . import models, statements
-from .logger import setup_logger
 
 
 class CreateTag(BaseModel):
@@ -40,7 +39,7 @@ class CreateCard(BaseModel):
 
 
 router = APIRouter()
-logger = setup_logger("my_logger", "app.log")
+logger = logging.getLogger()
 
 
 async def save_or_raise_500(instance: SQLModel) -> SQLModel:
@@ -150,16 +149,16 @@ async def get_tags():
 
 @router.get("/cards")
 async def get_cards(
-    user: int | None = None,
-    card_type: int | None = None,
+    user_id: int | None = None,
+    card_type_id: int | None = None,
     tags: str | None = None,
 ):
     """
     Get list of cards filtered by query parameters.
 
     Args:
-        user (int|None, default: None): user ID (model User)
-        card_type (int|None, default: None): card type ID (model CardType)
+        user_id (int|None, default: None): user ID (model User)
+        card_type_id (int|None, default: None): card type ID (model CardType)
         tags (str|None, default: None): tag names splitted by ','
 
     Returns:
@@ -169,7 +168,7 @@ async def get_cards(
         HTTP 500: database error
     """
     cards = await statements.get_filtered_cards(
-        user=user, card_type=card_type, tags=tags
+        user_id=user_id, card_type_id=card_type_id, tags=tags
     )
     if not cards:
         logger.warning("Invalid value of one or more query params in GET '/cards'")
