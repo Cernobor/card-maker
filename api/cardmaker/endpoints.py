@@ -47,7 +47,7 @@ async def get_users():
     Get list of all users and their ids.
 
     Returns:
-        json response: list of all users
+        json response with status code 200: list of all users
 
     Raises:
         HTTP 500: database error
@@ -70,7 +70,7 @@ async def get_card_types():
     Get list of all card types and their ids.
 
     Returns:
-        json response: list of all card types
+        json response with status code 200: list of all card types
 
     Raises:
         HTTP 500: database error
@@ -93,7 +93,7 @@ async def get_tags():
     Get list of all tags and their ids.
 
     Returns:
-        json response: list of all tags
+        json response with status code 200: list of all tags
 
     Raises:
         HTTP 500: database error
@@ -125,7 +125,7 @@ async def get_cards(
         tags (str|None, default: None): tag names splitted by ','
 
     Returns:
-        json response: filtered list of cards
+        json response with status code 200: filtered list of cards
 
     Raises:
         HTTP 500: database error
@@ -166,7 +166,7 @@ async def create_card(card_data: CreateCard):
         card_data (CreateCard): json request body, field are defined in CreateCard
 
     Returns:
-        json response: success message and ID of created card
+        json response with status code 201: success message and ID of created card
 
     Raises:
         HTTP 500: database error
@@ -244,9 +244,9 @@ async def create_card(card_data: CreateCard):
 
             session.commit()
 
-            response = {"status": "success", "card_id": card.id}
+            response = {"status": "successfully created", "card_id": card.id}
             logger.info(f"New card {card.name} created!")
-            return JSONResponse(content=response, status_code=200)
+            return JSONResponse(content=response, status_code=201)
     except HTTPException as e:
         raise e
     except Exception as e:
@@ -255,13 +255,97 @@ async def create_card(card_data: CreateCard):
 
 
 @router.put("/cards/{card_id}")
-def update_card():
-    ...
+def update_card(card_id: int, data: models.Card):
+    """
+    Update an existing card and save it into database.
+
+    Args:
+        card_data (Card): json request body, field are defined in models.Card
+
+    Returns:
+        json response with status code 204: success message
+
+    Raises:
+        HTTP 500: database error
+        HTTP 404: invalid card ID
+    """
+    try:
+        with Session(engine) as session:
+            statement = select(models.Card).where(models.Card.id == card_id)
+            result = session.exec(statement).first()
+            if not result:
+                logger.warning(f"Invalid resource requested: card {card_id}.")
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Invalid resource requested: card {card_id}."
+                )
+            result.name = data.name
+            result.fluff = data.fluff
+            result.effect = data.effect
+            try:
+                session.add(result)
+                session.commit()
+            except Exception as e:
+                session.rollback()
+                logger.error(f"Database error: {e}")
+                raise HTTPException(
+                    status_code=500, detail=f"An exception occurred: {e}"
+                )
+
+            response = {"status": "successfully updated"}
+            logger.info(f"New card {result.name} updated!")
+            return JSONResponse(content=response, status_code=204)
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        logger.error(f"Database error: {e} in PUT '/cards'")
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
 @router.delete("/cards/{card_id}")
-def delete_card():
-    ...
+def delete_card(card_id: int):
+    """
+    Delete an existing card in the database.
+
+    Args:
+        card_data (Card): json request body, field are defined in models.Card
+
+    Returns:
+        json response with status code 204: success message
+
+    Raises:
+        HTTP 500: database error
+        HTTP 404: invalid card ID
+    """
+    try:
+        with Session(engine) as session:
+            statement = select(models.Card).where(models.Card.id == card_id)
+            result = session.exec(statement).first()
+            if not result:
+                logger.warning(f"Invalid resource requested: card {card_id}.")
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Invalid resource requested: card {card_id}."
+                )
+            try:
+                session.delete(result)
+                session.commit()
+            except Exception as e:
+                session.rollback()
+                logger.error(f"Database error: {e}")
+                raise HTTPException(
+                    status_code=500, detail=f"An exception occurred: {e}"
+                )
+            response = {"status": "successfully deleted"}
+            logger.info(f"New card {result.name} deleted!")
+            return JSONResponse(content=response, status_code=204)
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        logger.error(f"Database error: {e} in DELETE '/cards'")
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
 
 @router.post("/users")
