@@ -6,7 +6,7 @@ import logging
 import sys
 
 
-def setup_logger(name, log_file, level=logging.INFO):
+def setup_log(name, log_file, level=logging.INFO):
     """
     Setup for python logger.
     All messages are logged into file and stdout.
