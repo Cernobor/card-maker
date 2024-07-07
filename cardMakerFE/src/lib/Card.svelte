@@ -104,6 +104,7 @@
 	}
 </script>
 
+
 <div class="{cardTypeClass} card" id="capture">
 	<section class="card-header">
 		<div class="card-name">{card.name}</div>
