@@ -73,7 +73,9 @@ async def get_filtered_cards(
         if user_id:
             statement = statement.where(models.Card.user_id == user_id)
         if card_type_id:
-            statement = statement.where(models.Card.card_type_id == card_type)
+            statement = statement.where(
+                models.Card.card_type_id == card_type_id
+            )
         if tags:
             for tag in tags.split(","):
                 statement = statement.where(models.Tag.name == tag)
@@ -84,13 +86,18 @@ async def get_user_by_id_or_default(
     user_id: int | None = None,
 ) -> models.User | None:
     """
-    Get user of given ID if exists or get default user ('Anonymous') if no ID provided.
+    Get user of given ID if exists
+    or get default user ('Anonymous')if no ID provided.
 
     Args:
-        user_id (int|None, default: None): ID of requested user or None if default user requested
+        user_id (int|None, default: None):
+                ID of requested user
+                or None if default user requested
 
     Returns:
-        model.User|None: instance of user with given ID or None if this ID does not exist
+        model.User|None:
+                instance of user with given ID
+                or None if this ID does not exist
     """
     with Session(engine) as session:
         statement = (
@@ -109,7 +116,9 @@ async def get_card_type_by_id(card_type_id: int) -> models.CardType | None:
         user_id (int): ID of requested card type
 
     Returns:
-        model.CardType|None: instance of card type with given ID or None if this ID does not exist
+        model.CardType|None:
+        instance of card type with given ID
+        or None if this ID does not exist
     """
     with Session(engine) as session:
         statement = select(models.CardType).where(
@@ -126,7 +135,9 @@ async def get_user_by_name(username: str) -> models.User | None:
         user_id (str): name of requested user
 
     Returns:
-        model.User|None: instance of user type with given name or None if this name does not exist
+        model.User|None:
+        instance of user type with given name
+        or None if this name does not exist
     """
     with Session(engine) as session:
         statement = select(models.User).where(models.User.name == username)
@@ -141,7 +152,9 @@ async def get_card_by_id(card_id: int) -> models.Card | None:
         user_id (int): ID of requested card
 
     Returns:
-        model.Card|None: instance of card with given ID or None if this ID does not exist
+        model.Card|None:
+        instance of card with given ID
+        or None if this ID does not exist
     """
     with Session(engine) as session:
         statement = select(models.Card).where(models.Card.id == card_id)
@@ -168,7 +181,7 @@ async def save_into_db(instance: SQLModel) -> SQLModel:
             session.commit()
         except Exception as e:
             session.rollback()
-            raise IOError("Database operation failed!")
+            raise IOError(f"Database operation failed! {e}")
         session.refresh(instance)
         logger.info(f"Instance {instance} saved into db.")
         return instance
@@ -191,7 +204,7 @@ async def delete_id_db(instance: SQLModel):
             session.commit()
         except Exception as e:
             session.rollback()
-            raise IOError("Database operation failed!")
+            raise IOError(f"Database operation failed! {e}")
 
 
 async def connect_tags_with_card(tags: List[models.Tag], card_id: int):
