@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { PUBLIC_BASE_API_URL } from '$env/static/public';
+	import { slugify } from '$lib/slugify.ts';
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
 	export let mode = 'create';
@@ -19,16 +20,7 @@
 
 	export let card: Card = {};
 
-	function slugify(str) {
-		return String(str)
-			.normalize('NFKD') // split accented characters into their base characters and diacritical marks
-			.replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
-			.trim() // trim leading or trailing whitespace
-			.toLowerCase() // convert to lowercase
-			.replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
-			.replace(/\s+/g, '-') // replace spaces with hyphens
-			.replace(/-+/g, '-'); // remove consecutive hyphens
-	}
+
 
 	async function getCardTypes() {
 		const url = PUBLIC_BASE_API_URL + '/cardmaker/card-types';
@@ -61,42 +53,38 @@
 		let cardTypes = await getCardTypes();
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
 		let requestMethod, url, requestBody;
-		console.log ("CARD", card)
-		
+		console.log('CARD', card);
 
-		if (mode == "create"){
-			
+		if (mode == 'create') {
 			requestMethod = 'POST';
 			url = PUBLIC_BASE_API_URL + '/cardmaker/cards';
-			requestBody={
-					name: card.name,
-					fluff: card.fluff,
-					effect: card.effect,
-					user_id: 1, // TODO: get user id from session
-					card_type_id: cardTypeId,
-					in_set: card.in_set,
-					set_name: card.setName,
-					tags: card.tags
-				}
-
-		 } else if (mode == "update"){
+			requestBody = {
+				name: card.name,
+				fluff: card.fluff,
+				effect: card.effect,
+				user_id: 1, // TODO: get user id from session
+				card_type_id: cardTypeId,
+				in_set: card.in_set,
+				set_name: card.setName,
+				tags: card.tags
+			};
+		} else if (mode == 'update') {
 			requestMethod = 'PUT';
 			url = PUBLIC_BASE_API_URL + '/cardmaker/cards/' + card.id;
-			requestBody={
-					id: card.id,
-					name: card.name,
-					fluff: card.fluff,
-					effect: card.effect,
-					user_id: 1, // TODO: get user id from session
-					card_type_id: 1,
-					in_set: card.in_set,
-					set_name: card.set_name,
-					tags: card.tags
-				}
-				console.log("TOTO SE POSÍLÁ")
-				console.log(requestBody)
-		 }
-		
+			requestBody = {
+				id: card.id,
+				name: card.name,
+				fluff: card.fluff,
+				effect: card.effect,
+				user_id: 1, // TODO: get user id from session
+				card_type_id: 1,
+				in_set: card.in_set,
+				set_name: card.set_name,
+				tags: card.tags
+			};
+			console.log('TOTO SE POSÍLÁ');
+			console.log(requestBody);
+		}
 
 		try {
 			const response = await fetch(url, {
@@ -105,7 +93,7 @@
 				body: JSON.stringify(requestBody)
 			});
 			console.log(response);
-			if (!response.ok ) {
+			if (!response.ok) {
 				alert(
 					'Něco se pokazilo, karta se neuložila do databáze, po odkliknutí tohoto okna si jí ale stále můžete alespoň stáhnout'
 				);
@@ -132,7 +120,6 @@
 		cardTypeClass = 'card-location';
 	}
 </script>
-
 
 <div class="{cardTypeClass} card" id="capture">
 	<section class="card-header">
