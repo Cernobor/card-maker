@@ -7,7 +7,7 @@
 	import Card from '$lib/Card.svelte';
 	import CardForm from '$lib/CardForm.svelte';
 
-	let cardTypes = ['Magický předmět', 'Volný aspekt', 'Lokace'];
+	let cardTypes = ['Volný aspekt', 'Lokace','Magický předmět'];
 
 	async function getCard() {
 		try {
@@ -33,7 +33,7 @@
 </script>
 <div class="cardmaker-body">
 	<div class="inputs">
-		<CardForm bind:card bind:cardTypes />
+		<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
 	</div>
 
 	<div class="card-view">

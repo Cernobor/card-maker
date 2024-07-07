@@ -1,10 +1,9 @@
 <script>
 	export let card;
-	let cardTypeProp = card.type;
+	export let cardTypeProp = card.type;
 	export let cardTypes;
 
-	$: {
-		card.type = cardTypeProp;
+	$: {card.type = cardTypeProp;
 		if (cardTypeProp == 'Magický předmět') {
 			card.in_set = false;
 			card.set_name = 'Jméno setu (počet itemů v setu)';
