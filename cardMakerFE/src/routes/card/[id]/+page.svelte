@@ -31,9 +31,6 @@
 	loadCard();
 	let cardComponent;
 </script>
-
-<h1>update card of id {data.card_id}</h1>
-
 <div class="cardmaker-body">
 	<div class="inputs">
 		<CardForm bind:card bind:cardTypes />
