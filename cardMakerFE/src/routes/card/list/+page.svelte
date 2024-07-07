@@ -56,13 +56,12 @@
     $: filteredCards = getFilteredCards(allCards, selectedAuthor, selectedType, activeTags);
 </script>
 
-
-<h1>card list</h1>
-
-<div>
-    <FilterDropdown bind:selected={selectedAuthor} filterName="Autor" options={authors}/>
-    <FilterDropdown bind:selected={selectedType} filterName="Typ karty" options={types}/>
-    <FilterCheckbox bind:activeTags options={tags}/>
+<div class="card-list-body">
+    <div class="filters">
+        <FilterDropdown bind:selected={selectedAuthor} filterName="Autor" options={authors}/>
+        <FilterDropdown bind:selected={selectedType} filterName="Typ karty" options={types}/>
+        <FilterCheckbox bind:activeTags options={tags}/>
+    </div>
     <div>
         <table>
             <tr>

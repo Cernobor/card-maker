@@ -41,7 +41,7 @@
 
 	<div class="card-view">
 		<Card bind:card bind:mode bind:this={cardComponent} />
-		<button on:click={cardComponent.saveCard} style="width:80px; height:30px">Save</button>
+		<button on:click={cardComponent.saveCard} >Save</button>
 	</div>
 </div>
 
@@ -51,5 +51,6 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 20px;
+		color: black;
 	}
 </style>
