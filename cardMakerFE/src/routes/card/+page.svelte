@@ -4,7 +4,7 @@
 	let cardTypes = ['Magický předmět', 'Volný aspekt', 'Lokace'];
 
 	//import logo from "$lib.assets/images/cb_logo_white.png";
-	
+
 	let card = {
 		name: 'Card Name',
 		type: cardTypes[0],
@@ -17,12 +17,11 @@
 		tags: []
 	};
 	let cardComponent;
-
 </script>
 
 <div class="cardmaker-body">
 	<div class="inputs">
-		<CardForm bind:card bind:cardTypes/>
+		<CardForm bind:card bind:cardTypes />
 	</div>
 
 	<div class="card-view">
@@ -32,10 +31,6 @@
 </div>
 
 <style>
-	textarea {
-		width: 400px;
-		height: 100px;
-	}
 	.card-view {
 		display: flex;
 		flex-direction: column;
