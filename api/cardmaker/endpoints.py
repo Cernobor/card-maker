@@ -15,6 +15,10 @@ from . import models, statements
 from .logger import Logger
 
 
+router = APIRouter()
+logger = Logger.get_instance()
+
+
 class CreateTag(BaseModel):
     """
     Fields of tag of CreateCard model.
@@ -30,6 +34,7 @@ class CreateCard(BaseModel):
     If no user ID provided, user is set to default user (Anonymous).
     """
 
+    id: Optional[int]
     name: str
     fluff: Optional[str]
     effect: Optional[str]
@@ -38,10 +43,6 @@ class CreateCard(BaseModel):
     in_set: bool
     set_name: Optional[str]
     tags: List[CreateTag | None]
-
-
-router = APIRouter()
-logger = Logger.get_instance()
 
 
 async def save_or_raise_500(instance: SQLModel) -> SQLModel:
@@ -61,7 +62,29 @@ async def save_or_raise_500(instance: SQLModel) -> SQLModel:
         return await statements.save_into_db(instance)
     except IOError as e:
         logger.error(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"An exception occurred: {e}")
+        raise HTTPException(
+            status_code=500, detail=f"An exception occurred: {e}"
+        )
+
+
+async def connect_tags_or_raise_500(tags, card_id):
+    """
+    Save new tags and connect existing tags or raise HTTP exeption.
+
+    Args:
+        tags (List[CreateTag]): list of tags to connect
+        card_id (int): ID of card to connect
+
+    Raises:
+        HTTP 500: when cannot save data into database
+    """
+    try:
+        await statements.connect_tags_with_card(tags, card_id)
+    except IOError as e:
+        logger.error(f"Database error: {e}")
+        raise HTTPException(
+            status_code=500, detail=f"An exception occurred: {e}"
+        )
 
 
 async def delete_or_raise_500(instance: SQLModel):
@@ -78,7 +101,9 @@ async def delete_or_raise_500(instance: SQLModel):
         await statements.delete_id_db(instance)
     except IOError as e:
         logger.error(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"An exception occurred: {e}")
+        raise HTTPException(
+            status_code=500, detail=f"An exception occurred: {e}"
+        )
 
 
 async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
@@ -98,7 +123,7 @@ async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
     data = await get_function(*args)
     if not data:
         logger.warning("Resource not found.")
-        raise HTTPException(status_code=404, detail=f"Resource not found.")
+        raise HTTPException(status_code=404, detail="Resource not found.")
     return data
 
 
@@ -129,7 +154,9 @@ async def get_card_types():
     Raises:
         HTTP 500: database error
     """
-    json_data = jsonable_encoder(await get_or_raise_404(statements.get_card_types))
+    json_data = jsonable_encoder(
+        await get_or_raise_404(statements.get_card_types)
+    )
     logger.info("Card types requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
@@ -179,8 +206,21 @@ async def get_cards(
             status_code=404,
             detail="Resource does not exist!",
         )
+    cards = [
+        CreateCard(
+            id = card.id,
+            name = card.name,
+            fluff = card.fluff,
+            effect = card.effect,
+            user_id = card.user_id,
+            card_type_id = card.card_type_id,
+            in_set = card.in_set,
+            set_name = card.set_name,
+            tags = await get_or_raise_404(statements.get_tags_of_card, card.id)
+        ) for card in cards
+    ]
     json_data = jsonable_encoder(cards)
-    logger.info(f"Cards requested, response successful.")
+    logger.info("Cards requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
 
@@ -190,16 +230,20 @@ async def create_card(data: CreateCard):
     Create new card and save it into database.
 
     Args:
-        card_data (CreateCard): json request body, field are defined in CreateCard
+        card_data (CreateCard):
+                json request body,field are defined in CreateCard
 
     Returns:
-        json response with status code 201: success message and ID of created card
+        json response with status code 201:
+                success message and ID of created card
 
     Raises:
         HTTP 500: database error
         HTTP 404: invalid user ID or card type ID
     """
-    user = await get_or_raise_404(statements.get_user_by_id_or_default, data.user_id)
+    user = await get_or_raise_404(
+        statements.get_user_by_id_or_default, data.user_id
+    )
     await get_or_raise_404(statements.get_card_type_by_id, data.card_type_id)
     card = await save_or_raise_500(
         models.Card(
@@ -209,22 +253,20 @@ async def create_card(data: CreateCard):
             user_id=user.id,
             card_type_id=data.card_type_id,
             in_set=data.in_set,
-            set_name=data.set_name
+            set_name=data.set_name,
         )
     )
-    data.tags.append(models.Tag(name=str(datetime.now().year), description=None))
-    try:
-        await statements.connect_tags_with_card(data.tags, card.id)
-    except IOError as e:
-        logger.error(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"An exception occurred: {e}")
+    data.tags.append(
+        models.Tag(name=str(datetime.now().year), description=None)
+    )
+    await connect_tags_or_raise_500(data.tags, card.id)
     response = {"status": "successfully created", "card_id": card.id}
     logger.info(f"New card {card.name} created!")
     return JSONResponse(content=response, status_code=201)
 
 
 @router.put("/cards/{card_id}")
-async def update_card(card_id: int, data: models.Card):
+async def update_card(card_id: int, data: CreateCard):
     """
     Update an existing card and save it into database.
 
@@ -244,6 +286,8 @@ async def update_card(card_id: int, data: models.Card):
     card.effect = data.effect
     card.in_set = data.in_set
     card.set_name = data.set_name
+    if data.tags:
+        await connect_tags_or_raise_500(data.tags, card_id)
     await save_or_raise_500(card)
     logger.info(f"New card {card.name} updated!")
     return Response(status_code=204)
