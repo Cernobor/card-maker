@@ -3,7 +3,6 @@
 	import CardForm from '$lib/CardForm.svelte';
 	let cardTypes = ['Magický předmět', 'Volný aspekt', 'Lokace'];
 
-	//import logo from "$lib.assets/images/cb_logo_white.png";
 
 	let card = {
 		name: 'Card Name',

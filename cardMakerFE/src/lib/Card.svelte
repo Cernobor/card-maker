@@ -2,6 +2,7 @@
 	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
+	export let mode = 'create';
 
 	interface Card {
 		name: string;
@@ -59,13 +60,13 @@
 	async function sentCardToAPI() {
 		let cardTypes = await getCardTypes();
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
+		let requestMethod, url, requestBody;
 
-		const url = PUBLIC_BASE_API_URL + '/cardmaker/cards';
-		try {
-			const response = await fetch(url, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
+		if (mode == "create"){
+			
+			requestMethod = 'POST';
+			url = PUBLIC_BASE_API_URL + '/cardmaker/cards';
+			requestBody={
 					name: card.name,
 					fluff: card.fluff,
 					effect: card.effect,
@@ -74,9 +75,33 @@
 					in_set: card.inSet,
 					set_name: card.setName,
 					tags: card.tags
-				})
+				}
+
+		 } else if (mode == "update"){
+			requestMethod = 'PUT';
+			url = PUBLIC_BASE_API_URL + '/cardmaker/cards/' + card.id;
+			requestBody={
+					id: card.id,
+					name: card.name,
+					fluff: card.fluff,
+					effect: card.effect,
+					user_id: 1, // TODO: get user id from session
+					card_type_id: cardTypeId,
+					in_set: card.inSet,
+					set_name: card.setName,
+					tags: card.tags
+				}
+		 }
+		
+
+		try {
+			const response = await fetch(url, {
+				method: requestMethod,
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(requestBody)
 			});
-			if (!response.ok) {
+			console.log(response);
+			if (!response.ok ) {
 				alert(
 					'Něco se pokazilo, karta se neuložila do databáze, po odkliknutí tohoto okna si jí ale stále můžete alespoň stáhnout'
 				);
