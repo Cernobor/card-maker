@@ -208,16 +208,17 @@ async def get_cards(
         )
     cards = [
         CreateCard(
-            id = card.id,
-            name = card.name,
-            fluff = card.fluff,
-            effect = card.effect,
-            user_id = card.user_id,
-            card_type_id = card.card_type_id,
-            in_set = card.in_set,
-            set_name = card.set_name,
-            tags = await get_or_raise_404(statements.get_tags_of_card, card.id)
-        ) for card in cards
+            id=card.id,
+            name=card.name,
+            fluff=card.fluff,
+            effect=card.effect,
+            user_id=card.user_id,
+            card_type_id=card.card_type_id,
+            in_set=card.in_set,
+            set_name=card.set_name,
+            tags=await get_or_raise_404(statements.get_tags_of_card, card.id),
+        )
+        for card in cards
     ]
     json_data = jsonable_encoder(cards)
     logger.info("Cards requested, response successful.")

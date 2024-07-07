@@ -230,7 +230,7 @@ async def connect_tags_with_card(tags: List[models.Tag], card_id: int):
 
 async def get_tags_of_card(card_id: int) -> List[models.Tag]:
     """
-    Get 
+    Get all tags connected to specific card.
 
     Args:
         card_id (int): ID of card connected to tags
