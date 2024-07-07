@@ -10,6 +10,8 @@
 		type: string;
 		fluff: string;
 		effect: string;
+		userID: number|undefined;
+		cardTypeID: number|undefined;
 		nonRemovable: boolean;
 		in_set: boolean;
 		setName: string;
