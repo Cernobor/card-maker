@@ -12,9 +12,9 @@
 <div class="header-block">
 	<h1>Card <img src="/images/cb_logo_black.png" width="50px" /> maker</h1>
 	<nav class="navbar">
-		<a href="#">Home</a>
-		<a href="#">vytvoř kartu</a>
-		<a href="#">databáze karet</a>
+		<a href="/">Home</a>
+		<a href="/card">vytvoř kartu</a>
+		<a href="/card/list">databáze karet</a>
 		<p>Uživatel XY</p>
 	</nav>
 </div>
