@@ -10,12 +10,11 @@ class Logger(object):
     """
     Logger singleton class
     """
-    _instance = None
 
+    _instance = None
 
     def __init__(self):
         raise RuntimeError("Call get_instance() instead")
-
 
     @classmethod
     def get_instance(cls):
@@ -24,22 +23,17 @@ class Logger(object):
             cls._instance.setup_logger()
         return cls._instance
 
-
     def debug(self, message):
         self.logger.debug(message)
-
 
     def info(self, message):
         self.logger.info(message)
 
-
     def warning(self, message):
         self.logger.warning(message)
 
-
     def error(self, message):
         self.logger.error(message)
-
 
     def setup_logger(self):
         """
