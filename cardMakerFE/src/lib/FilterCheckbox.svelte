@@ -14,8 +14,12 @@
 
 <div>
     <h3 class="filter-title">Tagy</h3>
-    {#each options as option}
-        <label>{option.name}</label>
-        <input type="checkbox" value={option.name} on:change={handleChange} />
+    <div class="all-checkboxes-container">
+        {#each options as option}
+        <div class="checkbox-container" >
+            <label for={option.name}>{option.name}</label>
+            <input type="checkbox" id={option.name} class="checkbox" value={option.name} on:change={handleChange} />
+        </div>
     {/each}
+    </div>
 </div>

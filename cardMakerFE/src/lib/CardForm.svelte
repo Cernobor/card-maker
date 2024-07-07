@@ -34,10 +34,10 @@
 
 		{#if card.type == 'Magický předmět'}
 			<label for="nonremovable">Neodložitelný:</label>
-			<input type="checkbox" bind:checked={card.nonRemovable} id="nonremovable" />
+			<input type="checkbox" class="checkbox" bind:checked={card.nonRemovable} id="nonremovable" />
 
 			<label for="in_set">V setu:</label>
-			<input type="checkbox" bind:checked={card.in_set} id="in_set" />
+			<input type="checkbox" class="checkbox" bind:checked={card.in_set} id="in_set" />
 			{#if card.in_set}
 				<label for="set_name">Jméno setu:</label>
 				<input type="text" bind:value={card.set_name} id="set_name" />
@@ -46,7 +46,7 @@
 
 		{#if card.type == 'Volný aspekt'}
 			<label for="aspectFamily">V rodině apektů:</label>
-			<input type="checkbox" bind:checked={card.in_set} id="aspectFamily" />
+			<input type="checkbox" class="checkbox" bind:checked={card.in_set} id="aspectFamily" />
 			{#if card.in_set}
 				<label for="aspectFamilyName">Jméno rodiny aspektů:</label>
 				<input type="text" bind:value={card.set_name} id="aspectFamilyName" />
