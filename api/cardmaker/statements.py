@@ -87,7 +87,7 @@ async def get_user_by_id_or_default(
 ) -> models.User | None:
     """
     Get user of given ID if exists
-    or get default user ('Anonymous')if no ID provided.
+    or get default user ('Anonym')if no ID provided.
 
     Args:
         user_id (int|None, default: None):
@@ -103,7 +103,7 @@ async def get_user_by_id_or_default(
         statement = (
             select(models.User).where(models.User.id == user_id)
             if user_id
-            else select(models.User).where(models.User.name == "Anonymous")
+            else select(models.User).where(models.User.name == "Anonym")
         )
         return session.exec(statement).first()
 
