@@ -17,6 +17,29 @@ nav {
     background-color: #00ADB5;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: center;
+}
+
+th {
+    background-color: #bdbec0;
+    padding: 12px;
+    border-bottom: 2px solid #000000;
+}
+  
+  td {
+    padding: 12px;
+    border-bottom: 1px solid #000000;
+}
+  
+  tr:hover {
+    background-color: #cadee4;
+}
+
 .header-block {
     text-align: center;
     font-family: "Inknut Antiqua", serif;
