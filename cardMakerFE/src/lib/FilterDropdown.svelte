@@ -8,7 +8,7 @@
 <div>
     <h3 class="filter-title">{filterName}</h3>
     <select bind:value={selected}>
-        <option value={null}>All</option>
+        <option value={null}>Vše</option>
         {#each options as optionValue}
             <option value={optionValue}>{optionValue.name}</option>
         {/each}

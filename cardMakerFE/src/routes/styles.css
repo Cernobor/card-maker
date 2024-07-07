@@ -30,14 +30,14 @@ th {
     background-color: #222831;
     padding-top: 12px;
     padding-bottom: 12px;
-    border-bottom: 2px solid #76ABAE;
+    border-bottom: 2px solid #00ADB5;
     width: 10%;
 }
   
 td {
     padding-top: 12px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #76ABAE;
+    border-bottom: 1px solid #00ADB5;
 }
   
 tr:hover {
@@ -45,7 +45,7 @@ tr:hover {
 }
 
 a {
-    color: #76ABAE;
+    color: #00ADB5;
     text-decoration: none;
 }
 
@@ -55,9 +55,9 @@ textarea:focus, input:focus select:hover {
 
 input, select, textarea{
     background-color: #31363F;
-    color: #76ABAE;
+    color: #00ADB5;
     border-radius: 10px;
-    border-color: #76ABAE;
+    border-color: #00ADB5;
     font-size: 16px;
 }
 
@@ -65,7 +65,7 @@ button {
     background-color: #31363F;
     color: #EEEEEE;
     border-radius: 20px;
-    border-color: #76ABAE;
+    border-color: #00ADB5;
     font-size: 16px;
     width: 100px;
     height: 40px;
