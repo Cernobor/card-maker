@@ -225,6 +225,25 @@ async def get_cards(
     return JSONResponse(content=json_data, status_code=200)
 
 
+@router.get("/cards/{card_id}")
+async def get_card(card_id: int):
+    """
+    Get card information by card ID.
+
+    Args:
+        card_id (int): card ID
+
+    Returns:
+        json response with status code 200: card information
+
+    Raises:
+        HTTP 500: database error
+    """
+    card = await get_or_raise_404(statements.get_card_by_id, card_id)
+
+    return JSONResponse(content=jsonable_encoder(card), status_code=200)
+
+
 @router.post("/cards")
 async def create_card(data: CreateCard):
     """
@@ -328,6 +347,7 @@ async def create_user(username: str):
 
     Raises:
         HTTP 500: database error
+        HTTP 404: invalid card ID
     """
     if await statements.get_user_by_name(username):
         raise HTTPException(
