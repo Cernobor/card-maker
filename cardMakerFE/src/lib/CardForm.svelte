@@ -6,11 +6,11 @@
 	$: {
 		card.type = cardTypeProp;
 		if (cardTypeProp == 'Magický předmět') {
-			card.inSet = false;
-			card.setName = 'Jméno setu (počet itemů v setu)';
+			card.in_set = false;
+			card.set_name = 'Jméno setu (počet itemů v setu)';
 		} else if (cardTypeProp == 'Volný aspekt') {
-			card.inSet = false;
-			card.setName = 'Jméno rodiny aspektů';
+			card.in_set = false;
+			card.set_name = 'Jméno rodiny aspektů';
 		}
 	}
 </script>
@@ -37,20 +37,20 @@
 			<label for="nonremovable">Neodložitelný:</label>
 			<input type="checkbox" bind:checked={card.nonRemovable} id="nonremovable" />
 
-			<label for="inSet">V setu:</label>
-			<input type="checkbox" bind:checked={card.inSet} id="inSet" />
-			{#if card.inSet}
-				<label for="setName">Jméno setu:</label>
-				<input type="text" bind:value={card.setName} id="setName" />
+			<label for="in_set">V setu:</label>
+			<input type="checkbox" bind:checked={card.in_set} id="in_set" />
+			{#if card.in_set}
+				<label for="set_name">Jméno setu:</label>
+				<input type="text" bind:value={card.set_name} id="set_name" />
 			{/if}
 		{/if}
 
 		{#if card.type == 'Volný aspekt'}
 			<label for="aspectFamily">V rodině apektů:</label>
-			<input type="checkbox" bind:checked={card.inSet} id="aspectFamily" />
-			{#if card.inSet}
+			<input type="checkbox" bind:checked={card.in_set} id="aspectFamily" />
+			{#if card.in_set}
 				<label for="aspectFamilyName">Jméno rodiny aspektů:</label>
-				<input type="text" bind:value={card.setName} id="aspectFamilyName" />
+				<input type="text" bind:value={card.set_name} id="aspectFamilyName" />
 			{/if}
 		{/if}
 	</form>

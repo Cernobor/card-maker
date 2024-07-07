@@ -10,8 +10,8 @@
 		fluff: 'Card Fluff',
 		effect: 'Efekt/pravidla karty',
 		nonRemovable: true,
-		inSet: false,
-		setName: 'Jméno setu (počet itemů v setu)',
+		in_set: false,
+		set_name: 'Jméno setu (počet itemů v setu)',
 
 		tags: []
 	};

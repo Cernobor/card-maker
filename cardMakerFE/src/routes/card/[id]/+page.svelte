@@ -26,8 +26,9 @@
 
 	async function loadCard() {
 		const cardData = await getCard();
-		console.log(cardData);
-		card = cardData;
+		console.log("FETCHED CARD DATA",cardData);
+		card = {...cardData};
+		card.type = cardTypes[cardData.card_type_id - 1];
 	}
 	loadCard();
 	let cardComponent;

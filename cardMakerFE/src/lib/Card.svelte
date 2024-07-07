@@ -10,7 +10,7 @@
 		fluff: string;
 		effect: string;
 		nonRemovable: boolean;
-		inSet: boolean;
+		in_set: boolean;
 		setName: string;
 		tags: string[];
 	}
@@ -61,6 +61,8 @@
 		let cardTypes = await getCardTypes();
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
 		let requestMethod, url, requestBody;
+		console.log ("CARD", card)
+		
 
 		if (mode == "create"){
 			
@@ -72,7 +74,7 @@
 					effect: card.effect,
 					user_id: 1, // TODO: get user id from session
 					card_type_id: cardTypeId,
-					in_set: card.inSet,
+					in_set: card.in_set,
 					set_name: card.setName,
 					tags: card.tags
 				}
@@ -86,11 +88,13 @@
 					fluff: card.fluff,
 					effect: card.effect,
 					user_id: 1, // TODO: get user id from session
-					card_type_id: cardTypeId,
-					in_set: card.inSet,
-					set_name: card.setName,
+					card_type_id: 1,
+					in_set: card.in_set,
+					set_name: card.set_name,
 					tags: card.tags
 				}
+				console.log("TOTO SE POSÍLÁ")
+				console.log(requestBody)
 		 }
 		
 
@@ -135,9 +139,9 @@
 		<div class="card-name">{card.name}</div>
 		<div class="card-set">
 			{#if card.type == 'Magický předmět'}
-				<div class="card-in-set">{card.inSet ? card.setName : ''}</div>
+				<div class="card-in-set">{card.in_set ? card.setName : ''}</div>
 			{:else if card.type == 'Volný aspekt'}
-				<div class="card-in-set">{card.inSet ? card.setName : ''}</div>
+				<div class="card-in-set">{card.in_set ? card.setName : ''}</div>
 			{/if}
 		</div>
 		<div class="card-type">{card.type}</div>

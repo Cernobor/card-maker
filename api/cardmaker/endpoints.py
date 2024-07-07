@@ -240,8 +240,17 @@ async def get_card(card_id: int):
         HTTP 500: database error
     """
     card = await get_or_raise_404(statements.get_card_by_id, card_id)
-
-    return JSONResponse(content=jsonable_encoder(card), status_code=200)
+    return_data = CreateCard(
+            id=card.id,
+            name=card.name,
+            fluff=card.fluff,
+            effect=card.effect,
+            user_id=card.user_id,
+            card_type_id=card.card_type_id,
+            in_set=card.in_set,
+            set_name=card.set_name,
+            tags=await get_or_raise_404(statements.get_tags_of_card, card.id))
+    return JSONResponse(content=jsonable_encoder(return_data), status_code=200)
 
 
 @router.post("/cards")
