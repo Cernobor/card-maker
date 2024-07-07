@@ -80,7 +80,9 @@ async def get_filtered_cards(
         return session.execute(statement).scalars().all()
 
 
-async def get_user_by_id_or_default(user_id: int | None = None) -> models.User | None:
+async def get_user_by_id_or_default(
+    user_id: int | None = None,
+) -> models.User | None:
     """
     Get user of given ID if exists or get default user ('Anonymous') if no ID provided.
 
@@ -110,7 +112,9 @@ async def get_card_type_by_id(card_type_id: int) -> models.CardType | None:
         model.CardType|None: instance of card type with given ID or None if this ID does not exist
     """
     with Session(engine) as session:
-        statement = select(models.CardType).where(models.CardType.id == card_type_id)
+        statement = select(models.CardType).where(
+            models.CardType.id == card_type_id
+        )
         return session.exec(statement).first()
 
 
@@ -166,6 +170,7 @@ async def save_into_db(instance: SQLModel) -> SQLModel:
             session.rollback()
             raise IOError("Database operation failed!")
         session.refresh(instance)
+        logger.info(f"Instance {instance} saved into db.")
         return instance
 
 
@@ -191,8 +196,8 @@ async def delete_id_db(instance: SQLModel):
 
 async def connect_tags_with_card(tags: List[models.Tag], card_id: int):
     """
-    Save new tags into database
-    and create new record to relationship table of tag and card.
+    Save tag into database if not exists.
+    and create new record to relationship table of tag and card if not exist.
     or raise IOError.
 
     Args:
@@ -210,6 +215,26 @@ async def connect_tags_with_card(tags: List[models.Tag], card_id: int):
                 tag_instance = await save_into_db(
                     models.Tag(name=tag.name, description=tag.description)
                 )
-            await save_into_db(
-                models.CardTagRelationship(card_id=card_id, tag_id=tag_instance.id)
+            statement = (
+                select(models.CardTagRelationship)
+                .where(models.CardTagRelationship.card_id == card_id)
+                .where(models.CardTagRelationship.tag_id == tag_instance.id)
             )
+            if not session.exec(statement).first():
+                await save_into_db(
+                    models.CardTagRelationship(
+                        card_id=card_id, tag_id=tag_instance.id
+                    )
+                )
+
+
+async def get_tags_of_card(card_id: int) -> List[models.Tag]:
+    """
+    Get all tags connected to specific card.
+
+    Args:
+        card_id (int): ID of card connected to tags
+    """
+    with Session(engine) as session:
+        statement = select(models.Card).where(models.Card.id == card_id)
+        return session.exec(statement).first().tags
