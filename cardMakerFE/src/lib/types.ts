@@ -8,6 +8,12 @@ export type CardType = {
     id: number;
 };
 
+export type Tag = {
+    name: string;
+    value: string;
+    id: number;
+}
+
 export type ErrorWithMessage = {
     message: string;
 }

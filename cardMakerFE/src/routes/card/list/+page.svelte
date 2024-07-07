@@ -2,12 +2,13 @@
     import FilterDropdown from "$lib/FilterDropdown.svelte";
 	import TableRow from "$lib/TableRow.svelte";
     import Card from '$lib/Card.svelte';
-    import type { Author, CardType } from "$lib/types";
-    import { fetchCards, fetchAuthors, fetchTypes } from "$lib/fetchResource";
+    import type { Author, CardType, Tag } from "$lib/types";
+    import { fetchCards, fetchAuthors, fetchTypes, fetchTags } from "$lib/fetchResource";
 	import { onMount } from "svelte";
+	import FilterCheckbox from "$lib/FilterCheckbox.svelte";
 
 
-    function getFilteredCards(allCards: Card[]|[], selectedAuthor: Author|null, selectedType: CardType|null) {
+    function getFilteredCards(allCards: Card[]|[], selectedAuthor: Author|null, selectedType: CardType|null, activeTags: number[]) {
         let cards = allCards;
         if (selectedAuthor != null) {
             cards = cards.filter((card: Card) => {
@@ -19,25 +20,40 @@
                 return card.card_type_id === selectedType.id;
             });
         }
+        if (activeTags.length > 0) {
+            for (const tagName of activeTags) {
+                cards = cards.filter((card: Card) => {
+                    for (const cardTag of card.tags) {
+                        if (cardTag.name === tagName) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+            }
+        }
         return cards;
     }
+
 
     let allCards: Card[]|[] = [];
     let authors: Author[]|[] = [];
     let types: CardType[]|[] = [];
+    let tags: Tag[]|[] = [];
+    let activeTags: number[]|[] = [];
     
     onMount(async () => {
         allCards = await fetchCards();
         authors = await fetchAuthors();
         types = await fetchTypes();
+        tags = await fetchTags();
     });
 
     let selectedAuthor: Author|null = null;
     let selectedType: CardType|null = null;
 
     let filteredCards: Card[] = allCards;
-    $: filteredCards = getFilteredCards(allCards, selectedAuthor, selectedType);
-
+    $: filteredCards = getFilteredCards(allCards, selectedAuthor, selectedType, activeTags);
 </script>
 
 
@@ -46,6 +62,7 @@
 <div>
     <FilterDropdown bind:selected={selectedAuthor} filterName="Autor" options={authors}/>
     <FilterDropdown bind:selected={selectedType} filterName="Typ karty" options={types}/>
+    <FilterCheckbox bind:activeTags options={tags}/>
     <div>
         <table>
             <tr>

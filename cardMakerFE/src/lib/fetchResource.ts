@@ -32,6 +32,16 @@ export async function fetchTypes() {
 }
 
 
+export async function fetchTags() {
+    try {
+        return await fetchResource("tags");
+    } catch (error) {
+        console.error(`Error fetching tags!: ${getErrorMessage(error)}`);
+        return [];
+    }
+}
+
+
 async function fetchResource(resourceName: string) {
     const response = await fetch(`${PUBLIC_BASE_API_URL}/cardmaker/${resourceName}`);
     if (!response.ok) {
