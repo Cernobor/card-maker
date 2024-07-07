@@ -10,8 +10,9 @@ from cardmaker import models
 from cardmaker.logger import Logger
 from sqlmodel import Session, SQLModel, create_engine
 
-engine = create_engine(os.getenv("DATABASE_URL"))
 logger = Logger.get_instance()
+engine = create_engine(os.getenv("DATABASE_URL"))
+logger.info("Engine created")
 
 
 def save_card_types(card_types: list):
@@ -32,34 +33,6 @@ def save_card_types(card_types: list):
                 return
             session.commit()
             logger.info(f"Card type {card_type["name"]} inserted into db.")
-            session.refresh(card_type_instance)
-            for size in card_type["sizes"]:
-                size_instance = models.Size(
-                    name=size["name"], width=size["width"], height=size["height"]
-                )
-                try:
-                    session.add(size_instance)
-                except Exception as e:
-                    session.rollback()
-                    logger.error(f"Cannot save size {size["name"]} into db. {e}")
-                    return
-                session.commit()
-                logger.info(f"Card size {size["name"]} inserted into db.")
-                session.refresh(size_instance)
-                try:
-                    session.add(
-                        models.CardTypeSizeRelationship(
-                            card_type_id=card_type_instance.id, size_id=size_instance.id
-                        )
-                    )
-                except Exception as e:
-                    session.rollback()
-                    logger.error(
-                        f"Cannot save card type size relationship into db. {e}"
-                    )
-                    return
-                session.commit()
-                logger.info(f"Card type size relationship inserted into db.")
 
 
 def save_users(users: list):

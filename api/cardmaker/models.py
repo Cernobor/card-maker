@@ -20,37 +20,6 @@ class User(SQLModel, table=True):
     name: str
 
 
-class CardTypeSizeRelationship(SQLModel, table=True):
-    """
-    Link model for CardType and Size.
-    """
-
-    __tablename__ = "cards_type_size_relationship"
-
-    card_type_id: int = Field(
-        default=None, foreign_key="card_types.id", primary_key=True
-    )
-    size_id: int = Field(default=None, foreign_key="sizes.id", primary_key=True)
-
-
-class Size(SQLModel, table=True):
-    """
-    Defined sizes of particular card types.
-    width and height are defined in px.
-    """
-
-    __tablename__ = "sizes"
-
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
-    width: int
-    height: int
-
-    card_types: list["CardType"] = Relationship(
-        back_populates="sizes", link_model=CardTypeSizeRelationship
-    )
-
-
 class CardType(SQLModel, table=True):
     """
     Type of card, which means for example Location or Magical item.
@@ -61,10 +30,6 @@ class CardType(SQLModel, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
-
-    sizes: list[Size] = Relationship(
-        back_populates="card_types", link_model=CardTypeSizeRelationship
-    )
 
 
 class CardTagRelationship(SQLModel, table=True):
