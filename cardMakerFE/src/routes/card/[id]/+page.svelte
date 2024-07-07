@@ -11,7 +11,6 @@
 
 	async function getCard() {
 		try {
-			console.log(data.card_id);
 			const response = await fetch(PUBLIC_BASE_API_URL + '/cardmaker/cards/' + data.card_id);
 			if (!response.ok) {
 				throw new Error(`Response status: ${response.status}`);
@@ -26,8 +25,7 @@
 
 	async function loadCard() {
 		const cardData = await getCard();
-		console.log("FETCHED CARD DATA",cardData);
-		card = {...cardData};
+		card = { ...cardData };
 		card.type = cardTypes[cardData.card_type_id - 1];
 	}
 	loadCard();

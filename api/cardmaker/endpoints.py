@@ -24,6 +24,7 @@ class CreateTag(BaseModel):
     Fields of tag of CreateCard model.
     """
 
+    id:int
     name: str
     description: Optional[str]
 

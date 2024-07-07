@@ -3,7 +3,6 @@
 	import CardForm from '$lib/CardForm.svelte';
 	let cardTypes = ['Magický předmět', 'Volný aspekt', 'Lokace'];
 
-
 	let card = {
 		name: 'Card Name',
 		type: cardTypes[0],
