@@ -1,44 +1,14 @@
 {
     "card_types": [
         {
-            "name": "Volný aspekt",
-            "sizes": [
-                {
-                    "name": "Malá",
-                    "width": 280,
-                    "height": 400
-                },
-                {
-                    "name": "Velká",
-                    "width": 400,
-                    "height": 560
-                }
-            ]
+            "name": "Volný aspekt"
         },
         {
-            "name": "Lokace",
-            "sizes": [
-                {
-                    "name": "Velká",
-                    "width": 1120,
-                    "height": 800
-                },
-                {
-                    "name": "Malá",
-                    "width": 800,
-                    "height": 560
-                }
-            ]
+            "name": "Lokace"
+
         },
         {
-            "name": "Magický předmět",
-            "sizes": [
-                {
-                    "name": "Normální",
-                    "width": 400,
-                    "height": 280
-                }
-            ]
+            "name": "Magický předmět"
         }
     ],
     "users": [
