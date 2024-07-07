@@ -1,6 +1,6 @@
 <script lang="ts">
     import FilterDropdown from "$lib/FilterDropdown.svelte";
-	import CardTable from "$lib/CardTable.svelte";
+	import TableRow from "$lib/TableRow.svelte";
     import Card from '$lib/Card.svelte';
     import type { Author, CardType } from "$lib/types";
     import { fetchCards, fetchAuthors, fetchTypes } from "$lib/fetchResource";
@@ -11,12 +11,12 @@
         let cards = allCards;
         if (selectedAuthor != null) {
             cards = cards.filter((card: Card) => {
-                return card.userID === selectedAuthor.id;
+                return card.user_id === selectedAuthor.id;
             });
         }
         if (selectedType != null) {
             cards = cards.filter((card: Card) => {
-                return card.cardTypeID === selectedType.id;
+                return card.card_type_id === selectedType.id;
             });
         }
         return cards;
@@ -46,5 +46,20 @@
 <div>
     <FilterDropdown bind:selected={selectedAuthor} filterName="Autor" options={authors}/>
     <FilterDropdown bind:selected={selectedType} filterName="Typ karty" options={types}/>
+    <div>
+        <table>
+            <tr>
+                <th>Karta</th>
+                <th>Autor</th>
+                <th>Typ</th>
+            </tr>
+            {#each filteredCards as card}
+                <TableRow
+                    card={card}
+                    authors={authors}
+                    types={types}
+                />
+            {/each}
+        </table>
     </div>
-<CardTable cards={filteredCards}/>
+</div>
