@@ -4,9 +4,10 @@
     import Card from '$lib/Card.svelte';
     import type { Author, CardType } from "$lib/types";
     import { fetchCards, fetchAuthors, fetchTypes } from "$lib/fetchResource";
+	import { onMount } from "svelte";
 
 
-    function getFilteredCards(allCards: Card[]|[], selectedAuthor: Author, selectedType: CardType) {
+    function getFilteredCards(allCards: Card[]|[], selectedAuthor: Author|null, selectedType: CardType|null) {
         let cards = allCards;
         if (selectedAuthor != null) {
             cards = cards.filter((card: Card) => {
@@ -20,16 +21,21 @@
         }
         return cards;
     }
+
+    let allCards: Card[]|[] = [];
+    let authors: Author[]|[] = [];
+    let types: CardType[]|[] = [];
     
-    
-    const allCards = fetchCards();
-    const authors = fetchAuthors();
-    const types = fetchTypes();
+    onMount(async () => {
+        allCards = await fetchCards();
+        authors = await fetchAuthors();
+        types = await fetchTypes();
+    });
 
     let selectedAuthor: Author|null = null;
     let selectedType: CardType|null = null;
 
-    let filteredCards: Card[];
+    let filteredCards: Card[] = allCards;
     $: filteredCards = getFilteredCards(allCards, selectedAuthor, selectedType);
 
 </script>
