@@ -13,7 +13,7 @@
 </script>
 
 <div>
-    <h3>Tagy</h3>
+    <h3 class="filter-title">Tagy</h3>
     {#each options as option}
         <label>{option.name}</label>
         <input type="checkbox" value={option.name} on:change={handleChange} />

@@ -6,7 +6,7 @@
 </script>
 
 <div>
-    <h3>{filterName}</h3>
+    <h3 class="filter-title">{filterName}</h3>
     <select bind:value={selected}>
         <option value={null}>All</option>
         {#each options as optionValue}
