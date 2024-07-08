@@ -1,6 +1,5 @@
 <script>
 	import { PUBLIC_BASE_API_URL } from '$env/static/public';
-	import { error } from '@sveltejs/kit';
 	/** @type {import('./$types').PageData} */
 	export let data;
 
