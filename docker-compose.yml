@@ -56,3 +56,9 @@ volumes:
 
 networks:
   cardmaker:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+    scope: swarm
