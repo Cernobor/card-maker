@@ -1,8 +1,8 @@
-import { PUBLIC_BASE_API_URL } from '$env/static/public';
-import type { ErrorWithMessage } from './types';
+import type { CardSpec, ErrorWithMessage } from './types';
 
+const PREFIX = '/api';
 
-export async function fetchCards() {
+export async function getCards() {
     try {
         return await fetchResource("cards");
     } catch (error) {
@@ -12,7 +12,16 @@ export async function fetchCards() {
 }
 
 
-export async function fetchAuthors() {
+export async function getCard(id: number) {
+    try {
+        return await fetchResource(`cards/${id}`);
+    } catch (error) {
+        console.error(`Error fetching cards!: ${getErrorMessage(getErrorMessage(error))}`);
+    }
+}
+
+
+export async function getAuthors() {
     try {
         return await fetchResource("users");
     } catch (error) {
@@ -22,7 +31,7 @@ export async function fetchAuthors() {
 }
 
 
-export async function fetchTypes() {
+export async function getTypes() {
     try {
         return await fetchResource("card-types");
     } catch (error) {
@@ -32,7 +41,7 @@ export async function fetchTypes() {
 }
 
 
-export async function fetchTags() {
+export async function getTags() {
     try {
         return await fetchResource("tags");
     } catch (error) {
@@ -42,8 +51,34 @@ export async function fetchTags() {
 }
 
 
+export function createCard(cardSpec: CardSpec) {
+    const requestBody = JSON.stringify(cardSpec);
+    console.log('TOTO SE POSÍLÁ');
+    console.log(requestBody);
+    return fetch(`${PREFIX}/cards`, {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: requestBody
+    });
+}
+
+
+export function updateCard(id: number, cardSpec: CardSpec) {
+    const requestBody = JSON.stringify(cardSpec);
+    return fetch(`${PREFIX}/cards/${id}`, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: requestBody
+    });
+}
+
+
 async function fetchResource(resourceName: string) {
-    const response = await fetch(`${PUBLIC_BASE_API_URL}/cardmaker/${resourceName}`);
+    const response = await fetch(`${PREFIX}/${resourceName}`);
     if (!response.ok) {
         throw new Error(`Resource ${resourceName} not available: ${response.status}`);
     }

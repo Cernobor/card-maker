@@ -17,3 +17,14 @@ export type Tag = {
 export type ErrorWithMessage = {
     message: string;
 }
+
+export type CardSpec = {
+    name: string,
+    fluff: string,
+    effect: string,
+    user_id: number,
+    card_type_id: number,
+    in_set: boolean,
+    set_name: string,
+    tags: string[]
+};

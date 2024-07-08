@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 	import { slugify } from '$lib/slugify.ts';
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
+	import { createCard, getTypes, updateCard } from './api';
+	import type { CardSpec } from './types';
 	export let mode = 'create';
 
 	interface Card {
@@ -22,21 +23,6 @@
 
 	export let card: Card = {};
 
-	async function getCardTypes() {
-		const url = PUBLIC_BASE_API_URL + '/cardmaker/card-types';
-		try {
-			const response = await fetch(url);
-			if (!response.ok) {
-				throw new Error(`Response status: ${response.status}`);
-			}
-
-			const json = await response.json();
-			return json;
-		} catch (error) {
-			console.error(error.message);
-		}
-	}
-
 	export function saveCard() {
 		html2canvas(document.querySelector('#capture')).then((canvas) => {
 			let a = document.createElement('a');
@@ -50,48 +36,31 @@
 	}
 
 	async function sentCardToAPI() {
-		let cardTypes = await getCardTypes();
+		let cardTypes = await getTypes();
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
-		let requestMethod, url, requestBody;
 		console.log('CARD', card);
 
-		if (mode == 'create') {
-			requestMethod = 'POST';
-			url = PUBLIC_BASE_API_URL + '/cardmaker/cards';
-			requestBody = {
-				name: card.name,
-				fluff: card.fluff,
-				effect: card.effect,
-				user_id: 1, // TODO: get user id from session
-				card_type_id: cardTypeId,
-				in_set: card.in_set,
-				set_name: card.setName,
-				tags: card.tags
-			};
-		} else if (mode == 'update') {
-			requestMethod = 'PUT';
-			url = PUBLIC_BASE_API_URL + '/cardmaker/cards/' + card.id;
-			requestBody = {
-				id: card.id,
-				name: card.name,
-				fluff: card.fluff,
-				effect: card.effect,
-				user_id: 1, // TODO: get user id from session
-				card_type_id: 1,
-				in_set: card.in_set,
-				set_name: card.set_name,
-				tags: card.tags
-			};
-			console.log('TOTO SE POSÍLÁ');
-			console.log(requestBody);
-		}
+		const cardSpec: CardSpec = {
+			name: card.name,
+			fluff: card.fluff,
+			effect: card.effect,
+			user_id: 1, // TODO: get user id from session
+			card_type_id: cardTypeId,
+			in_set: card.in_set,
+			set_name: card.setName,
+			tags: card.tags
+		};
 
 		try {
-			const response = await fetch(url, {
-				method: requestMethod,
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(requestBody)
-			});
+			let response: Response
+			if (mode === 'create') {
+				response = await createCard(cardSpec);
+			} else if (mode === 'update') {
+				response = await updateCard(card.id, cardSpec);
+			} else {
+				console.error('invalid mode', mode);
+				return;
+			}
 			console.log(response);
 			if (!response.ok) {
 				alert(

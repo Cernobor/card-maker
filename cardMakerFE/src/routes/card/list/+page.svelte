@@ -3,7 +3,7 @@
 	import TableRow from "$lib/TableRow.svelte";
     import Card from '$lib/Card.svelte';
     import type { Author, CardType, Tag } from "$lib/types";
-    import { fetchCards, fetchAuthors, fetchTypes, fetchTags } from "$lib/fetchResource";
+    import { getAuthors, getCards, getTags, getTypes } from "$lib/api";
 	import { onMount } from "svelte";
 	import FilterCheckbox from "$lib/FilterCheckbox.svelte";
 
@@ -43,10 +43,10 @@
     let activeTags: number[]|[] = [];
     
     onMount(async () => {
-        allCards = await fetchCards();
-        authors = await fetchAuthors();
-        types = await fetchTypes();
-        tags = await fetchTags();
+        allCards = await getCards();
+        authors = await getAuthors();
+        types = await getTypes();
+        tags = await getTags();
     });
 
     let selectedAuthor: Author|null = null;

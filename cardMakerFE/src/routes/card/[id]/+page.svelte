@@ -1,5 +1,5 @@
 <script>
-	import { PUBLIC_BASE_API_URL } from '$env/static/public';
+	import { getCard } from '$lib/api';
 	/** @type {import('./$types').PageData} */
 	export let data;
 
@@ -12,22 +12,8 @@
 	let loadProgress;
 	let cardComponent;
 
-	async function getCard() {
-		try {
-			const response = await fetch(PUBLIC_BASE_API_URL + '/cardmaker/cards/' + data.card_id);
-			if (!response.ok) {
-				throw new Error(`Response status: ${response.status}`);
-			}
-			const json = await response.json();
-
-			return json;
-		} catch (e) {
-			console.error(e.message);
-		}
-	}
-
 	async function loadCard() {
-		const cardData = await getCard();
+		const cardData = await getCard(data.card_id);
 		card = { ...cardData };
 		card.type = cardTypes[cardData.card_type_id - 1];
 	}
