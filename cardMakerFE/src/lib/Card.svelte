@@ -10,8 +10,8 @@
 		type: string;
 		fluff: string;
 		effect: string;
-		user_id: number|undefined;
-		card_name_id: number|undefined;
+		user_id: number | undefined;
+		card_name_id: number | undefined;
 		nonRemovable: boolean;
 		in_set: boolean;
 		setName: string;
@@ -21,8 +21,6 @@
 	let cardTypeClass: string;
 
 	export let card: Card = {};
-
-
 
 	async function getCardTypes() {
 		const url = PUBLIC_BASE_API_URL + '/cardmaker/card-types';
