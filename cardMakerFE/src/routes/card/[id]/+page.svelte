@@ -3,7 +3,6 @@
 	import { error } from '@sveltejs/kit';
 	/** @type {import('./$types').PageData} */
 	export let data;
-	
 
 	import Card from '$lib/Card.svelte';
 	import CardForm from '$lib/CardForm.svelte';
@@ -11,7 +10,8 @@
 	let mode = 'update';
 	let cardTypes = ['Volný aspekt', 'Lokace', 'Magický předmět'];
 	let card = {};
-	let loadOK = false;
+	let loadProgress;
+	let cardComponent;
 
 	async function getCard() {
 		try {
@@ -20,47 +20,37 @@
 				throw new Error(`Response status: ${response.status}`);
 			}
 			const json = await response.json();
-			
+
 			return json;
 		} catch (e) {
 			console.error(e.message);
-			return null;
 		}
 	}
-	
 
 	async function loadCard() {
-		try {
-			const cardData = await getCard();
-			card = { ...cardData };
-			card.type = cardTypes[cardData.card_type_id - 1];
-			loadOK = true;
-		} catch (e) {
-			card = {};
-			console.error(e.message);
-			console.log(card)
-		}
+		const cardData = await getCard();
+		card = { ...cardData };
+		card.type = cardTypes[cardData.card_type_id - 1];
 	}
-	loadCard();
-	let cardComponent;
 
+	loadProgress = loadCard();
 </script>
+
 <div class="cardmaker-body">
-	{#if loadOK === false}
-	
-	<h1>Karta s id {data.card_id} neexistuje anebo se nenačítá</h1>
-	{:else}
+	{#await loadProgress}
+		<h1>loading...</h1>
+	{:then}
+		<div class="inputs">
+			<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
+		</div>
 
-	<div class="inputs">
-		<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
-	</div>
-
-	<div class="card-view">
-		<Card bind:card bind:mode bind:this={cardComponent} />
-		<button on:click={cardComponent.saveCard}>Save</button>
-	</div>
-
-	{/if}
+		<div class="card-view">
+			<Card bind:card bind:mode bind:this={cardComponent} />
+			<button on:click={cardComponent.saveCard}>Save</button>
+		</div>
+	{:catch error}
+		<h1>Karta s id {data.card_id} neexistuje</h1>
+	{/await}
 </div>
 
 <style>
