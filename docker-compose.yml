@@ -56,7 +56,7 @@ volumes:
 
 networks:
   cardmaker:
-    driver: overlay
+    driver: bridge
     ipam:
       driver: default
       config:
