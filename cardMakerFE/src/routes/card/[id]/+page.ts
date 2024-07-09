@@ -4,3 +4,5 @@ export function load({ params }) {
         card_id: params.id,
     }
 }
+
+export const prerender = false;
