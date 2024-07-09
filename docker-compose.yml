@@ -41,7 +41,7 @@ services:
     build: ./cardMakerFE
     container_name: frontend
     environment:
-      PUBLIC_BASE_API_URL: "http://api:8000"
+      PUBLIC_BASE_API_URL: "http://localhost:8000"
     depends_on:
       - api
     ports:
