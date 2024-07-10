@@ -17,7 +17,7 @@ services:
       - cardmaker
     healthcheck:
         test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-        timeout: 20s
+        timeout: 5s
         retries: 10
 
   api:

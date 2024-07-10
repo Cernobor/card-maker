@@ -1,4 +1,5 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -8,6 +9,21 @@
 	import CardForm from '$lib/CardForm.svelte';
 
 	let cardTypes = ['Volný aspekt', 'Lokace','Magický předmět'];
+
+	async function deleteCard() {
+		try {
+			const response = await fetch(PUBLIC_BASE_API_URL + '/cardmaker/cards/' + data.card_id, {method:"DELETE"});
+			if (!response.ok) {
+				throw new Error(`Response status: ${response.status}`);
+			}
+			const result = await response.json();
+			console.log(result);
+			goto('/card/list');
+		} catch (error) {
+			console.log(error);
+			console.error(error.message);
+		}
+	}
 
 	async function getCard() {
 		try {
@@ -31,6 +47,7 @@
 	loadCard();
 	let cardComponent;
 </script>
+
 <div class="cardmaker-body">
 	<div class="inputs">
 		<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
@@ -38,7 +55,8 @@
 
 	<div class="card-view">
 		<Card bind:card bind:mode bind:this={cardComponent} />
-		<button on:click={cardComponent.saveCard} >Save</button>
+		<button on:click={cardComponent.saveCard}>Save edit</button>
+		<button on:click={deleteCard}>Delete card</button>
 	</div>
 </div>
 
