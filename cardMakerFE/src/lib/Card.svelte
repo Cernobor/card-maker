@@ -23,7 +23,7 @@
 	export let card: Card = {};
 
 	async function getCardTypes() {
-		const url = PUBLIC_BASE_API_URL + '/cardmaker/card-types';
+		const url = PUBLIC_BASE_API_URL + '/card-types';
 		try {
 			const response = await fetch(url);
 			if (!response.ok) {
