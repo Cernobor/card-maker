@@ -57,7 +57,7 @@
 
 		if (mode == 'create') {
 			requestMethod = 'POST';
-			url = PUBLIC_BASE_API_URL + '/cardmaker/cards';
+			url = PUBLIC_BASE_API_URL + '/cards';
 			requestBody = {
 				name: card.name,
 				fluff: card.fluff,
@@ -70,7 +70,7 @@
 			};
 		} else if (mode == 'update') {
 			requestMethod = 'PUT';
-			url = PUBLIC_BASE_API_URL + '/cardmaker/cards/' + card.id;
+			url = PUBLIC_BASE_API_URL + '/cards/' + card.id;
 			requestBody = {
 				id: card.id,
 				name: card.name,
