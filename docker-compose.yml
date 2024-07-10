@@ -41,7 +41,6 @@ services:
     build: ./cardMakerFE
     container_name: frontend
     environment:
-      PUBLIC_BASE_API_URL: "http://proxy/api"
     depends_on:
       - api
     ports:
