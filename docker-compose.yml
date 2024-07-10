@@ -41,15 +41,27 @@ services:
     build: ./cardMakerFE
     container_name: frontend
     environment:
-      PUBLIC_BASE_API_URL: "http://localhost:8000"
+      PUBLIC_BASE_API_URL: "http://proxy/api"
     depends_on:
       - api
     ports:
-      - "3000:80"
+      - "3000:3000"
     networks:
       - cardmaker
     expose:
       - 3000
+
+  proxy:
+    image: nginx:alpine
+    container_name: proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - cardmaker
+    expose:
+      - 80
 
 volumes:
   db_data:
