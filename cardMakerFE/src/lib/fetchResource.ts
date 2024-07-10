@@ -43,7 +43,7 @@ export async function fetchTags() {
 
 
 async function fetchResource(resourceName: string) {
-    const response = await fetch(`${PUBLIC_BASE_API_URL}/cardmaker/${resourceName}`);
+    const response = await fetch(`${PUBLIC_BASE_API_URL}/${resourceName}`);
     if (!response.ok) {
         throw new Error(`Resource ${resourceName} not available: ${response.status}`);
     }
