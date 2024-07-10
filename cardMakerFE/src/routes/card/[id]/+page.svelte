@@ -30,7 +30,7 @@
 
 	async function getCard() {
 		try {
-			const response = await fetch(PUBLIC_BASE_API_URL + '/cards/' + data.card_id);
+			const response = await fetch('/api/cards/' + data.card_id);
 			if (!response.ok) {
 				throw new Error(`Response status: ${response.status}`);
 			}
