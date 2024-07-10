@@ -60,6 +60,9 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     networks:
       - cardmaker
+    depends_on:
+      - api
+      - frontend
     expose:
       - 80
 
