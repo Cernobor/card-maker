@@ -40,7 +40,6 @@ services:
   frontend:
     build: ./cardMakerFE
     container_name: frontend
-    environment:
     depends_on:
       - api
     ports:
