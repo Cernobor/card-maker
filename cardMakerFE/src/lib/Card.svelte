@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 	import { slugify } from '$lib/slugify.ts';
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
@@ -23,7 +22,7 @@
 	export let card: Card = {};
 
 	async function getCardTypes() {
-		const url = PUBLIC_BASE_API_URL + '/card-types';
+		const url = '/api/card-types';
 		try {
 			const response = await fetch(url);
 			if (!response.ok) {
@@ -57,7 +56,7 @@
 
 		if (mode == 'create') {
 			requestMethod = 'POST';
-			url = PUBLIC_BASE_API_URL + '/cards';
+			url = '/api/cards';
 			requestBody = {
 				name: card.name,
 				fluff: card.fluff,
@@ -70,7 +69,7 @@
 			};
 		} else if (mode == 'update') {
 			requestMethod = 'PUT';
-			url = PUBLIC_BASE_API_URL + '/cards/' + card.id;
+			url = '/api/cards/' + card.id;
 			requestBody = {
 				id: card.id,
 				name: card.name,
