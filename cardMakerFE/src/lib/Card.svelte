@@ -22,7 +22,7 @@
 	export let card: Card = {};
 
 	async function getCardTypes() {
-		const url = '/api/card-types';
+		const url = '/card-types';
 		try {
 			const response = await fetch(url);
 			if (!response.ok) {
@@ -56,7 +56,7 @@
 
 		if (mode == 'create') {
 			requestMethod = 'POST';
-			url = '/api/cards';
+			url = '/cards';
 			requestBody = {
 				name: card.name,
 				fluff: card.fluff,
@@ -69,7 +69,7 @@
 			};
 		} else if (mode == 'update') {
 			requestMethod = 'PUT';
-			url = '/api/cards/' + card.id;
+			url = '/cards/' + card.id;
 			requestBody = {
 				id: card.id,
 				name: card.name,
