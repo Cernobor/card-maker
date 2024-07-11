@@ -1,4 +1,5 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -11,6 +12,21 @@
 	let card = {};
 	let loadProgress;
 	let cardComponent;
+
+	async function deleteCard() {
+		try {
+			const response = await fetch(PUBLIC_BASE_API_URL + '/cardmaker/cards/' + data.card_id, {method:"DELETE"});
+			if (!response.ok) {
+				throw new Error(`Response status: ${response.status}`);
+			}
+			const result = await response.json();
+			console.log(result);
+			goto('/card/list');
+		} catch (error) {
+			console.log(error);
+			console.error(error.message);
+		}
+	}
 
 	async function getCard() {
 		try {
