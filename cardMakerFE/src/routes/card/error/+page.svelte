@@ -1,1 +1,1 @@
-<h1>404: Karta nebyla nalezena</h1>
+<img src="/images/404.jpg" alt="404: Not found" class="_404-image" />
