@@ -53,7 +53,6 @@
 		let cardTypes = await getCardTypes();
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
 		let requestMethod, url, requestBody;
-		console.log('CARD', card);
 
 		if (mode == 'create') {
 			requestMethod = 'POST';
@@ -90,7 +89,6 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(requestBody)
 			});
-			console.log(response);
 			if (!response.ok) {
 				alert(
 					'Něco se pokazilo, karta se neuložila do databáze, po odkliknutí tohoto okna si jí ale stále můžete alespoň stáhnout'
