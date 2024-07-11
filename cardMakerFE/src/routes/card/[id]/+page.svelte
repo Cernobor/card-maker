@@ -19,7 +19,12 @@
 			if (!response.ok) {
 				throw new Error(`Response status: ${response.status}`);
 			}
-			goto('/card/list');
+			if (response.ok){
+				goto('/card/list');
+			} else {
+				throw new Error('Failed to delete card');
+			}
+			
 		} catch (error) {
 			console.log(error);
 			console.error(error.message);
