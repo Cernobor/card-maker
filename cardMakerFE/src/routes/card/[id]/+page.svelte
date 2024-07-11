@@ -15,7 +15,7 @@
 
 	async function deleteCard() {
 		try {
-			const response = await fetch(PUBLIC_BASE_API_URL + '/cardmaker/cards/' + data.card_id, {method:"DELETE"});
+			const response = await fetch(PUBLIC_BASE_API_URL + '/cards/' + data.card_id, {method:"DELETE"});
 			if (!response.ok) {
 				throw new Error(`Response status: ${response.status}`);
 			}
@@ -30,7 +30,7 @@
 
 	async function getCard() {
 		try {
-			const response = await fetch('/api/cards/' + data.card_id);
+			const response = await fetch('/cards/' + data.card_id);
 			if (!response.ok) {
 				throw new Error(`Response status: ${response.status}`);
 			}
