@@ -147,13 +147,6 @@ button:hover {
     flex-direction: row;
 }
 
-._404-image {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-}
-
 
 input, textarea, select, button { font-family:inherit; }
 

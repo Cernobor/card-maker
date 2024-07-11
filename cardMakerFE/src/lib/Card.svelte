@@ -3,6 +3,7 @@
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
 	export let mode = 'create';
+	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 
 	interface Card {
 		name: string;
@@ -22,7 +23,7 @@
 	export let card: Card = {};
 
 	async function getCardTypes() {
-		const url = '/card-types';
+		const url = PUBLIC_BASE_API_URL + '/card-types';
 		try {
 			const response = await fetch(url);
 			if (!response.ok) {
@@ -52,11 +53,10 @@
 		let cardTypes = await getCardTypes();
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
 		let requestMethod, url, requestBody;
-		console.log('CARD', card);
 
 		if (mode == 'create') {
 			requestMethod = 'POST';
-			url = '/cards';
+			url = PUBLIC_BASE_API_URL + '/cards';
 			requestBody = {
 				name: card.name,
 				fluff: card.fluff,
@@ -69,7 +69,7 @@
 			};
 		} else if (mode == 'update') {
 			requestMethod = 'PUT';
-			url = '/cards/' + card.id;
+			url = PUBLIC_BASE_API_URL + '/cards/' + card.id;
 			requestBody = {
 				id: card.id,
 				name: card.name,
@@ -81,8 +81,6 @@
 				set_name: card.set_name,
 				tags: card.tags
 			};
-			console.log('TOTO SE POSÍLÁ');
-			console.log(requestBody);
 		}
 
 		try {
@@ -91,16 +89,12 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(requestBody)
 			});
-			console.log(response);
 			if (!response.ok) {
 				alert(
 					'Něco se pokazilo, karta se neuložila do databáze, po odkliknutí tohoto okna si jí ale stále můžete alespoň stáhnout'
 				);
 				throw new Error(`Response status: ${response.status}`);
 			}
-
-			const json = await response.json();
-			console.log(json);
 		} catch (error) {
 			console.error(error.message);
 		}

@@ -14,7 +14,9 @@
 
 		tags: []
 	};
+
 	let cardComponent;
+	
 </script>
 
 <div class="cardmaker-body">
