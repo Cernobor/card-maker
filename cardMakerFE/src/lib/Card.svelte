@@ -57,7 +57,7 @@
 
 		if (mode == 'create') {
 			requestMethod = 'POST';
-			url = PUBLIC_BASE_API_URL +'/cards';
+			url = PUBLIC_BASE_API_URL + '/cards';
 			requestBody = {
 				name: card.name,
 				fluff: card.fluff,

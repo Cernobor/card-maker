@@ -15,16 +15,17 @@
 
 	async function deleteCard() {
 		try {
-			const response = await fetch(PUBLIC_BASE_API_URL + '/cards/' + data.card_id, {method:"DELETE"});
+			const response = await fetch(PUBLIC_BASE_API_URL + '/cards/' + data.card_id, {
+				method: 'DELETE'
+			});
 			if (!response.ok) {
 				throw new Error(`Response status: ${response.status}`);
 			}
-			if (response.ok){
+			if (response.ok) {
 				goto('/card/list');
 			} else {
 				throw new Error('Failed to delete card');
 			}
-			
 		} catch (error) {
 			console.log(error);
 			console.error(error.message);
