@@ -320,8 +320,7 @@ async def update_card(card_id: int, data: CreateCard):
         await connect_tags_or_raise_500(data.tags, card_id)
     await save_or_raise_500(card)
     logger.info(f"New card {card.name} updated!")
-    response = {"status": "success", "card": card_id}
-    return JSONResponse(content=response, status_code=200)
+    return Response(status_code=204)
 
 
 @router.delete("/cards/{card_id}")
@@ -342,8 +341,7 @@ async def delete_card(card_id: int):
     card = await get_or_raise_404(statements.get_card_by_id, card_id)
     await delete_or_raise_500(card)
     logger.info(f"New card {card.name} deleted!")
-    response = {"status": "success", "card": card_id}
-    return JSONResponse(content=response, status_code=200)
+    return Response(status_code=204)
 
 
 @router.post("/users")

@@ -19,8 +19,6 @@
 			if (!response.ok) {
 				throw new Error(`Response status: ${response.status}`);
 			}
-			const result = await response.json();
-			console.log(result);
 			goto('/card/list');
 		} catch (error) {
 			console.log(error);
@@ -30,7 +28,7 @@
 
 	async function getCard() {
 		try {
-			const response = await fetch('/cards/' + data.card_id);
+			const response = await fetch(PUBLIC_BASE_API_URL + '/cards/' + data.card_id);
 			if (!response.ok) {
 				throw new Error(`Response status: ${response.status}`);
 			}
@@ -61,7 +59,8 @@
 
 		<div class="card-view">
 			<Card bind:card bind:mode bind:this={cardComponent} />
-			<button on:click={cardComponent.saveCard}>Save</button>
+			<button on:click={cardComponent.saveCard}>Save edit</button>
+			<button on:click={deleteCard}>Delete card</button>
 		</div>
 	{:catch error}
 		<h1>Karta s id {data.card_id} neexistuje</h1>
