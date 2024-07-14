@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { slugify } from '$lib/slugify.ts';
+	import { PUBLIC_BASE_API_URL } from '$env/static/public';
+	import { slugify } from '$lib/slugify';
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
 	export let mode = 'create';
@@ -35,7 +36,6 @@
 	}
 
 	async function sentCardToAPI() {
-		
 		let cardTypes = await $api.getCardTypes();
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
 
@@ -50,20 +50,22 @@
 				set_name: card.setName,
 				tags: card.tags
 			});
-
 		} else if (mode == 'update') {
-			$api.updateCard({
-				id: card.id,
-				name: card.name,
-				fluff: card.fluff,
-				effect: card.effect,
-				user_id: 1, // TODO: get user id from session
-				card_type_id: 1,
-				in_set: card.in_set,
-				set_name: card.set_name,
-				tags: card.tags
-			}, card.id);
-	}
+			$api.updateCard(
+				{
+					id: card.id,
+					name: card.name,
+					fluff: card.fluff,
+					effect: card.effect,
+					user_id: 1, // TODO: get user id from session
+					card_type_id: 1,
+					in_set: card.in_set,
+					set_name: card.set_name,
+					tags: card.tags
+				},
+				card.id
+			);
+		}
 	}
 
 	function pf_filter(text) {
