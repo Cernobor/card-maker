@@ -49,7 +49,11 @@ a {
     text-decoration: none;
 }
 
-textarea:focus, input:focus select:hover {
+a:hover {
+    color: #EEEEEE;
+}
+
+textarea:focus, input:focus, select:hover {
     background-color: #222831;
 }
 
