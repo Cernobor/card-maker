@@ -8,7 +8,6 @@ from typing import Callable, List, Optional
 from fastapi import APIRouter, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from pydantic import BaseModel
 from sqlmodel import SQLModel
 
 from . import models, statements
@@ -17,33 +16,6 @@ from .logger import Logger
 
 router = APIRouter()
 logger = Logger.get_instance()
-
-
-class CreateTag(BaseModel):
-    """
-    Fields of tag of CreateCard model.
-    """
-
-    id:int
-    name: str
-    description: Optional[str]
-
-
-class CreateCard(BaseModel):
-    """
-    Fields of request body of POST '/cardmaker/cards'.
-    If no user ID provided, user is set to default user (Anonymous).
-    """
-
-    id: Optional[int]
-    name: str
-    fluff: Optional[str]
-    effect: Optional[str]
-    user_id: Optional[int]
-    card_type_id: int
-    in_set: bool
-    set_name: Optional[str]
-    tags: List[CreateTag | None]
 
 
 async def save_or_raise_500(instance: SQLModel) -> SQLModel:
@@ -227,7 +199,7 @@ async def get_cards(
 
 
 @router.get("/cards/{card_id}")
-async def get_card(card_id: int):
+async def get_card_by_id(card_id: int):
     """
     Get card information by card ID.
 
@@ -255,13 +227,13 @@ async def get_card(card_id: int):
 
 
 @router.post("/cards")
-async def create_card(data: CreateCard):
+async def create_card(data: models.CardCreate):
     """
     Create new card and save it into database.
 
     Args:
-        card_data (CreateCard):
-                json request body,field are defined in CreateCard
+        card_data (models.CardCreate):
+                json request body, fields are defined in models.CardCreate
 
     Returns:
         json response with status code 201:
@@ -275,17 +247,7 @@ async def create_card(data: CreateCard):
         statements.get_user_by_id_or_default, data.user_id
     )
     await get_or_raise_404(statements.get_card_type_by_id, data.card_type_id)
-    card = await save_or_raise_500(
-        models.Card(
-            name=data.name,
-            fluff=data.fluff,
-            effect=data.effect,
-            user_id=user.id,
-            card_type_id=data.card_type_id,
-            in_set=data.in_set,
-            set_name=data.set_name,
-        )
-    )
+    card = await save_or_raise_500(models.Card(data))
     data.tags.append(
         models.Tag(name=str(datetime.now().year), description=None)
     )
