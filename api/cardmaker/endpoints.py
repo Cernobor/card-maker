@@ -2,12 +2,15 @@
 API endpoints.
 """
 
+import secrets
 from datetime import datetime
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Annotated
+from datetime import datetime, timedelta
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from sqlmodel import SQLModel
 
 from . import models, statements, auth
@@ -16,6 +19,7 @@ from .logger import Logger
 
 router = APIRouter()
 logger = Logger.get_instance()
+security = HTTPBasic()
 
 
 async def save_or_raise_500(instance: SQLModel) -> SQLModel:
@@ -340,3 +344,41 @@ async def create_user(data: models.UserCreate):
     response = {"status": "success", "user_id": user.id}
     logger.info(f"New user {user.username} created!")
     return JSONResponse(content=response, status_code=201)
+
+
+async def authenticate(username: str, password: str):
+    """
+    TODO docstring
+    """
+    user = await statements.get_user_by_name(username)
+    if not user:
+        logger.debug(f"{username} not in db")
+        return False
+    if not secrets.compare_digest(
+        auth.hash_password(password), user.hashed_password
+    ):
+        logger.debug(f"{auth.hash_password(password)} is not same as {user.hashed_password}")
+        return False
+    return user
+
+
+@router.post("/users/me")
+async def get_current_user(
+    credentials: Annotated[HTTPBasicCredentials, Depends(security)]
+):
+    """
+    TODO docstring
+    """
+    user = await authenticate(credentials.username, credentials.password)
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Wrong username or password!",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return models.Token(
+        access_token=auth.create_access_token(
+            user, datetime.now() + timedelta(minutes=30)
+        ),
+        token_type="bearer",
+    )
