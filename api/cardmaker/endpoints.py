@@ -2,106 +2,20 @@
 API endpoints.
 """
 
-import secrets
 from datetime import datetime
-from typing import Callable, List, Optional, Annotated
+from typing import List, Optional, Annotated
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from sqlmodel import SQLModel
 
-from . import models, statements, auth
+from . import models, statements, security, utils
 from .logger import Logger
 
 
 router = APIRouter()
 logger = Logger.get_instance()
-security = HTTPBasic()
-
-
-async def save_or_raise_500(instance: SQLModel) -> SQLModel:
-    """
-    Save instance into database or raise HTTP exeption.
-
-    Args:
-        instance (SQLModel): instance of child class of SQLModel
-
-    Returns:
-        SQLModel: same child of SQLModel with updated parameters
-
-    Raises:
-        HTTP 500: when cannot save data into database
-    """
-    try:
-        return await statements.save_into_db(instance)
-    except IOError as e:
-        logger.error(f"Database error: {e}")
-        raise HTTPException(
-            status_code=500, detail=f"An exception occurred: {e}"
-        )
-
-
-async def connect_tags_or_raise_500(tags, card_id):
-    """
-    Save new tags and connect existing tags or raise HTTP exeption.
-
-    Args:
-        tags (List[CreateTag]): list of tags to connect
-        card_id (int): ID of card to connect
-
-    Raises:
-        HTTP 500: when cannot save data into database
-    """
-    try:
-        await statements.connect_tags_with_card(tags, card_id)
-    except IOError as e:
-        logger.error(f"Database error: {e}")
-        raise HTTPException(
-            status_code=500, detail=f"An exception occurred: {e}"
-        )
-
-
-async def delete_or_raise_500(instance: SQLModel):
-    """
-    Delete instance in database or raise HTTP exeption.
-
-    Args:
-        instance (SQLModel): instance of child class of SQLModel
-
-    Raises:
-        HTTP 500: when cannot delete data in database
-    """
-    try:
-        await statements.delete_id_db(instance)
-    except IOError as e:
-        logger.error(f"Database error: {e}")
-        raise HTTPException(
-            status_code=500, detail=f"An exception occurred: {e}"
-        )
-
-
-async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
-    """
-    Get instance from databse or raise HTTP exeption.
-
-    Args:
-        get_function (Callable): function for getting data
-        args (): arguments for 'get_function'
-
-    Returns:
-        SQLModel: requested instance of child class of SQLModel
-
-    Raises:
-        HTTP 500: when cannot delete data in database
-    """
-    data = await get_function(*args)
-    if not data:
-        logger.warning("Resource not found.")
-        raise HTTPException(status_code=404, detail="Resource not found.")
-    return data
 
 
 @router.get("/users")
@@ -115,7 +29,7 @@ async def get_users():
     Raises:
         HTTP 500: database error
     """
-    json_data = jsonable_encoder(await get_or_raise_404(statements.get_users))
+    json_data = jsonable_encoder(await utils.get_or_raise_404(statements.get_users))
     logger.info("Users requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
@@ -132,7 +46,7 @@ async def get_card_types():
         HTTP 500: database error
     """
     json_data = jsonable_encoder(
-        await get_or_raise_404(statements.get_card_types)
+        await utils.get_or_raise_404(statements.get_card_types)
     )
     logger.info("Card types requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
@@ -149,7 +63,7 @@ async def get_tags():
     Raises:
         HTTP 500: database error
     """
-    json_data = jsonable_encoder(await get_or_raise_404(statements.get_tags))
+    json_data = jsonable_encoder(await utils.get_or_raise_404(statements.get_tags))
     logger.info("Tags requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
@@ -187,7 +101,7 @@ async def get_cards(
     for card in cards:
         tags = [
             models.TagBase.model_validate(tag)
-            for tag in await get_or_raise_404(
+            for tag in await utils.get_or_raise_404(
                 statements.get_tags_of_card, card.id
             )
         ]
@@ -214,13 +128,13 @@ async def get_card_by_id(card_id: int):
     Raises:
         HTTP 500: database error
     """
-    card = await get_or_raise_404(statements.get_card_by_id, card_id)
+    card = await utils.get_or_raise_404(statements.get_card_by_id, card_id)
     card = models.CardGet.model_validate(
         card.model_dump(),
         update={
             "tag_list": [
                 models.TagBase.model_validate(tag)
-                for tag in await get_or_raise_404(
+                for tag in await utils.get_or_raise_404(
                     statements.get_tags_of_card, card.id
                 )
             ]
@@ -246,16 +160,16 @@ async def create_card(data: models.CardCreate):
         HTTP 500: database error
         HTTP 404: invalid user ID or card type ID
     """
-    user = await get_or_raise_404(
+    user = await utils.get_or_raise_404(
         statements.get_user_by_id_or_default, data.user_id
     )
     data.user_id = user.id
-    await get_or_raise_404(statements.get_card_type_by_id, data.card_type_id)
-    card = await save_or_raise_500(models.Card.model_validate(data))
+    await utils.get_or_raise_404(statements.get_card_type_by_id, data.card_type_id)
+    card = await utils.save_or_raise_500(models.Card.model_validate(data))
     data.tag_list.append(
         models.Tag(name=str(datetime.now().year), description=None)
     )
-    await connect_tags_or_raise_500(data.tag_list, card.id)
+    await utils.connect_tags_or_raise_500(data.tag_list, card.id)
     logger.info(f"New card {card.name} created!")
     return JSONResponse(
         content={"status": "successfully created", "card_id": card.id},
@@ -279,10 +193,10 @@ async def update_card(card_id: int, data: models.CardCreate):
         HTTP 500: database error
         HTTP 404: invalid card ID
     """
-    card = await get_or_raise_404(statements.get_card_by_id, card_id)
+    card = await utils.get_or_raise_404(statements.get_card_by_id, card_id)
     if data.tag_list:
-        await connect_tags_or_raise_500(data.tag_list, card_id)
-    await save_or_raise_500(
+        await utils.connect_tags_or_raise_500(data.tag_list, card_id)
+    await utils.save_or_raise_500(
         card.sqlmodel_update(card.model_dump(), update={"id": card_id})
     )
     logger.info(f"New card {card.name} updated!")
@@ -304,8 +218,8 @@ async def delete_card(card_id: int):
         HTTP 500: database error
         HTTP 404: invalid card ID
     """
-    card = await get_or_raise_404(statements.get_card_by_id, card_id)
-    await delete_or_raise_500(card)
+    card = await utils.get_or_raise_404(statements.get_card_by_id, card_id)
+    await utils.delete_or_raise_500(card)
     logger.info(f"New card {card.name} deleted!")
     return Response(status_code=204)
 
@@ -332,7 +246,7 @@ async def create_user(data: models.UserCreate):
             status_code=403, detail=f"User with name {username} already exists!"
         )
     logger.info(data)
-    user = await save_or_raise_500(
+    user = await utils.save_or_raise_500(
         models.User.model_validate(
             data,
             update={
@@ -346,30 +260,14 @@ async def create_user(data: models.UserCreate):
     return JSONResponse(content=response, status_code=201)
 
 
-async def authenticate(username: str, password: str):
-    """
-    TODO docstring
-    """
-    user = await statements.get_user_by_name(username)
-    if not user:
-        logger.debug(f"{username} not in db")
-        return False
-    if not secrets.compare_digest(
-        auth.hash_password(password), user.hashed_password
-    ):
-        logger.debug(f"{auth.hash_password(password)} is not same as {user.hashed_password}")
-        return False
-    return user
-
-
 @router.post("/users/me")
-async def get_current_user(
-    credentials: Annotated[HTTPBasicCredentials, Depends(security)]
+async def get_access_token(
+    credentials: Annotated[HTTPBasicCredentials, Depends(security.http_basic)]
 ):
     """
     TODO docstring
     """
-    user = await authenticate(credentials.username, credentials.password)
+    user = await security.authenticate(credentials.username, credentials.password)
     if not user:
         raise HTTPException(
             status_code=401,
@@ -377,7 +275,7 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Basic"},
         )
     return models.Token(
-        access_token=auth.create_access_token(
+        access_token=security.create_access_token(
             user, datetime.now() + timedelta(minutes=30)
         ),
         token_type="bearer",
