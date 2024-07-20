@@ -143,7 +143,7 @@ async def get_card_by_id(card_id: int):
     return JSONResponse(content=jsonable_encoder(card), status_code=200)
 
 
-@router.post("/cards")
+@router.post("/cards", dependencies=[Depends[security.JWTBearer]])
 async def create_card(data: models.CardCreate):
     """
     Create new card and save it into database.
@@ -177,7 +177,7 @@ async def create_card(data: models.CardCreate):
     )
 
 
-@router.put("/cards/{card_id}")
+@router.put("/cards/{card_id}", dependencies=[Depends[security.JWTBearer]])
 async def update_card(card_id: int, data: models.CardCreate):
     """
     Update an existing card and save it into database.
@@ -203,7 +203,7 @@ async def update_card(card_id: int, data: models.CardCreate):
     return Response(status_code=204)
 
 
-@router.delete("/cards/{card_id}")
+@router.delete("/cards/{card_id}", dependencies=[Depends[security.JWTBearer]])
 async def delete_card(card_id: int):
     """
     Delete an existing card in the database.
