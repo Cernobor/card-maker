@@ -1,11 +1,13 @@
 """
 Authorization utilities
 """
-from datetime import datetime
+
 import os
-import jwt
 import secrets
-from fastapi import Request, HTTPException
+from datetime import datetime
+
+import jwt
+from fastapi import HTTPException, Request
 from fastapi.security import HTTPBasic, HTTPBasicCredentials, HTTPBearer
 
 from . import models, statements
@@ -24,6 +26,7 @@ class JWTBearer(HTTPBearer):
     """
     TODO docstring
     """
+
     def __init__(self, auto_error: bool = True):
         super(JWTBearer, self).__init__(auto_error=auto_error)
 
@@ -31,12 +34,18 @@ class JWTBearer(HTTPBearer):
         token = await super(JWTBearer, self).__call__(request)
         if token:
             if token.scheme != "Bearer":
-                raise HTTPException(status_code=403, detail="Invalid authentication scheme!")
+                raise HTTPException(
+                    status_code=403, detail="Invalid authentication scheme!"
+                )
             if not await verify_jwt(token):
-                raise HTTPException(status_code=403, detail="Invalid or expired token!")
+                raise HTTPException(
+                    status_code=403, detail="Invalid or expired token!"
+                )
             return token.credentials
         else:
-            raise HTTPException(status_code=403, detail="Invalid authorization code!")
+            raise HTTPException(
+                status_code=403, detail="Invalid authorization code!"
+            )
 
 
 def hash_password(password: str):
@@ -71,7 +80,9 @@ async def authenticate(username: str, password: str):
     if not secrets.compare_digest(
         auth.hash_password(password), user.hashed_password
     ):
-        logger.debug(f"{hash_password(password)} is not same as {user.hashed_password}")
+        logger.debug(
+            f"{hash_password(password)} is not same as {user.hashed_password}"
+        )
         return
     return user
 

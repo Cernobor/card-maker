@@ -3,7 +3,7 @@ ORM models for 'Cardmaker' database and models for fastapi endpoints.
 """
 
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -12,6 +12,7 @@ class Token(SQLModel):
     """
     JWT token
     """
+
     access_token: str
     token_type: str
 
