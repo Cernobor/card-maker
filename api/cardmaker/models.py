@@ -8,6 +8,14 @@ from typing import Optional, List
 from sqlmodel import Field, Relationship, SQLModel
 
 
+class Token(SQLModel):
+    """
+    JWT token
+    """
+    access_token: str
+    token_type: str
+
+
 class UserBase(SQLModel):
     """
     Base model of author of the card.
