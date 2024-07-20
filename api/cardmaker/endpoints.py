@@ -10,7 +10,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from sqlmodel import SQLModel
 
-from . import models, statements
+from . import models, statements, auth
 from .logger import Logger
 
 
@@ -179,23 +179,21 @@ async def get_cards(
             status_code=404,
             detail="Resource does not exist!",
         )
-    cards = [
-        CreateCard(
-            id=card.id,
-            name=card.name,
-            fluff=card.fluff,
-            effect=card.effect,
-            user_id=card.user_id,
-            card_type_id=card.card_type_id,
-            in_set=card.in_set,
-            set_name=card.set_name,
-            tags=await get_or_raise_404(statements.get_tags_of_card, card.id),
+    cards_new = []
+    for card in cards:
+        tags = [
+            models.TagBase.model_validate(tag)
+            for tag in await get_or_raise_404(
+                statements.get_tags_of_card, card.id
+            )
+        ]
+        cards_new.append(
+            models.CardGet.model_validate(
+                card.model_dump(), update={"tag_list": tags}
+            )
         )
-        for card in cards
-    ]
-    json_data = jsonable_encoder(cards)
     logger.info("Cards requested, response successful.")
-    return JSONResponse(content=json_data, status_code=200)
+    return JSONResponse(content=jsonable_encoder(cards), status_code=200)
 
 
 @router.get("/cards/{card_id}")
@@ -213,17 +211,18 @@ async def get_card_by_id(card_id: int):
         HTTP 500: database error
     """
     card = await get_or_raise_404(statements.get_card_by_id, card_id)
-    return_data = CreateCard(
-            id=card.id,
-            name=card.name,
-            fluff=card.fluff,
-            effect=card.effect,
-            user_id=card.user_id,
-            card_type_id=card.card_type_id,
-            in_set=card.in_set,
-            set_name=card.set_name,
-            tags=await get_or_raise_404(statements.get_tags_of_card, card.id))
-    return JSONResponse(content=jsonable_encoder(return_data), status_code=200)
+    card = models.CardGet.model_validate(
+        card.model_dump(),
+        update={
+            "tag_list": [
+                models.TagBase.model_validate(tag)
+                for tag in await get_or_raise_404(
+                    statements.get_tags_of_card, card.id
+                )
+            ]
+        },
+    )
+    return JSONResponse(content=jsonable_encoder(card), status_code=200)
 
 
 @router.post("/cards")
@@ -232,7 +231,7 @@ async def create_card(data: models.CardCreate):
     Create new card and save it into database.
 
     Args:
-        card_data (models.CardCreate):
+        data (models.CardCreate):
                 json request body, fields are defined in models.CardCreate
 
     Returns:
@@ -246,41 +245,42 @@ async def create_card(data: models.CardCreate):
     user = await get_or_raise_404(
         statements.get_user_by_id_or_default, data.user_id
     )
+    data.user_id = user.id
     await get_or_raise_404(statements.get_card_type_by_id, data.card_type_id)
-    card = await save_or_raise_500(models.Card(data))
-    data.tags.append(
+    card = await save_or_raise_500(models.Card.model_validate(data))
+    data.tag_list.append(
         models.Tag(name=str(datetime.now().year), description=None)
     )
-    await connect_tags_or_raise_500(data.tags, card.id)
-    response = {"status": "successfully created", "card_id": card.id}
+    await connect_tags_or_raise_500(data.tag_list, card.id)
     logger.info(f"New card {card.name} created!")
-    return JSONResponse(content=response, status_code=201)
+    return JSONResponse(
+        content={"status": "successfully created", "card_id": card.id},
+        status_code=201,
+    )
 
 
 @router.put("/cards/{card_id}")
-async def update_card(card_id: int, data: CreateCard):
+async def update_card(card_id: int, data: models.CardCreate):
     """
     Update an existing card and save it into database.
 
     Args:
-        card_data (Card): json request body, field are defined in models.Card
+        data (models.CardCreate):
+                json request body, field are defined in models.CardCreate
 
     Returns:
-        json response with status code 204: success message
+        response with status code 204
 
     Raises:
         HTTP 500: database error
         HTTP 404: invalid card ID
     """
     card = await get_or_raise_404(statements.get_card_by_id, card_id)
-    card.name = data.name
-    card.fluff = data.fluff
-    card.effect = data.effect
-    card.in_set = data.in_set
-    card.set_name = data.set_name
-    if data.tags:
-        await connect_tags_or_raise_500(data.tags, card_id)
-    await save_or_raise_500(card)
+    if data.tag_list:
+        await connect_tags_or_raise_500(data.tag_list, card_id)
+    await save_or_raise_500(
+        card.sqlmodel_update(card.model_dump(), update={"id": card_id})
+    )
     logger.info(f"New card {card.name} updated!")
     return Response(status_code=204)
 
@@ -291,10 +291,10 @@ async def delete_card(card_id: int):
     Delete an existing card in the database.
 
     Args:
-        card_data (Card): json request body, field are defined in models.Card
+        card_id (int): id of card to delete
 
     Returns:
-        json response with status code 204: success message
+        response with status code 204
 
     Raises:
         HTTP 500: database error
@@ -307,25 +307,36 @@ async def delete_card(card_id: int):
 
 
 @router.post("/users")
-async def create_user(username: str):
+async def create_user(data: models.UserCreate):
     """
     Create new user and save it into database.
 
     Args:
-        username (str): name of new created user
+        data (models.UserCreate):
+                json request body, field are defined in models.UserCreate
 
     Returns:
-        json response: success message and ID of created user
+        json response with status code 201:
+                success message and ID of created user
 
     Raises:
         HTTP 500: database error
         HTTP 404: invalid card ID
     """
-    if await statements.get_user_by_name(username):
+    if await statements.get_user_by_name(data.username):
         raise HTTPException(
             status_code=403, detail=f"User with name {username} already exists!"
         )
-    user = await save_or_raise_500(models.User(name=username))
+    logger.info(data)
+    user = await save_or_raise_500(
+        models.User.model_validate(
+            data,
+            update={
+                "hashed_password": auth.hash_password(data.password),
+                "anonymous": False,
+            },
+        )
+    )
     response = {"status": "success", "user_id": user.id}
-    logger.info(f"New user {user.name} created!")
-    return JSONResponse(content=response, status_code=200)
+    logger.info(f"New user {user.username} created!")
+    return JSONResponse(content=response, status_code=201)
