@@ -15,6 +15,8 @@ from .logger import Logger
 
 logger = Logger.get_instance()
 SECRET_KEY = os.getenv("SECRET_KEY")
+# just for development purposes
+# this line will be removed and new secret key will be generated
 SECRET_KEY = "6de9b7c10564fb4794c13a2c127b5a00e21259cd56df440aad5199dae182966b"
 ALGORITHM = "HS256"
 
