@@ -1,6 +1,7 @@
 """
 Some usefull functions for API endpoints
 """
+
 from typing import Callable
 
 from fastapi import HTTPException
@@ -8,7 +9,6 @@ from sqlmodel import SQLModel
 
 from . import models
 from .logger import Logger
-
 
 logger = Logger.get_instance()
 

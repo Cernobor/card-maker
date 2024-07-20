@@ -2,17 +2,15 @@
 API endpoints.
 """
 
-from datetime import datetime
-from typing import List, Optional, Annotated
 from datetime import datetime, timedelta
+from typing import Annotated, List, Optional
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 
-from . import models, statements, security, utils
+from . import models, security, statements, utils
 from .logger import Logger
-
 
 router = APIRouter()
 logger = Logger.get_instance()
@@ -29,7 +27,9 @@ async def get_users():
     Raises:
         HTTP 500: database error
     """
-    json_data = jsonable_encoder(await utils.get_or_raise_404(statements.get_users))
+    json_data = jsonable_encoder(
+        await utils.get_or_raise_404(statements.get_users)
+    )
     logger.info("Users requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
@@ -63,7 +63,9 @@ async def get_tags():
     Raises:
         HTTP 500: database error
     """
-    json_data = jsonable_encoder(await utils.get_or_raise_404(statements.get_tags))
+    json_data = jsonable_encoder(
+        await utils.get_or_raise_404(statements.get_tags)
+    )
     logger.info("Tags requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
 
@@ -164,7 +166,9 @@ async def create_card(data: models.CardCreate):
         statements.get_user_by_id_or_default, data.user_id
     )
     data.user_id = user.id
-    await utils.get_or_raise_404(statements.get_card_type_by_id, data.card_type_id)
+    await utils.get_or_raise_404(
+        statements.get_card_type_by_id, data.card_type_id
+    )
     card = await utils.save_or_raise_500(models.Card.model_validate(data))
     data.tag_list.append(
         models.Tag(name=str(datetime.now().year), description=None)
@@ -267,7 +271,9 @@ async def get_access_token(
     """
     TODO docstring
     """
-    user = await security.authenticate(credentials.username, credentials.password)
+    user = await security.authenticate(
+        credentials.username, credentials.password
+    )
     if not user:
         raise HTTPException(
             status_code=401,
