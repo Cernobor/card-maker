@@ -8,4 +8,4 @@ def hash_password(password):
     passlib library can be used:
     https://passlib.readthedocs.io/en/stable/
     """
-    return f"hashed password {password}"
+    return f"hashed password {password} + salt"

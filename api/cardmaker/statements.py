@@ -14,7 +14,7 @@ engine = create_engine(os.getenv("DATABASE_URL"))
 logger = Logger.get_instance()
 
 
-async def get_users() -> List[models.User | None]:
+async def get_users() -> List[models.UserPublic | None]:
     """
     Get all users from database.
 
@@ -23,7 +23,10 @@ async def get_users() -> List[models.User | None]:
     """
     with Session(engine) as session:
         statement = select(models.User)
-        return session.execute(statement).scalars().all()
+        return [
+            models.UserPublic.model_validate(db_user)
+            for db_user in session.execute(statement).scalars().all()
+        ]
 
 
 async def get_card_types() -> List[models.CardType | None]:
@@ -103,7 +106,7 @@ async def get_user_by_id_or_default(
         statement = (
             select(models.User).where(models.User.id == user_id)
             if user_id
-            else select(models.User).where(models.User.name == "Anonym")
+            else select(models.User).where(models.User.username == "Anonym")
         )
         return session.exec(statement).first()
 
@@ -140,7 +143,7 @@ async def get_user_by_name(username: str) -> models.User | None:
         or None if this name does not exist
     """
     with Session(engine) as session:
-        statement = select(models.User).where(models.User.name == username)
+        statement = select(models.User).where(models.User.username == username)
         return session.exec(statement).first()
 
 

@@ -29,7 +29,9 @@ def save_card_types(card_types: list):
                 session.add(card_type_instance)
             except Exception as e:
                 session.rollback()
-                logger.error(f"Cannot save card type {card_type["name"]} into db. {e}")
+                logger.error(
+                    f"Cannot save card type {card_type["name"]} into db. {e}"
+                )
                 return
             session.commit()
             logger.info(f"Card type {card_type["name"]} inserted into db.")
@@ -44,14 +46,20 @@ def save_users(users: list):
     """
     with Session(engine) as session:
         for user in users:
+            logger.info(user)
             try:
-                session.add(models.User(name=user["name"]))
+                session.add(
+                    models.User(
+                        username=user["username"],
+                        anonymous=user["anonymous"],
+                    )
+                )
             except Exception as e:
                 session.rollback()
-                logger.error(f"Cannot save user {user["name"]} into db. {e}")
+                logger.error(f"Cannot save user {user["username"]} into db. {e}")
                 return
             session.commit()
-            logger.info(f"User {user["name"]} inserted into db.")
+            logger.info(f"User {user["username"]} inserted into db.")
 
 
 def save_tags(tags: list):
@@ -64,7 +72,9 @@ def save_tags(tags: list):
     with Session(engine) as session:
         for tag in tags:
             try:
-                session.add(models.Tag(name=tag["name"], description=tag["description"]))
+                session.add(
+                    models.Tag(name=tag["name"], description=tag["description"])
+                )
             except Exception as e:
                 session.rollback()
                 logger.error(f"Cannot save tag {tag["name"]} into db. {e}")

@@ -13,7 +13,8 @@
     ],
     "users": [
         {
-            "name": "Anonym"
+            "username": "Anonym",
+            "anonymous": true
         }
     ],
     "tags": [
