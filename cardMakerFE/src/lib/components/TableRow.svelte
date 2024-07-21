@@ -1,27 +1,27 @@
 <script lang="ts">
-    import type { Author, CardType } from "$lib/types";
+    import type { UserPublic, CardType } from "$lib/interfaces";
     import Card from "./Card.svelte";
 
     export let card: Card;
 
-    export let authors: Author[]|[];
+    export let users: UserPublic[]|[];
     export let types: CardType[]|[];
 
     let cardAuthor: string = "waiting...";
     let cardType: string = "waiting...";
 
     async function getUserNameByID(id: number) {
-        return authors.filter((author) => author.id == id)[0];
+        return users.filter((user) => user.id == id)[0];
     }
 
     async function getTypeNameByID(id: number) {
         return types.filter((type) => type.id == id)[0];
     }
 
-    $: if (authors.length) {
+    $: if (users.length) {
         (async () => {
             const response = await getUserNameByID(card.user_id);
-            cardAuthor = response.name;
+            cardAuthor = response.username;
         })();
     }
     $: if (types.length) {
