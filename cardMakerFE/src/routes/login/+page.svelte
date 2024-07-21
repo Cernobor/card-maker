@@ -1,12 +1,15 @@
 <script lang="ts">
     import type { User } from "$lib/types";
+    import { Cookies } from "js-cookie";
     let user: User;
 
     function handleSubmit(e) {
         try {
             /*
-             * TODO: saveUserOrError
+             * TODO: getTokenOrError
              */
+            let JWTToken = "";
+            Cookies.set("token", JWTToken);
         } catch {
             e.prevendDefalt()
             user.username = "";
