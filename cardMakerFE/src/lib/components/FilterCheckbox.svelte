@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Tag } from "$lib/interfaces";
     export let options: Tag[]|[];
-    export let activeTags: number[]|[];
+    export let activeTags: Tag[]|[];
 
     function handleChange(e) {
         if (e.target.checked) {
@@ -18,7 +18,7 @@
         {#each options as option}
         <div class="checkbox-container" >
             <label for={option.name}>{option.name}</label>
-            <input type="checkbox" id={option.name} class="checkbox" value={option.name} on:change={handleChange} />
+            <input type="checkbox" id={option.name} class="checkbox" value={option} on:change={handleChange} />
         </div>
     {/each}
     </div>
