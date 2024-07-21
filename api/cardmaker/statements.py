@@ -250,7 +250,10 @@ async def get_tags_of_card(card_id: int) -> List[models.Tag]:
 
     Args:
         card_id (int): ID of card connected to tags
+
+    Returns:
+        List[models.Tag]: list of tags of card
     """
     with Session(engine) as session:
         statement = select(models.Card).where(models.Card.id == card_id)
-        return session.exec(statement).first().tags
+        return session.exec(statement).first().tag_list
