@@ -7,7 +7,7 @@ from typing import Callable
 from fastapi import HTTPException
 from sqlmodel import SQLModel
 
-from . import models
+from . import models, statements
 from .logger import Logger
 
 logger = Logger.get_instance()

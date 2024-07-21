@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import HTTPBasicCredentials
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 
@@ -113,7 +114,7 @@ async def get_cards(
             )
         )
     logger.info("Cards requested, response successful.")
-    return JSONResponse(content=jsonable_encoder(cards), status_code=200)
+    return JSONResponse(content=jsonable_encoder(cards_new), status_code=200)
 
 
 @router.get("/cards/{card_id}")
@@ -145,7 +146,7 @@ async def get_card_by_id(card_id: int):
     return JSONResponse(content=jsonable_encoder(card), status_code=200)
 
 
-@router.post("/cards", dependencies=[Depends[security.JWTBearer]])
+@router.post("/cards", dependencies=[Depends(security.JWTBearer())])
 async def create_card(data: models.CardCreate):
     """
     Create new card and save it into database.
@@ -181,7 +182,7 @@ async def create_card(data: models.CardCreate):
     )
 
 
-@router.put("/cards/{card_id}", dependencies=[Depends[security.JWTBearer]])
+@router.put("/cards/{card_id}", dependencies=[Depends(security.JWTBearer())])
 async def update_card(card_id: int, data: models.CardCreate):
     """
     Update an existing card and save it into database.
@@ -207,7 +208,7 @@ async def update_card(card_id: int, data: models.CardCreate):
     return Response(status_code=204)
 
 
-@router.delete("/cards/{card_id}", dependencies=[Depends[security.JWTBearer]])
+@router.delete("/cards/{card_id}", dependencies=[Depends(security.JWTBearer())])
 async def delete_card(card_id: int):
     """
     Delete an existing card in the database.
@@ -254,7 +255,7 @@ async def create_user(data: models.UserCreate):
         models.User.model_validate(
             data,
             update={
-                "hashed_password": auth.hash_password(data.password),
+                "hashed_password": security.hash_password(data.password),
                 "anonymous": False,
             },
         )
