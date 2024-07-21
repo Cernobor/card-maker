@@ -1,5 +1,10 @@
-<script>
-	export let card;
+<script lang="ts">
+	import type { Tag } from "./types";
+	import Card from "./Card.svelte"
+	import { onMount } from "svelte";
+	import { fetchTags } from "./fetchResource";
+
+	export let card: Card;
 	export let cardTypeProp = card.type;
 	export let cardTypes;
 
@@ -12,6 +17,21 @@
 			card.set_name = 'Jméno rodiny aspektů';
 		}
 	}
+
+	let tags: Tag[]|[] = [];
+	onMount(async () => {
+		tags = await fetchTags();
+    });
+
+	function handleTagsChange(e) {
+        if (e.target.checked) {
+            card.tags.push(e.target.value)
+        } else {
+            card.tags = card.tags.filter((_, i) => i !== card.tags.indexOf(e.target.value));
+        }
+		console.log(card.tags)
+	}
+
 </script>
 
 <div class="inputs">
@@ -52,6 +72,12 @@
 				<input type="text" bind:value={card.set_name} id="aspectFamilyName" />
 			{/if}
 		{/if}
+		<div class="checkbox-container">
+			{#each tags as tag}
+				<label for={tag.name}>{tag.name}</label>
+				<input type="checkbox" id={tag.name} class="checkbox" value={tag.name} on:change={handleTagsChange} />
+			{/each}
+		</div>
 	</form>
 </div>
 
