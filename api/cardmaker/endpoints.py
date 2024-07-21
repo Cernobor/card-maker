@@ -6,9 +6,9 @@ from datetime import datetime, timedelta
 from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import HTTPBasicCredentials
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
+from fastapi.security import HTTPBasicCredentials
 
 from . import models, security, statements, utils
 from .logger import Logger
@@ -183,7 +183,7 @@ async def create_card(data: models.CardCreate):
 
 
 @router.put("/cards/{card_id}", dependencies=[Depends(security.JWTBearer())])
-async def update_card(card_id: int, data: models.CardCreate):
+async def update_card(card_id: int, data: models.CardUpdate):
     """
     Update an existing card and save it into database.
 
@@ -201,9 +201,7 @@ async def update_card(card_id: int, data: models.CardCreate):
     card = await utils.get_or_raise_404(statements.get_card_by_id, card_id)
     if data.tag_list:
         await utils.connect_tags_or_raise_500(data.tag_list, card_id)
-    await utils.save_or_raise_500(
-        card.sqlmodel_update(card.model_dump(), update={"id": card_id})
-    )
+    await utils.save_or_raise_500(card.sqlmodel_update(data.model_dump()))
     logger.info(f"New card {card.name} updated!")
     return Response(status_code=204)
 
