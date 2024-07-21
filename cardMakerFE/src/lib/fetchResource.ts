@@ -2,7 +2,7 @@ import { PUBLIC_BASE_API_URL } from '$env/static/public';
 import { getErrorMessage } from "./errors";
 import type { Tag, UserPublic, CardType, CardGet } from "./interfaces";
 
-export async function fetchCards(): Promise<object|CardGet[]|[]> {
+export async function fetchCards(): Promise<CardGet[]|[]> {
     /**
      * Base function for GET methods.
      * 
@@ -16,7 +16,7 @@ export async function fetchCards(): Promise<object|CardGet[]|[]> {
     }
 }
 
-export async function fetchUsers(): Promise<object|UserPublic[]|[]> {
+export async function fetchUsers(): Promise<UserPublic[]|[]> {
     /**
      * Base function for GET methods.
      * 
@@ -30,7 +30,7 @@ export async function fetchUsers(): Promise<object|UserPublic[]|[]> {
     }
 }
 
-export async function fetchTypes(): Promise<object|CardType[]|[]> {
+export async function fetchTypes(): Promise<CardType[]|[]> {
     /**
      * Base function for GET methods.
      * 
@@ -44,7 +44,7 @@ export async function fetchTypes(): Promise<object|CardType[]|[]> {
     }
 }
 
-export async function fetchTags(): Promise<object|Tag[]|[]> {
+export async function fetchTags(): Promise<Tag[]|[]> {
     /**
      * Base function for GET methods.
      * 
@@ -58,12 +58,12 @@ export async function fetchTags(): Promise<object|Tag[]|[]> {
     }
 }
 
-async function fetchResource(resourceName: string): Promise<object> {
+async function fetchResource(resourceName: string) {
     /**
      * Base function for GET methods.
      * 
      * @param resourceName - name of recource in uri
-     * @returns promise of object of response
+     * @returns promise of object of response json
      */
     const response = await fetch(`${PUBLIC_BASE_API_URL}/${resourceName}`);
     if (!response.ok) {
