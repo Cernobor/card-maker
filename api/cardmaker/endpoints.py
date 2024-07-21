@@ -281,7 +281,7 @@ async def get_access_token(
         )
     return models.Token(
         access_token=security.create_access_token(
-            user, datetime.now() + timedelta(minutes=30)
+            user, datetime.now() + timedelta(days=15)
         ),
         token_type="bearer",
     )
