@@ -17,3 +17,8 @@ export type Tag = {
 export type ErrorWithMessage = {
     message: string;
 }
+
+export type User = {
+    username: string;
+    password: string;
+}
