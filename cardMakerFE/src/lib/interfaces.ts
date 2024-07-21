@@ -61,6 +61,21 @@ export interface UserPublic extends UserBase {
     id: number;
 }
 
+export function isUserPublic(instance: unknown): instance is UserPublic {
+    /**
+     * Determine if variable is of type UserPublic.
+     * 
+     * @param instance - variable of unknown type
+     * @returns predicate if variable is of type UsrePublic
+     */
+	return (
+		typeof instance === 'object' &&
+		instance !== null &&
+		'message' in instance &&
+		typeof (instance as Record<string, unknown>).username === 'string'
+	)
+}
+
 export interface CardType {
     /**
      * Interface used for '/api/card-types' GET.
@@ -75,4 +90,19 @@ export interface ErrorWithMessage {
      * Interface used for define error containing message.
      */
     message: string;
+}
+
+export function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
+    /**
+     * Determine if error contains message.
+     * 
+     * @param error - error object of unknown type
+     * @returns predicate if error is error with message
+     */
+	return (
+		typeof error === 'object' &&
+		error !== null &&
+		'message' in error &&
+		typeof (error as Record<string, unknown>).message === 'string'
+	)
 }
