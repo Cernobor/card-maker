@@ -32,21 +32,23 @@ class JWTBearer(HTTPBearer):
     def __init__(self, auto_error: bool = True):
         super(JWTBearer, self).__init__(auto_error=auto_error)
 
-    async def __call__(self):
+    async def __call__(self, request: Request):
         token = await super(JWTBearer, self).__call__(request)
         if token:
             if token.scheme != "Bearer":
                 raise HTTPException(
-                    status_code=403, detail="Invalid authentication scheme!"
+                    status_code=401, detail="Invalid authentication scheme!"
                 )
-            if not await verify_jwt(token):
+            user = await verify_jwt(token)
+            if not user:
                 raise HTTPException(
-                    status_code=403, detail="Invalid or expired token!"
+                    status_code=401, detail="Invalid or expired token!"
                 )
+            logger.debug(token.credentials)
             return token.credentials
         else:
             raise HTTPException(
-                status_code=403, detail="Invalid authorization code!"
+                status_code=401, detail="Invalid authorization code!"
             )
 
 
@@ -80,7 +82,7 @@ async def authenticate(username: str, password: str):
         logger.debug(f"{username} not in db")
         return
     if not secrets.compare_digest(
-        auth.hash_password(password), user.hashed_password
+        hash_password(password), user.hashed_password
     ):
         logger.debug(
             f"{hash_password(password)} is not same as {user.hashed_password}"
@@ -97,13 +99,16 @@ async def verify_jwt(token: str):
         logger.error("Cannot obtain secret key!")
         return
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username = payload.get("sub")
+        payload = jwt.decode(token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        logger.debug(payload)
+        username = payload["username"]
         if not username:
             return
         user = await statements.get_user_by_name(username)
+        logger.debug(user)
         if not user:
             return
-    except (InvalidTokenError, ValidationError):
+    except Exception as e:
+        logger.info(e)
         return
     return user
