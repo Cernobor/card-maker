@@ -97,7 +97,7 @@ class Tag(TagBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
     cards: List["Card"] = Relationship(
-        back_populates="tags", link_model=CardTagRelationship
+        back_populates="tag_list", link_model=CardTagRelationship
     )
 
 
@@ -118,7 +118,7 @@ class CardCreate(CardBase):
     Card model for 'create_card' POST method.
     """
 
-    tag_list: List[TagBase | None]
+    tags: List[TagBase | None]
     user_id: int
     card_type_id: int
 
@@ -137,7 +137,7 @@ class CardUpdate(CardBase):
     Card model for 'update_card' PUT method.
     """
 
-    tag_list: List[TagBase | None]
+    tags: List[TagBase | None]
 
 
 class Card(CardBase, table=True):
@@ -151,6 +151,6 @@ class Card(CardBase, table=True):
     user_id: int = Field(foreign_key="users.id")
     card_type_id: int = Field(foreign_key="card_types.id")
 
-    tags: List[Tag] = Relationship(
+    tag_list: List[Tag] = Relationship(
         back_populates="cards", link_model=CardTagRelationship
     )

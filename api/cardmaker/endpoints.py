@@ -110,7 +110,7 @@ async def get_cards(
         ]
         cards_new.append(
             models.CardGet.model_validate(
-                card.model_dump(), update={"tag_list": tags}
+                card.model_dump(), update={"tags": tags}
             )
         )
     logger.info("Cards requested, response successful.")
@@ -135,7 +135,7 @@ async def get_card_by_id(card_id: int):
     card = models.CardGet.model_validate(
         card.model_dump(),
         update={
-            "tag_list": [
+            "tags": [
                 models.TagBase.model_validate(tag)
                 for tag in await utils.get_or_raise_404(
                     statements.get_tags_of_card, card.id
@@ -171,10 +171,10 @@ async def create_card(data: models.CardCreate):
         statements.get_card_type_by_id, data.card_type_id
     )
     card = await utils.save_or_raise_500(models.Card.model_validate(data))
-    data.tag_list.append(
+    data.tags.append(
         models.Tag(name=str(datetime.now().year), description=None)
     )
-    await utils.connect_tags_or_raise_500(data.tag_list, card.id)
+    await utils.connect_tags_or_raise_500(data.tags, card.id)
     logger.info(f"New card {card.name} created!")
     return JSONResponse(
         content={"status": "successfully created", "card_id": card.id},
@@ -199,8 +199,8 @@ async def update_card(card_id: int, data: models.CardUpdate):
         HTTP 404: invalid card ID
     """
     card = await utils.get_or_raise_404(statements.get_card_by_id, card_id)
-    if data.tag_list:
-        await utils.connect_tags_or_raise_500(data.tag_list, card_id)
+    if data.tags:
+        await utils.connect_tags_or_raise_500(data.tags, card_id)
     await utils.save_or_raise_500(card.sqlmodel_update(data.model_dump()))
     logger.info(f"New card {card.name} updated!")
     return Response(status_code=204)
