@@ -1,5 +1,5 @@
 import { PUBLIC_BASE_API_URL } from '$env/static/public';
-import type { ErrorWithMessage } from './types';
+import type { ErrorWithMessage } from './interfaces';
 
 
 export async function fetchCards() {
