@@ -99,7 +99,9 @@ async def verify_jwt(token: str):
         logger.error("Cannot obtain secret key!")
         return
     try:
-        payload = jwt.decode(token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(
+            token.credentials, SECRET_KEY, algorithms=[ALGORITHM]
+        )
         logger.debug(payload)
         username = payload["username"]
         if not username:

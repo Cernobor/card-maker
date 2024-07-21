@@ -132,6 +132,14 @@ class CardGet(CardCreate):
     id: int
 
 
+class CardUpdate(CardBase):
+    """
+    Card model for 'update_card' PUT method.
+    """
+
+    tag_list: List[TagBase | None]
+
+
 class Card(CardBase, table=True):
     """
     Each Card instance has author (User) and type (CardType).
