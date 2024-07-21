@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type { User } from "$lib/types";
-    let user: User;
+    import type { UserCreate } from "$lib/interfaces";
+    let user: UserCreate;
     let passwordConfirm: string;
 
 

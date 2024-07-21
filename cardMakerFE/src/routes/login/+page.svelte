@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { User } from "$lib/interfaces";
+    import type { UserCreate } from "$lib/interfaces";
     import { Cookies } from "js-cookie";
-    let user: User;
+    let user: UserCreate;
 
     function handleSubmit(e) {
         try {
