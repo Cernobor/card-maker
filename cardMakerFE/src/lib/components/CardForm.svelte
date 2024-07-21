@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Tag } from "./types";
+	import type { Tag } from "./interfaces";
 	import Card from "./Card.svelte"
 	import { onMount } from "svelte";
 	import { fetchTags } from "./fetchResource";

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Tag } from "$lib/types";
+    import type { Tag } from "$lib/interfaces";
     export let options: Tag[]|[];
     export let activeTags: number[]|[];
 
