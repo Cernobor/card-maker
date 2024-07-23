@@ -27,14 +27,35 @@ export class CardMakerApi{
             method: 'GET',
             headers: headers,
         };
-        console.log(url);
         const response = await fetch(url, options);
         if (! response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
-       
         return response;
     }
+
+    private async post<T>(path: string, body: { [key: string]: any }):Promise<T | null> {
+        const urlparams = new URLSearchParams(params);
+        let url = new URL(path, this.endpoint);
+        url.search = urlparams.toString();
+        const headers = {
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+        };
+        const options = {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(body),
+        };
+
+        const response = await fetch(url, options);
+        if (! response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        
+        return response;
+    }
+
 
 
     public async getCardTypes(): Promise<APICardTypes[]> {
