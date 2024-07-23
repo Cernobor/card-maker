@@ -79,6 +79,11 @@ export class CardMakerApi{
         return response.json();
     }
 
+    public async getCard(card_id): Promise<APICardTypes[]> {
+        let response = await this.get<APICard>("/cards" + card_id);
+        return response.json();
+    }
+
     public async createCard(card): Promise<APICardTypes[]> {
         let response = await this.post<APICard>("/cards",card);
         return response.json();
