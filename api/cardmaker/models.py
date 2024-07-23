@@ -31,6 +31,7 @@ class UserCreate(UserBase):
     """
 
     password: str
+    api_key: str
 
 
 class UserPublic(UserBase):

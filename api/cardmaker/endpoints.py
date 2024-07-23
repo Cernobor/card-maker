@@ -244,6 +244,10 @@ async def create_user(data: models.UserCreate):
         HTTP 500: database error
         HTTP 404: invalid card ID
     """
+    if not security.verify_api_key(data.api_key):
+        raise HTTPException(
+            status_code=403, detail="Wrong API key!"
+        )
     if await statements.get_user_by_name(data.username):
         raise HTTPException(
             status_code=403, detail=f"User with name {username} already exists!"
