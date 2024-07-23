@@ -7,8 +7,8 @@ import secrets
 from datetime import datetime
 from typing import Tuple
 
-import jwt
 import bcrypt
+import jwt
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPBasic, HTTPBasicCredentials, HTTPBearer
 
@@ -30,7 +30,8 @@ http_basic = HTTPBasic()
 
 class JWTBearer(HTTPBearer):
     """
-    TODO docstring
+    JWT token checker.
+    Override '__call__' method to make the class callable in endpoints.
     """
 
     def __init__(self, auto_error: bool = True):
@@ -56,30 +57,52 @@ class JWTBearer(HTTPBearer):
             )
 
 
-def hash_password(password: str, salt: str|None = None) -> Tuple[bytes]:
+def hash_password(password: str, salt: bytes | None = None) -> Tuple[bytes]:
     """
-    TODO docstring
+    Has password with salt,
+
+    Args:
+        password (str): plain text password
+        salt (bytes|None, default: None):
+                salt should be provided for existing user,
+                if salt set to None, salt will be generated
+
+    Returns:
+        bytes: hashed password
+        bytes: salt
     """
     if not salt:
         salt = bcrypt.gensalt()
     return bcrypt.hashpw(str.encode(password), salt), salt
 
 
-def verify_api_key(api_key: str):
+def verify_api_key(api_key: str) -> bool | None:
     """
-    TODO docstring
+    Verify if provided api key is the same as reference api key.
+
+    Args:
+        api_key (str): token used to allow user be registrated
+
+    Returns:
+        bool|None: if api key is correct
+                    (None if reference api key does not exist)
     """
     if not API_KEY:
         logger.error("Cannot obtain api key!")
         return
-    return secrets.compare_digest(
-        api_key, API_KEY
-    )
-    
+    return secrets.compare_digest(api_key, API_KEY)
 
-def create_access_token(user: models.User, expiration: datetime):
+
+def create_access_token(user: models.User, expiration: datetime) -> str | None:
     """
-    TODO docstring
+    Generate JWT token for authentication.
+
+    Args:
+        user (models.User): user object with username, password etc.
+        expiration (datetime): date of token expiration
+
+    Returns:
+        str|None: JWT token (None if secred key does not exist)
     """
     to_encode = user.model_dump()
     to_encode.update({"exp": expiration})
@@ -93,26 +116,37 @@ def create_access_token(user: models.User, expiration: datetime):
 
 async def authenticate(username: str, password: str):
     """
-    TODO docstring
+    Verify if provided username and password are correct.
+
+    Args:
+        user (models.User): user object with username, password etc.
+        expiration (datetime): date of token expiration
+
+    Returns:
+        models.User|None: db user object
     """
     user = await statements.get_user_by_name(username)
     if not user:
         logger.debug(f"{username} not in db")
         return
-    hashed_password, _ = hash_password(password, user.salt);
+    hashed_password, _ = hash_password(password, user.salt)
     if not secrets.compare_digest(
         hashed_password, str.encode(user.hashed_password)
     ):
-        logger.debug(
-            f"{hashed_password} is not same as {user.hashed_password}"
-        )
+        logger.debug(f"{hashed_password} is not same as {user.hashed_password}")
         return
     return user
 
 
 async def verify_jwt(token: str):
     """
-    TODO docstring
+    Verify if provided JWT token is correct and returns user object.
+
+    Args:
+        token (str): JWT token
+
+    Returns:
+        models.User|None: db user object
     """
     if not SECRET_KEY:
         logger.error("Cannot obtain secret key!")

@@ -242,15 +242,14 @@ async def create_user(data: models.UserCreate):
 
     Raises:
         HTTP 500: database error
-        HTTP 404: invalid card ID
+        HTTP 403: wrong api key or existing username
     """
     if not security.verify_api_key(data.api_key):
-        raise HTTPException(
-            status_code=403, detail="Wrong API key!"
-        )
+        raise HTTPException(status_code=403, detail="Wrong API key!")
     if await statements.get_user_by_name(data.username):
         raise HTTPException(
-            status_code=403, detail=f"User with name {data.username} already exists!"
+            status_code=403,
+            detail=f"User with name {data.username} already exists!",
         )
     logger.info(data)
     hashed_password, salt = security.hash_password(data.password)
@@ -273,7 +272,17 @@ async def get_access_token(
     credentials: Annotated[HTTPBasicCredentials, Depends(security.http_basic)]
 ):
     """
-    TODO docstring
+    Generate JWT token for current user.
+
+    Args:
+        credentials (HTTPBasicCredentials): username and password
+
+    Returns:
+        json response with status code 200:
+                token with token type 'bearer'
+
+    Raises:
+        HTTP 401: wrong credentials
     """
     user = await security.authenticate(
         credentials.username, credentials.password
@@ -284,9 +293,12 @@ async def get_access_token(
             detail="Wrong username or password!",
             headers={"WWW-Authenticate": "Basic"},
         )
-    return models.Token(
-        access_token=security.create_access_token(
-            user, datetime.now() + timedelta(days=15)
-        ),
-        token_type="bearer",
+    response = jsonable_encoder(
+        models.Token(
+            access_token=security.create_access_token(
+                user, datetime.now() + timedelta(days=15)
+            ),
+            token_type="bearer",
+        )
     )
+    return JSONResponse(status_code=200, content=response)
