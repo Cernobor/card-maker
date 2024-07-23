@@ -1,4 +1,5 @@
 
+import { PUBLIC_BASE_API_URL } from '$env/static/public';
 export interface APICard {
     //TODO
 }
@@ -6,11 +7,11 @@ export interface APICard {
 
 
 export class CardMakerApi{
-    public constructor(endpoint: string) {
-        this.endpoint = endpoint;
+    public constructor() {
+        this.endpoint = PUBLIC_BASE_API_URL;
     }
 
-    private async get<T>(path: string, params: { [key: string]: string } = {}): Promise<Result<T | null>> {
+    private async get<T>(path: string, params: { [key: string]: string } = {}): Promise<T | null> {
         const urlparams = new URLSearchParams(params);
         let url = new URL(path, this.endpoint);
         url.search = urlparams.toString();
@@ -21,37 +22,19 @@ export class CardMakerApi{
             method: 'GET',
             headers: headers,
         };
-        let response = await fetch(url, options);
-        if (response.status == 404) {
-            return Result.ok(null);
-        }
+        console.log(url);
+        const response = await fetch(url, options);
         if (! response.ok) {
-            return Result.err(new Error("Failed to fetch: " + response.statusText));
+            throw new Error(`Response status: ${response.status}`);
         }
-        let data = await response.json();
-        return Result.ok(data);
+       
+        return response;
     }
 
-    public async getCard(): Promise<APICard[]> {
-        let response = await this.get<APIBareosClientList>("/cards");
-        if (response.isErr) {
-            throw response.error;
-        }
-        if (response.value == null) {
-            return [];
-        }
-        return Object.values(response.value.clients);
-    }
 
     public async getCardTypes(): Promise<APICard[]> {
-        let response = await this.get<APIBareosClientList>("/card-types");
-        if (response.isErr) {
-            throw response.error;
-        }
-        if (response.value == null) {
-            return [];
-        }
-        return Object.values(response.value.clients);
+        let response = await this.get<APICard>("/card-types");
+        return response.json();
     }
 
 

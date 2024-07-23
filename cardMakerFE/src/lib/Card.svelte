@@ -4,6 +4,7 @@
 	import DOMPurify from 'isomorphic-dompurify';
 	export let mode = 'create';
 	import { PUBLIC_BASE_API_URL } from '$env/static/public';
+	import { CardMakerApi } from '$lib/api';
 
 	interface Card {
 		name: string;
@@ -22,21 +23,6 @@
 
 	export let card: Card = {};
 
-	async function getCardTypes() {
-		const url = PUBLIC_BASE_API_URL + '/card-types';
-		try {
-			const response = await fetch(url);
-			if (!response.ok) {
-				throw new Error(`Response status: ${response.status}`);
-			}
-
-			const json = await response.json();
-			return json;
-		} catch (error) {
-			console.error(error.message);
-		}
-	}
-
 	export function saveCard() {
 		html2canvas(document.querySelector('#capture')).then((canvas) => {
 			let a = document.createElement('a');
@@ -50,7 +36,9 @@
 	}
 
 	async function sentCardToAPI() {
-		let cardTypes = await getCardTypes();
+		let api = new CardMakerApi();
+		let cardTypes = await api.getCardTypes();
+		console.log(cardTypes);
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
 		let requestMethod, url, requestBody;
 
