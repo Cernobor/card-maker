@@ -5,8 +5,10 @@ Authorization utilities
 import os
 import secrets
 from datetime import datetime
+from typing import Tuple
 
 import jwt
+import bcrypt
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPBasic, HTTPBasicCredentials, HTTPBearer
 
@@ -54,13 +56,13 @@ class JWTBearer(HTTPBearer):
             )
 
 
-def hash_password(password: str):
+def hash_password(password: str, salt: str|None = None) -> Tuple[bytes]:
     """
-    TODO
-    passlib library can be used:
-    https://passlib.readthedocs.io/en/stable/
+    TODO docstring
     """
-    return f"hashed password {password} + salt"
+    if not salt:
+        salt = bcrypt.gensalt()
+    return bcrypt.hashpw(str.encode(password), salt), salt
 
 
 def verify_api_key(api_key: str):
@@ -81,6 +83,8 @@ def create_access_token(user: models.User, expiration: datetime):
     """
     to_encode = user.model_dump()
     to_encode.update({"exp": expiration})
+    to_encode.pop("salt")
+    logger.debug(to_encode)
     if not SECRET_KEY:
         logger.error("Cannot obtain secret key!")
         return
@@ -95,11 +99,12 @@ async def authenticate(username: str, password: str):
     if not user:
         logger.debug(f"{username} not in db")
         return
+    hashed_password, _ = hash_password(password, user.salt);
     if not secrets.compare_digest(
-        hash_password(password), user.hashed_password
+        hashed_password, str.encode(user.hashed_password)
     ):
         logger.debug(
-            f"{hash_password(password)} is not same as {user.hashed_password}"
+            f"{hashed_password} is not same as {user.hashed_password}"
         )
         return
     return user

@@ -50,8 +50,8 @@ class User(UserBase, table=True):
     __tablename__ = "users"
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    hashed_password: Optional[str]
-    anonymous: bool
+    hashed_password: str
+    salt: bytes
 
 
 class CardType(SQLModel, table=True):

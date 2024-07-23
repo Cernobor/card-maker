@@ -37,31 +37,6 @@ def save_card_types(card_types: list):
             logger.info(f"Card type {card_type["name"]} inserted into db.")
 
 
-def save_users(users: list):
-    """
-    Save default users into database.
-
-    Args:
-        users (list): list of dictionaries
-    """
-    with Session(engine) as session:
-        for user in users:
-            logger.info(user)
-            try:
-                session.add(
-                    models.User(
-                        username=user["username"],
-                        anonymous=user["anonymous"],
-                    )
-                )
-            except Exception as e:
-                session.rollback()
-                logger.error(f"Cannot save user {user["username"]} into db. {e}")
-                return
-            session.commit()
-            logger.info(f"User {user["username"]} inserted into db.")
-
-
 def save_tags(tags: list):
     """
     Save default tags into database.
@@ -95,9 +70,6 @@ def json_to_db(json_path: str) -> list:
 
     if "card_types" in data.keys():
         save_card_types(data["card_types"])
-
-    if "users" in data.keys():
-        save_users(data["users"])
 
     if "tags" in data.keys():
         save_tags(data["tags"])

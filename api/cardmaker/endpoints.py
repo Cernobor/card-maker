@@ -250,15 +250,16 @@ async def create_user(data: models.UserCreate):
         )
     if await statements.get_user_by_name(data.username):
         raise HTTPException(
-            status_code=403, detail=f"User with name {username} already exists!"
+            status_code=403, detail=f"User with name {data.username} already exists!"
         )
     logger.info(data)
+    hashed_password, salt = security.hash_password(data.password)
     user = await utils.save_or_raise_500(
         models.User.model_validate(
             data,
             update={
-                "hashed_password": security.hash_password(data.password),
-                "anonymous": False,
+                "hashed_password": hashed_password,
+                "salt": salt,
             },
         )
     )
