@@ -1,6 +1,6 @@
 <script>
-	import Card from '$lib/Card.svelte';
-	import CardForm from '$lib/CardForm.svelte';
+	import Card from '$lib/components/Card.svelte';
+	import CardForm from '$lib/components/CardForm.svelte';
 	let cardTypes = ['Magický předmět', 'Volný aspekt', 'Lokace'];
 
 	let card = {

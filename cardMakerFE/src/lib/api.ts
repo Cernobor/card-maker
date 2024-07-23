@@ -1,6 +1,11 @@
 
 import { PUBLIC_BASE_API_URL } from '$env/static/public';
+
 export interface APICard {
+    //TODO
+}
+
+export interface APICardTypes {
     //TODO
 }
 
@@ -32,10 +37,12 @@ export class CardMakerApi{
     }
 
 
-    public async getCardTypes(): Promise<APICard[]> {
+    public async getCardTypes(): Promise<APICardTypes[]> {
         let response = await this.get<APICard>("/card-types");
         return response.json();
     }
-
-
+    public async getCard(): Promise<APICardTypes[]> {
+        let response = await this.get<APICard>("/card-types");
+        return response.json();
+    }
 }

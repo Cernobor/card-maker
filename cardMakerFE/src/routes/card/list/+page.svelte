@@ -1,11 +1,11 @@
 <script lang="ts">
-    import FilterDropdown from "$lib/FilterDropdown.svelte";
-	import TableRow from "$lib/TableRow.svelte";
-    import Card from '$lib/Card.svelte';
+    import FilterDropdown from "$lib/components/FilterDropdown.svelte";
+	import TableRow from "$lib/components/TableRow.svelte";
+    import Card from '$lib/components/Card.svelte';
     import type { Author, CardType, Tag } from "$lib/types";
     import { fetchCards, fetchAuthors, fetchTypes, fetchTags } from "$lib/fetchResource";
 	import { onMount } from "svelte";
-	import FilterCheckbox from "$lib/FilterCheckbox.svelte";
+	import FilterCheckbox from "$lib/components/FilterCheckbox.svelte";
 
 
     function getFilteredCards(allCards: Card[]|[], selectedAuthor: Author|null, selectedType: CardType|null, activeTags: number[]) {
