@@ -4,8 +4,8 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	import Card from '$lib/Card.svelte';
-	import CardForm from '$lib/CardForm.svelte';
+	import Card from '$lib/components/Card.svelte';
+	import CardForm from '$lib/components/CardForm.svelte';
 
 	let mode = 'update';
 	let cardTypes = ['Volný aspekt', 'Lokace', 'Magický předmět'];
