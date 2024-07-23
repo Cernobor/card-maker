@@ -4,7 +4,7 @@
 	import DOMPurify from 'isomorphic-dompurify';
 	export let mode = 'create';
 	import { PUBLIC_BASE_API_URL } from '$env/static/public';
-	import { CardMakerApi } from '$lib/api';
+	import { api } from '$lib/stores/store';
 
 	interface Card {
 		name: string;
@@ -36,7 +36,7 @@
 	}
 
 	async function sentCardToAPI() {
-		let api = new CardMakerApi();
+		
 		let cardTypes = await api.getCardTypes();
 		console.log(cardTypes);
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
