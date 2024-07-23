@@ -15,9 +15,11 @@ from .logger import Logger
 
 logger = Logger.get_instance()
 SECRET_KEY = os.getenv("SECRET_KEY")
+API_KEY = os.getenv("API_KEY")
 # just for development purposes
-# this line will be removed and new secret key will be generated
+# this lines will be removed and new secret key will be generated
 SECRET_KEY = "6de9b7c10564fb4794c13a2c127b5a00e21259cd56df440aad5199dae182966b"
+API_KEY = "7d9e46b9-c8d9-429b-88b0-8de20a4268a0"
 ALGORITHM = "HS256"
 
 
@@ -60,6 +62,18 @@ def hash_password(password: str):
     """
     return f"hashed password {password} + salt"
 
+
+def verify_api_key(api_key: str):
+    """
+    TODO docstring
+    """
+    if not API_KEY:
+        logger.error("Cannot obtain api key!")
+        return
+    return secrets.compare_digest(
+        api_key, API_KEY
+    )
+    
 
 def create_access_token(user: models.User, expiration: datetime):
     """
