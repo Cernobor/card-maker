@@ -55,9 +55,7 @@
 			});
 
 		} else if (mode == 'update') {
-			requestMethod = 'PUT';
-			url = PUBLIC_BASE_API_URL + '/cards/' + card.id;
-			requestBody = {
+			api.updateCard({
 				id: card.id,
 				name: card.name,
 				fluff: card.fluff,
@@ -67,24 +65,7 @@
 				in_set: card.in_set,
 				set_name: card.set_name,
 				tags: card.tags
-			};
-		
-
-		try {
-			const response = await fetch(url, {
-				method: requestMethod,
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(requestBody)
-			});
-			if (!response.ok) {
-				alert(
-					'Něco se pokazilo, karta se neuložila do databáze, po odkliknutí tohoto okna si jí ale stále můžete alespoň stáhnout'
-				);
-				throw new Error(`Response status: ${response.status}`);
-			}
-		} catch (error) {
-			console.error(error.message);
-		}
+			}, card.id);
 	}
 	}
 

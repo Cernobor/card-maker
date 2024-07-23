@@ -54,6 +54,26 @@ export class CardMakerApi{
         return response;
     }
 
+    private async put<T>(path: string, body: { [key: string]: any }):Promise<T | null> {
+        let url = new URL(path, this.endpoint);
+        const headers = {
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+        };
+        const options = {
+            method: 'PUT',
+            headers: headers,
+            body: JSON.stringify(body),
+        };
+
+        const response = await fetch(url, options);
+        if (! response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+        return response;
+    }
+
     public async getCardTypes(): Promise<APICardTypes[]> {
         let response = await this.get<APICard>("/card-types");
         return response.json();
@@ -61,6 +81,11 @@ export class CardMakerApi{
 
     public async createCard(card): Promise<APICardTypes[]> {
         let response = await this.post<APICard>("/cards",card);
+        return response.json();
+    }
+
+    public async updateCard(card, card_id): Promise<APICardTypes[]> {
+        let response = await this.put<APICard>("/cards" + card_id,card);
         return response.json();
     }
 }
