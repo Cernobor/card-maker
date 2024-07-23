@@ -43,9 +43,7 @@
 		let requestMethod, url, requestBody;
 
 		if (mode == 'create') {
-			requestMethod = 'POST';
-			url = PUBLIC_BASE_API_URL + '/cards';
-			requestBody = {
+			api.createCard({
 				name: card.name,
 				fluff: card.fluff,
 				effect: card.effect,
@@ -54,7 +52,8 @@
 				in_set: card.in_set,
 				set_name: card.setName,
 				tags: card.tags
-			};
+			});
+
 		} else if (mode == 'update') {
 			requestMethod = 'PUT';
 			url = PUBLIC_BASE_API_URL + '/cards/' + card.id;
@@ -69,7 +68,7 @@
 				set_name: card.set_name,
 				tags: card.tags
 			};
-		}
+		
 
 		try {
 			const response = await fetch(url, {
@@ -86,6 +85,7 @@
 		} catch (error) {
 			console.error(error.message);
 		}
+	}
 	}
 
 	function pf_filter(text) {

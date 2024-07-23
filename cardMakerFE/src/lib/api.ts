@@ -35,9 +35,7 @@ export class CardMakerApi{
     }
 
     private async post<T>(path: string, body: { [key: string]: any }):Promise<T | null> {
-        const urlparams = new URLSearchParams(params);
         let url = new URL(path, this.endpoint);
-        url.search = urlparams.toString();
         const headers = {
             accept: 'application/json',
             'Content-Type': 'application/json',
@@ -52,18 +50,17 @@ export class CardMakerApi{
         if (! response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
-        
+
         return response;
     }
-
-
 
     public async getCardTypes(): Promise<APICardTypes[]> {
         let response = await this.get<APICard>("/card-types");
         return response.json();
     }
-    public async getCard(): Promise<APICardTypes[]> {
-        let response = await this.get<APICard>("/card-types");
+
+    public async createCard(card): Promise<APICardTypes[]> {
+        let response = await this.post<APICard>("/cards",card);
         return response.json();
     }
 }
