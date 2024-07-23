@@ -1,5 +1,5 @@
 
-import { PUBLIC_BASE_API_URL } from '$env/static/public';
+
 
 export interface APICard {
     //TODO
@@ -12,8 +12,8 @@ export interface APICardTypes {
 
 
 export class CardMakerApi{
-    public constructor() {
-        this.endpoint = PUBLIC_BASE_API_URL;
+    public constructor(api_endpoint: string) {
+        this.endpoint = api_endpoint;
     }
 
     private async get<T>(path: string, params: { [key: string]: string } = {}): Promise<T | null> {
