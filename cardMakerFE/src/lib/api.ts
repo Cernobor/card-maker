@@ -11,7 +11,7 @@ export interface APICardTypes {
 
 
 
-export class CardMakerApi{
+export class CardMakerApi {
     public constructor(api_endpoint: string) {
         this.endpoint = api_endpoint;
     }
@@ -28,13 +28,13 @@ export class CardMakerApi{
             headers: headers,
         };
         const response = await fetch(url, options);
-        if (! response.ok) {
+        if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
         return response;
     }
 
-    private async post<T>(path: string, body: { [key: string]: any }):Promise<T | null> {
+    private async post<T>(path: string, body: { [key: string]: any }): Promise<T | null> {
         let url = new URL(path, this.endpoint);
         const headers = {
             accept: 'application/json',
@@ -47,14 +47,14 @@ export class CardMakerApi{
         };
 
         const response = await fetch(url, options);
-        if (! response.ok) {
+        if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
 
         return response;
     }
 
-    private async put<T>(path: string, body: { [key: string]: any }):Promise<T | null> {
+    private async put<T>(path: string, body: { [key: string]: any }): Promise<T | null> {
         let url = new URL(path, this.endpoint);
         const headers = {
             accept: 'application/json',
@@ -67,14 +67,14 @@ export class CardMakerApi{
         };
 
         const response = await fetch(url, options);
-        if (! response.ok) {
+        if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
 
         return response;
     }
 
-    private async delete<T>(path: string, body: { [key: string]: any }):Promise<T | null> {
+    private async delete<T>(path: string, body: { [key: string]: any }): Promise<T | null> {
         let url = new URL(path, this.endpoint);
         const headers = {
             accept: 'application/json',
@@ -86,7 +86,7 @@ export class CardMakerApi{
         };
 
         const response = await fetch(url, options);
-        if (! response.ok) {
+        if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
 
@@ -104,12 +104,12 @@ export class CardMakerApi{
     }
 
     public async createCard(card): Promise<APICardTypes[]> {
-        let response = await this.post<APICard>("/cards",card);
+        let response = await this.post<APICard>("/cards", card);
         return response.json();
     }
 
     public async updateCard(card, card_id): Promise<APICardTypes[]> {
-        let response = await this.put<APICard>("/cards/" + card_id,card);
+        let response = await this.put<APICard>("/cards/" + card_id, card);
         return response;
     }
 
