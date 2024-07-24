@@ -3,7 +3,6 @@
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
 	export let mode = 'create';
-	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 	import { api } from '$lib/stores/store';
 
 	interface Card {
@@ -37,13 +36,13 @@
 
 	async function sentCardToAPI() {
 		
-		let cardTypes = await api.getCardTypes();
+		let cardTypes = await $api.getCardTypes();
 		console.log(cardTypes);
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
 		let requestMethod, url, requestBody;
 
 		if (mode == 'create') {
-			api.createCard({
+			$api.createCard({
 				name: card.name,
 				fluff: card.fluff,
 				effect: card.effect,
@@ -55,7 +54,7 @@
 			});
 
 		} else if (mode == 'update') {
-			api.updateCard({
+			$api.updateCard({
 				id: card.id,
 				name: card.name,
 				fluff: card.fluff,
