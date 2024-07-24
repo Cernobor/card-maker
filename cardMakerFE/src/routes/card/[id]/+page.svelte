@@ -1,7 +1,4 @@
-
 <script>
-	import { goto } from '$app/navigation';
-	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 	import { api } from '$lib/stores/store';
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -11,29 +8,26 @@
 
 	let mode = 'update';
 	let cardTypes = ['Volný aspekt', 'Lokace', 'Magický předmět'];
-	
+
 	let card = {};
 	let cardComponent;
-
 </script>
 
 <div class="cardmaker-body">
-	{#await  $api.getCard(data.card_id)}
+	{#await $api.getCard(data.card_id)}
 		<h1>loading...</h1>
 	{:then card_data}
-	<div class="card-view">
-		{card = {...card_data, type: cardTypes[card_data.card_type_id - 1]}}
+		<div class="card-view">
+			{(card = { ...card_data, type: cardTypes[card_data.card_type_id - 1] })}
 
-		<div class="inputs">
+			<div class="inputs">
+				<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
+			</div>
 
-			<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
-		</div>
-		
 			<Card bind:card bind:mode bind:this={cardComponent} />
 			<button on:click={cardComponent.saveCard}>Save edit</button>
-			<button on:click={$api.deleteCard(card.id, "/card/list")}>Delete card</button>
+			<button on:click={$api.deleteCard(card.id, '/card/list')}>Delete card</button>
 		</div>
-
 	{:catch error}
 		<h1>Karta s id {data.card_id} neexistuje</h1>
 	{/await}
@@ -48,4 +42,3 @@
 		color: black;
 	}
 </style>
-
