@@ -1,4 +1,4 @@
-
+import { goto } from '$app/navigation';
 
 
 export interface APICard {
@@ -74,6 +74,25 @@ export class CardMakerApi{
         return response;
     }
 
+    private async delete<T>(path: string, body: { [key: string]: any }):Promise<T | null> {
+        let url = new URL(path, this.endpoint);
+        const headers = {
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+        };
+        const options = {
+            method: 'DELETE',
+            headers: headers,
+        };
+
+        const response = await fetch(url, options);
+        if (! response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+        return response;
+    }
+
     public async getCardTypes(): Promise<APICardTypes[]> {
         let response = await this.get<APICard>("/card-types");
         return response.json();
@@ -91,25 +110,12 @@ export class CardMakerApi{
 
     public async updateCard(card, card_id): Promise<APICardTypes[]> {
         let response = await this.put<APICard>("/cards/" + card_id,card);
-        return response.json();
+        return response;
+    }
+
+    public async deleteCard(card_id, redirect_path): Promise<APICardTypes[]> {
+        let response = await this.delete<APICard>("/cards/" + card_id);
+        goto(redirect_path);
+        return response;
     }
 }
-
-/*	async function deleteCard() {
-		try {
-			const response = await fetch(PUBLIC_BASE_API_URL + '/cards/' + data.card_id, {
-				method: 'DELETE'
-			});
-			if (!response.ok) {
-				throw new Error(`Response status: ${response.status}`);
-			}
-			if (response.ok) {
-				goto('/card/list');
-			} else {
-				throw new Error('Failed to delete card');
-			}
-		} catch (error) {
-			console.log(error);
-			console.error(error.message);
-		}
-	}*/
