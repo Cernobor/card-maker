@@ -11,50 +11,9 @@
 
 	let mode = 'update';
 	let cardTypes = ['Volný aspekt', 'Lokace', 'Magický předmět'];
+	
 	let card = {};
 	let cardComponent;
-
-	async function deleteCard() {
-		try {
-			const response = await fetch(PUBLIC_BASE_API_URL + '/cards/' + data.card_id, {
-				method: 'DELETE'
-			});
-			if (!response.ok) {
-				throw new Error(`Response status: ${response.status}`);
-			}
-			if (response.ok) {
-				goto('/card/list');
-			} else {
-				throw new Error('Failed to delete card');
-			}
-		} catch (error) {
-			console.log(error);
-			console.error(error.message);
-		}
-	}
-
-	async function getCard() {
-		try {
-			const response = await fetch(PUBLIC_BASE_API_URL + '/cards/' + data.card_id);
-			if (!response.ok) {
-				throw new Error(`Response status: ${response.status}`);
-			}
-			const json = await response.json();
-
-			return json;
-		} catch (e) {
-			console.error(e.message);
-		}
-	}
-
-	async function loadCard() {
-		console.log("kkkkk");
-		const cardData = await getCard();
-		card = { ...cardData };
-		
-		card.type = cardTypes[cardData.card_type_id - 1];
-	}
-
 
 </script>
 
@@ -63,17 +22,16 @@
 		<h1>loading...</h1>
 	{:then card_data}
 	<div class="card-view">
-		{card_data}
+		{card = {...card_data, type: cardTypes[card_data.card_type_id - 1]}}
+
 		<div class="inputs">
 
 			<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
 		</div>
 		
-		
-		
 			<Card bind:card bind:mode bind:this={cardComponent} />
 			<button on:click={cardComponent.saveCard}>Save edit</button>
-			<button on:click={deleteCard}>Delete card</button>
+			<button on:click={$api.deleteCard(card.id, "/card/list")}>Delete card</button>
 		</div>
 
 	{:catch error}
