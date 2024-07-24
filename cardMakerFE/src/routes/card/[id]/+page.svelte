@@ -54,21 +54,18 @@
 		
 		card.type = cardTypes[cardData.card_type_id - 1];
 	}
-	console.log("there")
-	let loadProgress = api.getCard(data.card_id)
-	console.log("here")
+
 
 </script>
 
 <div class="cardmaker-body">
-	{#await  api.getCard(data.card_id)}
+	{#await  $api.getCard(data.card_id)}
 		<h1>loading...</h1>
-	{:then}
-	<div class="card-view"></div>
-	lllll
-	<!--
+	{:then card_data}
+	<div class="card-view">
+		{card_data}
 		<div class="inputs">
-			{@debug loadProgress}
+
 			<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
 		</div>
 		
@@ -78,7 +75,7 @@
 			<button on:click={cardComponent.saveCard}>Save edit</button>
 			<button on:click={deleteCard}>Delete card</button>
 		</div>
-		-->
+
 	{:catch error}
 		<h1>Karta s id {data.card_id} neexistuje</h1>
 	{/await}
