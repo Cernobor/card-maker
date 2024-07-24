@@ -37,9 +37,7 @@
 	async function sentCardToAPI() {
 		
 		let cardTypes = await $api.getCardTypes();
-		console.log(cardTypes);
 		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
-		let requestMethod, url, requestBody;
 
 		if (mode == 'create') {
 			$api.createCard({
