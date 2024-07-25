@@ -103,6 +103,11 @@ export class CardMakerApi {
         return response.json();
     }
 
+    public async getCards(): Promise<APICardTypes[]> {
+        let response = await this.get<APICard>("/cards");
+        return response.json();
+    }
+
     public async createCard(card): Promise<APICardTypes[]> {
         let response = await this.post<APICard>("/cards", card);
         return response.json();
@@ -117,5 +122,14 @@ export class CardMakerApi {
         let response = await this.delete<APICard>("/cards/" + card_id);
         goto(redirect_path);
         return response;
+    }
+
+    public async getUsers(): Promise<APICardTypes[]> {
+        let response = await this.get<APICard>("/users");
+        return response.json();
+    }
+    public async getTags(): Promise<APICardTypes[]> {
+        let response = await this.get<APICard>("/card-types");
+        return response.json();
     }
 }

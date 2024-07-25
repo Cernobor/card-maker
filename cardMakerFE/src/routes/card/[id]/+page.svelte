@@ -26,7 +26,6 @@
 			<div class="inputs">
 				<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
 			</div>
-
 			<Card bind:card bind:mode bind:this={cardComponent} />
 			<button on:click={cardComponent.saveCard}>Save edit</button>
 			<button on:click={$api.deleteCard(card.id, '/card/list')}>Delete card</button>
