@@ -6,6 +6,7 @@
     import { fetchCards, fetchAuthors, fetchTypes, fetchTags } from "$lib/fetchResource";
 	import { onMount } from "svelte";
 	import FilterCheckbox from "$lib/components/FilterCheckbox.svelte";
+    import { api } from '$lib/stores/store';
 
 
     function getFilteredCards(allCards: Card[]|[], selectedAuthor: Author|null, selectedType: CardType|null, activeTags: number[]) {
@@ -43,10 +44,10 @@
     let activeTags: number[]|[] = [];
     
     onMount(async () => {
-        allCards = await fetchCards();
-        authors = await fetchAuthors();
-        types = await fetchTypes();
-        tags = await fetchTags();
+        allCards = await $api.getCards();
+        authors = await $api.getUsers();
+        types = await $api.getCardTypes();
+        tags = await $api.getTags();
     });
 
     let selectedAuthor: Author|null = null;
