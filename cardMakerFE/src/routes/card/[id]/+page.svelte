@@ -11,14 +11,20 @@
 
 	let card = {};
 	let cardComponent;
+
+	async function loadCard() {
+		const card_data = await $api.getCard(data.card_id)
+		card = { ...card_data, type: cardTypes[card_data.card_type_id - 1] }
+	}
+	;
+
 </script>
 
 <div class="cardmaker-body">
-	{#await $api.getCard(data.card_id)}
+	{#await loadCard()}
 		<h1>loading...</h1>
-	{:then card_data}
+	{:then}
 		<div class="card-view">
-			{(card = { ...card_data, type: cardTypes[card_data.card_type_id - 1] })}
 
 			<div class="inputs">
 				<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
