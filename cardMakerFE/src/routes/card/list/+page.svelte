@@ -2,8 +2,7 @@
 	import FilterDropdown from '$lib/components/FilterDropdown.svelte';
 	import TableRow from '$lib/components/TableRow.svelte';
 	import Card from '$lib/components/Card.svelte';
-	import type { Author, CardType, Tag } from '$lib/types';
-	import { fetchCards, fetchAuthors, fetchTypes, fetchTags } from '$lib/fetchResource';
+	import type { CardGet, UserPublic, , CardType, Tag } from '$lib/interfaces';
 	import { onMount } from 'svelte';
 	import FilterCheckbox from '$lib/components/FilterCheckbox.svelte';
 	import { api } from '$lib/stores/store';

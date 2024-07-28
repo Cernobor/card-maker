@@ -2,7 +2,7 @@
 	import Card from '$lib/components/Card.svelte';
 	import CardForm from '$lib/components/CardForm.svelte';
 	import { fetchTags } from '$lib/fetchResource';
-	import type { Tag } from '$lib/types';
+	import type { Tag } from '$lib/interfaces';
 	import { onMount } from 'svelte';
 	let cardTypes = ['Magický předmět', 'Volný aspekt', 'Lokace'];
 
