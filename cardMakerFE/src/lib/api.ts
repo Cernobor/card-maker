@@ -8,8 +8,8 @@ export default class CardMakerApi {
 	 *
 	 * @todo Implement 'getToken' method and save token into cookies.
 	 */
-	private endpoint;
-	//private JWTToken;
+	private endpoint: string;
+	//private JWTToken: string;
 	public constructor(api_endpoint: string) {
 		this.endpoint = api_endpoint;
 	}
