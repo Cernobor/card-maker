@@ -1,8 +1,7 @@
 <script lang="ts">
 	import FilterDropdown from '$lib/components/FilterDropdown.svelte';
 	import TableRow from '$lib/components/TableRow.svelte';
-	import Card from '$lib/components/Card.svelte';
-	import type { CardGet, UserPublic, , CardType, Tag } from '$lib/interfaces';
+	import type { CardGet, UserPublic, CardType, Tag } from '$lib/interfaces';
 	import { onMount } from 'svelte';
 	import FilterCheckbox from '$lib/components/FilterCheckbox.svelte';
 	import { api } from '$lib/stores/store';
@@ -11,7 +10,7 @@
 		allCards: CardGet[] | [],
 		selectedAuthor: UserPublic | null,
 		selectedType: CardType | null,
-		activeTags: number[]
+		activeTags: Tag[]
 	) {
 		let cards = allCards;
 		if (selectedAuthor != null) {
@@ -25,10 +24,10 @@
 			});
 		}
 		if (activeTags.length > 0) {
-			for (const tagName of activeTags) {
+			for (const activeTag of activeTags) {
 				cards = cards.filter((card: CardGet) => {
 					for (const cardTag of card.tags) {
-						if (cardTag.name === tagName) {
+						if (cardTag.name === activeTag.name) {
 							return true;
 						}
 					}
@@ -39,15 +38,15 @@
 		return cards;
 	}
 
-	let allCards: CardGet[] | [] = [];
-	let authors: UserPublic[] | [] = [];
-	let types: CardType[] | [] = [];
-	let tags: Tag[] | [] = [];
-	let activeTags: number[] | [] = [];
+	let allCards: CardGet[] = [];
+	let users: UserPublic[] = [];
+	let types: CardType[] = [];
+	let tags: Tag[] = [];
+	let activeTags: Tag[] = [];
 
 	onMount(async () => {
 		allCards = await $api.getCards();
-		authors = await $api.getUsers();
+		users = await $api.getUsers();
 		types = await $api.getCardTypes();
 		tags = await $api.getTags();
 	});
@@ -61,7 +60,7 @@
 
 <div class="card-list-body">
 	<div class="filters">
-		<FilterDropdown bind:selected={selectedAuthor} filterName="Autor" options={authors} />
+		<FilterDropdown bind:selected={selectedAuthor} filterName="Autor" options={users} />
 		<FilterDropdown bind:selected={selectedType} filterName="Typ karty" options={types} />
 		<FilterCheckbox bind:activeTags options={tags} />
 	</div>
@@ -73,7 +72,7 @@
 				<th>Typ</th>
 			</tr>
 			{#each filteredCards as card}
-				<TableRow {card} {authors} {types} />
+				<TableRow {card} {users} {types} />
 			{/each}
 		</table>
 	</div>

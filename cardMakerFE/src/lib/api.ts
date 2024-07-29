@@ -1,6 +1,14 @@
 import { goto } from '$app/navigation';
 import { getErrorMessage } from './errors';
-import type { UserPublic, CardGet, CardCreate, CardType, UserCreate, Tag } from './interfaces';
+import type {
+	CardBase,
+	UserPublic,
+	CardGet,
+	CardCreate,
+	CardType,
+	UserCreate,
+	Tag
+} from './interfaces';
 
 export default class CardMakerApi {
 	/**
@@ -174,7 +182,7 @@ export default class CardMakerApi {
 		}
 	}
 
-	public async updateCard(card: CardCreate, cardId: number) {
+	public async updateCard(card: CardBase, cardId: number) {
 		/**
 		 * Update existing card with ID or alert if not success.
 		 *
@@ -194,7 +202,6 @@ export default class CardMakerApi {
 		 *
 		 * @param cardId - ID of card to delete
 		 */
-		goto(rediredcPath);
 		try {
 			await this.delete('/cards/' + crdiId);
 			goto(rediredcPath);
@@ -217,7 +224,7 @@ export default class CardMakerApi {
 		}
 	}
 
-	public async getTags(): Promise<Tag[] | null> {
+	public async getTags(): Promise<Tag[]> {
 		/**
 		 * Get array of tags.
 		 *

@@ -1,29 +1,34 @@
 <script lang="ts">
 	import Card from '$lib/components/Card.svelte';
 	import CardForm from '$lib/components/CardForm.svelte';
-	import { fetchTags } from '$lib/fetchResource';
-	import type { Tag } from '$lib/interfaces';
+	import { api } from '$lib/stores/store';
 	import { onMount } from 'svelte';
-	let cardTypes = ['Magický předmět', 'Volný aspekt', 'Lokace'];
+	import type { CardCreate, Tag, CardType } from '$lib/interfaces';
 
-	let card = {
+	let cardComponent;
+	let tags: Tag[] = [];
+	let cardTypes: CardType[] = [];
+	onMount(async () => {
+		tags = await $api.getTags();
+		cardTypes = await $api.getCardTypes();
+	});
+
+	let currentTags: Tag[] = [
+		{
+			name: 'Neodložitelný'
+		}
+	];
+	let card: CardCreate = {
 		name: 'Card Name',
-		type: cardTypes[0],
+		card_type_id: cardTypes[0].id,
+		user_id: 1,
 		fluff: 'Card Fluff',
 		effect: 'Efekt/pravidla karty',
-		nonRemovable: true,
 		in_set: false,
 		set_name: 'Jméno setu (počet itemů v setu)',
 
-		tags: []
+		tags: currentTags
 	};
-
-	let cardComponent;
-
-	let tags: Tag[] | [] = [];
-	onMount(async () => {
-		tags = await fetchTags();
-	});
 
 	function handleTagsChange() {}
 </script>
@@ -47,7 +52,7 @@
 	</div>
 
 	<div class="card-view">
-		<Card bind:card bind:this={cardComponent} />
+		<Card bind:card bind:this={cardComponent} bind:cardTypes />
 		<button on:click={cardComponent.saveCard}>Save</button>
 	</div>
 </div>

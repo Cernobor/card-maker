@@ -1,30 +1,19 @@
 <script lang="ts">
-	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 	import { slugify } from '$lib/slugify';
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
-	export let mode = 'create';
 	import { api } from '$lib/stores/store';
+	import type { CardCreate, CardGet, Mode } from '$lib/interfaces';
+	import { cardTypeClass } from '$lib/interfaces';
+	import type { CardTypeKey, CardTypeClass, CardType } from '$lib/interfaces';
 
-	interface Card {
-		name: string;
-		type: string;
-		fluff: string;
-		effect: string;
-		user_id: number | undefined;
-		card_name_id: number | undefined;
-		nonRemovable: boolean;
-		in_set: boolean;
-		setName: string;
-		tags: string[];
-	}
-
-	let cardTypeClass: string;
-
-	export let card: Card = {};
+	export let mode: Mode = 'create';
+	export let card: CardCreate | CardGet;
+	export let cardId: number | null = null;
+	export let cardTypes: CardType[];
 
 	export function saveCard() {
-		html2canvas(document.querySelector('#capture')).then((canvas) => {
+		html2canvas(document.querySelector('#capture')!).then((canvas) => {
 			let a = document.createElement('a');
 			a.href = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'); // here is the most important part because if you dont replace you will get a DOM 18 exception.
 			a.download = slugify(card.name) + '-card.png';
@@ -36,75 +25,52 @@
 	}
 
 	async function sentCardToAPI() {
-		let cardTypes = await $api.getCardTypes();
-		let cardTypeId = cardTypes.find((typeElement) => typeElement.name == card.type).id;
-
 		if (mode == 'create') {
-			$api.createCard({
-				name: card.name,
-				fluff: card.fluff,
-				effect: card.effect,
-				user_id: 1, // TODO: get user id from session
-				card_type_id: cardTypeId,
-				in_set: card.in_set,
-				set_name: card.setName,
-				tags: card.tags
-			});
+			$api.createCard(card);
 		} else if (mode == 'update') {
-			$api.updateCard(
-				{
-					id: card.id,
-					name: card.name,
-					fluff: card.fluff,
-					effect: card.effect,
-					user_id: 1, // TODO: get user id from session
-					card_type_id: 1,
-					in_set: card.in_set,
-					set_name: card.set_name,
-					tags: card.tags
-				},
-				card.id
-			);
+			if (!cardId) {
+				alert('Kartu nelze ');
+				return;
+			}
+			$api.updateCard(card, cardId);
 		}
 	}
 
-	function pf_filter(text) {
+	function pf_filter(text: string) {
 		// TODO: přefiltruj text a naházej symoboly/bold text tam kam patří
 		return text;
 	}
 
-	$: if (card.type == 'Magický předmět') {
-		cardTypeClass = 'card-magical-item';
-	} else if (card.type == 'Volný aspekt') {
-		cardTypeClass = 'card-free-aspect';
-	} else if (card.type == 'Lokace') {
-		cardTypeClass = 'card-location';
-	}
+	let cssClass: CardTypeClass;
+	const cardType = cardTypes.find((cardType) => {
+		cardType.id == card.card_type_id;
+	})!.name;
+	$: cssClass = cardTypeClass[cardType as CardTypeKey];
 </script>
 
-<div class="{cardTypeClass} card" id="capture">
+<div class="{cssClass} card" id="capture">
 	<section class="card-header">
 		<div class="card-name">{card.name}</div>
 		<div class="card-set">
-			{#if card.type == 'Magický předmět'}
-				<div class="card-in-set">{card.in_set ? card.setName : ''}</div>
-			{:else if card.type == 'Volný aspekt'}
-				<div class="card-in-set">{card.in_set ? card.setName : ''}</div>
+			{#if cardType == 'Magický předmět' || cardType == 'Volný aspekt'}
+				<div class="card-in-set">{card.in_set ? card.set_name : ''}</div>
 			{/if}
 		</div>
-		<div class="card-type">{card.type}</div>
-		{#if card.type == 'Magický předmět'}
-			<div class="irremovable">{card.nonRemovable ? 'Neodložitelný' : ''}</div>
+		<div class="card-type">{cardType}</div>
+		{#if cardType == 'Magický předmět'}
+			<div class="irremovable">
+				{card.tags.includes({ name: 'Neodložitelný' }) ? 'Neodložitelný' : ''}
+			</div>
 		{/if}
 	</section>
 
 	<div class="card-body">
 		<section class="card-content">
 			<div class="card-fluff">
-				{@html pf_filter(DOMPurify.sanitize(card.fluff))}
+				{@html pf_filter(DOMPurify.sanitize(card.fluff || ''))}
 			</div>
 			<div class="card-effect">
-				{@html pf_filter(DOMPurify.sanitize(card.effect))}
+				{@html pf_filter(DOMPurify.sanitize(card.effect || ''))}
 			</div>
 		</section>
 	</div>
