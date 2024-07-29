@@ -7,7 +7,7 @@ export interface Tag {
 	 * Interface used for work with card tags.
 	 */
 	name: string;
-	description: string | null;
+	description?: string | null;
 }
 
 export interface CardBase {
@@ -106,3 +106,18 @@ export function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
 		typeof (error as Record<string, unknown>).message === 'string'
 	);
 }
+
+export type Mode = 'create' | 'update';
+
+export const cardTypeClass = {
+	/**
+	 * Enum used to determine which
+	 * css class to choose in Card component
+	 */
+	'Magický předmět': 'card-magical-item',
+	'Volný aspekt': 'card-free-aspect',
+	Lokace: 'card-location'
+} as const;
+
+export type CardTypeKey = keyof typeof cardTypeClass;
+export type CardTypeClass = (typeof cardTypeClass)[CardTypeKey];

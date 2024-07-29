@@ -1,20 +1,25 @@
-<script>
+<script lang="ts">
 	import { api } from '$lib/stores/store';
 	/** @type {import('./$types').PageData} */
-	export let data;
-
 	import Card from '$lib/components/Card.svelte';
 	import CardForm from '$lib/components/CardForm.svelte';
+	import type { CardCreate, CardType, Mode } from '$lib/interfaces';
 
-	let mode = 'update';
-	let cardTypes = ['Volný aspekt', 'Lokace', 'Magický předmět'];
+	export let data: { cardId: number };
 
-	let card = {};
+	let mode: Mode = 'update';
+	let cardTypes: CardType[];
+
+	let card: CardCreate;
 	let cardComponent;
 
 	async function loadCard() {
-		const card_data = await $api.getCard(data.card_id);
-		card = { ...card_data, type: cardTypes[card_data.card_type_id - 1] };
+		const cardData = await $api.getCard(data.cardId);
+		cardTypes = await $api.getCardTypes();
+		if (!cardData) {
+			throw new Error('Card does not exist');
+		}
+		card = { ...cardData };
 	}
 </script>
 
@@ -24,14 +29,14 @@
 	{:then}
 		<div class="card-view">
 			<div class="inputs">
-				<CardForm bind:card bind:cardTypes cardTypeProp={card.type} />
+				<CardForm bind:card bind:cardTypes />
 			</div>
-			<Card bind:card bind:mode bind:this={cardComponent} />
+			<Card bind:card bind:mode bind:this={cardComponent} bind:cardTypes />
 			<button on:click={cardComponent.saveCard}>Save edit</button>
-			<button on:click={$api.deleteCard(card.id, '/card/list')}>Delete card</button>
+			<button on:click={() => $api.deleteCard(data.cardId, '/card/list')}>Delete card</button>
 		</div>
-	{:catch error}
-		<h1>Karta s id {data.card_id} neexistuje</h1>
+	{:catch}
+		<h1>Karta s id {data.cardId} neexistuje</h1>
 	{/await}
 </div>
 
