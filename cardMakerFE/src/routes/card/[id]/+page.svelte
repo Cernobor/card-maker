@@ -35,7 +35,7 @@
 		<div class="card-view">
 			{#if !$api.loggedIn}
 				<p class="warning">
-					Nejsi prihlaseny. Pro ulozeni ci smazani karty, se prihlas <a href="/login">zde</a>.
+					Nejsi přihlášený. Pro uložení změn či smazání karty se přihlaš <a href="/login">zde</a>.
 				</p>
 			{/if}
 			<Card
@@ -45,8 +45,8 @@
 				bind:cardTypes
 				bind:cardId={data.cardId}
 			/>
-			<button on:click={cardComponent.downloadCard}>Stahnout</button>
-			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Ulozit zmeny</button>
+			<button on:click={cardComponent.downloadCard}>Stáhnout</button>
+			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Uložit změny</button>
 			<button on:click={() => $api.deleteCard(data.cardId, '/card/list')} disabled={!$api.loggedIn}
 				>Smazat kartu</button
 			>

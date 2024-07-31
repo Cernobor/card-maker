@@ -25,7 +25,7 @@
 				goto('/');
 			})
 			.catch(() => {
-				wrongRegistration('Nespravne uzivatelske jmeno nebo heslo');
+				wrongRegistration('Nesprávné uživatelské jméno nebo heslo!');
 			});
 	}
 </script>
@@ -41,10 +41,10 @@
 			<input type="password" bind:value={user.password} class="login-form-input" />
 		</div>
 		<div class="login-form-item">
-			<input type="submit" value="Prihlasit se" class="submit-button" />
+			<input type="submit" value="Přihlásit se" class="submit-button" />
 		</div>
 	</form>
 	<div class="login-form-item">
-		<p>Nemas jeste ucet? <a href="/registration">Registruj se</a>.</p>
+		<p>Nemáš ještě účet? <a href="/registration">Registruj se</a>.</p>
 	</div>
 </div>

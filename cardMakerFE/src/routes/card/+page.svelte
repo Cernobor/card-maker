@@ -47,7 +47,7 @@
 		<div class="card-view">
 			{#if !$api.loggedIn}
 				<p class="warning">
-					Nejsi prihlaseny. Pro ulozeni karty, se prihlas <a href="/login">zde</a>.
+					Nejsi přihlášený. Pro uložení karty se přihlaš <a href="/login">zde</a>.
 				</p>
 			{/if}
 			<Card bind:card bind:this={cardComponent} bind:cardTypes />
