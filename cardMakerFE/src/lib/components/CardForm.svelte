@@ -7,16 +7,19 @@
 	export let cardTypes: CardType[];
 
 	let currentCardType: CardType = { id: 0, name: '' };
-
 	let tags: Tag[] = [];
+
 	onMount(async () => {
+		/**
+		 * Get tags and card types.
+		 */
 		try {
 			tags = await $api.getTags();
 			console.log(tags);
 			cardTypes = await $api.getCardTypes();
 			currentCardType = cardTypes[0];
 		} catch {
-			alert('nejde to');
+			alert('Problem s nacitanim tagu nebo typu karet.');
 		}
 	});
 
@@ -33,6 +36,9 @@
 	}
 
 	function handleTagsChange(event: Event) {
+		/**
+		 * Update card tags according to checkboxes.
+		 */
 		const target = event.target as HTMLInputElement;
 		if (target.checked) {
 			card.tags.push({ name: target.value });

@@ -1,13 +1,6 @@
 <script lang="ts">
 	import './styles.css';
 	import { api } from '$lib/stores/store';
-
-	let loginText: string;
-	let loginPath: string;
-	$: {
-		loginText = $api.loggedIn ? 'Odhlasit se' : 'Prihlasit se';
-		loginPath = $api.loggedIn ? '/logout' : '/login';
-	}
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,7 +16,11 @@
 		<a href="/">Home</a>
 		<a href="/card">vytvoř kartu</a>
 		<a href="/card/list">databáze karet</a>
-		<a href={loginPath}>{loginText}</a>
+		{#if $api.loggedIn}
+			<a href="/logout">Odhlasit se</a>
+		{:else}
+			<a href="/login">Prihlasit se</a>
+		{/if}
 	</nav>
 </div>
 <div class="page-container">

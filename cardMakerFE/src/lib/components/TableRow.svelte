@@ -18,7 +18,7 @@
 
 	$: if (users.length) {
 		(async () => {
-			const response = await getUserNameByID(card.user_id);
+			const response = await getUserNameByID(card.user_id || 0);
 			cardAuthor = response.username;
 		})();
 	}
