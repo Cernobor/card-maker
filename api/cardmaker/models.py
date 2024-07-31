@@ -15,6 +15,7 @@ class Token(SQLModel):
 
     access_token: str
     token_type: str
+    user_id: int = Field(foreign_key="users.id")
 
 
 class UserBase(SQLModel):

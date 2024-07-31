@@ -299,6 +299,7 @@ async def get_access_token(
                 user, datetime.now() + timedelta(days=15)
             ),
             token_type="bearer",
+            user_id=user.id,
         )
     )
     return JSONResponse(status_code=200, content=response)
