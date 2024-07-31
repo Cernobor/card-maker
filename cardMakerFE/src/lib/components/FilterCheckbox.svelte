@@ -23,7 +23,7 @@
 					type="checkbox"
 					id={option.name}
 					class="checkbox"
-					value={option}
+					value={option.name}
 					on:change={handleChange}
 				/>
 			</div>

@@ -2,59 +2,61 @@
 	import Card from '$lib/components/Card.svelte';
 	import CardForm from '$lib/components/CardForm.svelte';
 	import { api } from '$lib/stores/store';
-	import { onMount } from 'svelte';
 	import type { CardCreate, Tag, CardType } from '$lib/interfaces';
 
 	let cardComponent;
-	let tags: Tag[] = [];
-	let cardTypes: CardType[] = [];
-	onMount(async () => {
-		tags = await $api.getTags();
+	let cardTypes: CardType[];
+	let card: CardCreate;
+	let currentUserId: number | null = null;
+
+	async function load() {
+		/***
+		 * Get card types and initialize an empty card.
+		 */
 		cardTypes = await $api.getCardTypes();
-	});
-
-	let currentTags: Tag[] = [
-		{
-			name: 'Neodložitelný'
+		if (!cardTypes) {
+			throw new Error('Cannot get card types!');
 		}
-	];
-	let card: CardCreate = {
-		name: 'Card Name',
-		card_type_id: cardTypes[0].id,
-		user_id: 1,
-		fluff: 'Card Fluff',
-		effect: 'Efekt/pravidla karty',
-		in_set: false,
-		set_name: 'Jméno setu (počet itemů v setu)',
-
-		tags: currentTags
-	};
-
-	function handleTagsChange() {}
+		if ($api.currentUser) {
+			currentUserId = $api.currentUser.id;
+		}
+		card = {
+			name: 'Card Name',
+			card_type_id: cardTypes[0].id,
+			user_id: currentUserId,
+			fluff: 'Card Fluff',
+			effect: 'Efekt/pravidla karty',
+			in_set: false,
+			set_name: 'Jméno setu (počet itemů v setu)',
+			tags: [
+				{
+					name: 'Neodložitelný'
+				}
+			]
+		};
+	}
 </script>
 
 <div class="cardmaker-body">
-	<div class="inputs">
-		<CardForm bind:card bind:cardTypes />
-	</div>
-
-	<div class="checkbox-container">
-		{#each tags as tag}
-			<label for={tag.name}>{tag.name}</label>
-			<input
-				type="checkbox"
-				id={tag.name}
-				class="checkbox"
-				value={tag.name}
-				on:change={handleTagsChange}
-			/>
-		{/each}
-	</div>
-
-	<div class="card-view">
-		<Card bind:card bind:this={cardComponent} bind:cardTypes />
-		<button on:click={cardComponent.saveCard}>Save</button>
-	</div>
+	{#await load()}
+		<h1>loading...</h1>
+	{:then}
+		<div class="inputs">
+			<CardForm bind:card bind:cardTypes />
+		</div>
+		<div class="card-view">
+			{#if !$api.loggedIn}
+				<p class="warning">
+					Nejsi prihlaseny. Pro ulozeni karty, se prihlas <a href="/login">zde</a>.
+				</p>
+			{/if}
+			<Card bind:card bind:this={cardComponent} bind:cardTypes />
+			<button on:click={cardComponent.downloadCard}>Stahnout</button>
+			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Ulozit</button>
+		</div>
+	{:catch}
+		<h1>Nefunguje to #SorryJako</h1>
+	{/await}
 </div>
 
 <style>

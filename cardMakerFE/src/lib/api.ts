@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation';
-import { getErrorMessage } from './errors';
+import { clearSessionStorage, tokens } from './stores/tokens';
 import type {
 	CardBase,
 	UserPublic,
@@ -7,19 +7,32 @@ import type {
 	CardCreate,
 	CardType,
 	UserCreate,
-	Tag
+	Tag,
+	UserLogin,
+	JWTToken
 } from './interfaces';
 
 export default class CardMakerApi {
 	/**
 	 * Class for handling communication with API
-	 *
-	 * @todo Implement 'getToken' method and save token into cookies.
 	 */
 	private endpoint: string;
-	//private JWTToken: string;
+	private jwtToken: string = '';
+	public loggedIn: boolean;
+	public currentUser: UserPublic | null = null;
+
 	public constructor(api_endpoint: string) {
 		this.endpoint = api_endpoint;
+		// Get session values from store
+		if (typeof window !== undefined) {
+			tokens.subscribe((value) => {
+				this.jwtToken = value.jwtToken;
+				if (value.username !== '' && value.userId !== '') {
+					this.currentUser = { username: value.username, id: Number(value.userId) };
+				}
+			});
+		}
+		this.loggedIn = this.jwtToken !== '';
 	}
 
 	private async get<T>(path: string, params: { [key: string]: string } = {}): Promise<T> {
@@ -50,19 +63,22 @@ export default class CardMakerApi {
 		return response.json() as T;
 	}
 
-	private async post(path: string, body: { [key: string]: any }) {
+	private async post<T>(path: string, body: { [key: string]: any }): Promise<T> {
 		/**
 		 * Post data to the endpoint.
 		 *
 		 * @param path - path to the resource
 		 * @param body - request body
 		 *
+		 * @returns promise of the given type
+		 *
 		 * @throws HTTPError if not response ok
 		 */
 		let url = new URL(path, this.endpoint);
 		const headers = {
 			accept: 'application/json',
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${this.jwtToken}`
 		};
 		const options = {
 			method: 'POST',
@@ -72,8 +88,9 @@ export default class CardMakerApi {
 
 		const response = await fetch(url, options);
 		if (!response.ok) {
-			throw new Error(`Response status: ${response.status}`);
+			throw new Error(`Response status: ${response.status}}`);
 		}
+		return response.json();
 	}
 
 	private async put(path: string, body: { [key: string]: any }) {
@@ -87,7 +104,8 @@ export default class CardMakerApi {
 		 */
 		let url = new URL(path, this.endpoint);
 		const headers = {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${this.jwtToken}`
 		};
 		const options = {
 			method: 'PUT',
@@ -111,7 +129,8 @@ export default class CardMakerApi {
 		 */
 		let url = new URL(path, this.endpoint);
 		const headers = {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${this.jwtToken}`
 		};
 		const options = {
 			method: 'DELETE',
@@ -128,126 +147,117 @@ export default class CardMakerApi {
 		/**
 		 * Get array of types of cards (e.g. Aspekt).
 		 *
-		 * @returns array of card types or an empty array if error
+		 * @returns array of card types
 		 */
-		try {
-			return await this.get<CardType[]>('/card-types');
-		} catch (error) {
-			console.error(`Error getting card types: ${getErrorMessage(error)}`);
-			return [];
-		}
+		return await this.get<CardType[]>('/card-types');
 	}
 
-	public async getCard(cardId: number): Promise<CardGet | null> {
+	public async getCard(cardId: number): Promise<CardGet> {
 		/**
 		 * Get card object by.
 		 *
 		 * @param cardId - ID of card
 		 *
-		 * @returns card object of null if error
+		 * @returns card object
 		 */
-		try {
-			return await this.get<CardGet>('/cards/' + cardId);
-		} catch (error) {
-			console.error(`Error getting card types: ${getErrorMessage(error)}`);
-			return null;
-		}
+		return await this.get<CardGet>('/cards/' + cardId);
 	}
 
 	public async getCards(): Promise<CardGet[]> {
 		/**
 		 * Get array of cards.
 		 *
-		 * @returns array of cards or an empty array if error
+		 * @returns array of cards
 		 */
-		try {
-			return await this.get<CardGet[]>('/cards');
-		} catch (error) {
-			console.error(`Error getting cards: ${getErrorMessage(error)}`);
-			return [];
-		}
+		return await this.get<CardGet[]>('/cards');
 	}
 
 	public async createCard(card: CardCreate) {
 		/**
-		 * Create new card or alert if not success.
+		 * Create new card.
 		 *
 		 * @param card - card object
 		 */
-		try {
-			await this.post('/cards', card);
-		} catch (error) {
-			console.error(`Error creating card: ${getErrorMessage(error)}`);
-			alert('Během tvorby karty nastala chyba. Zkus to znova.');
-		}
+		await this.post('/cards', card);
 	}
 
 	public async updateCard(card: CardBase, cardId: number) {
 		/**
-		 * Update existing card with ID or alert if not success.
+		 * Update existing card with ID.
 		 *
 		 * @param card - card object
 		 * @param cardId - ID of card to update
 		 */
-		try {
-			await this.put('/cards/' + cardId, card);
-		} catch (error) {
-			console.error(`Error updating card: ${getErrorMessage(error)}`);
-		}
+		await this.put('/cards/' + cardId, card);
 	}
 
 	public async deleteCard(crdiId: number, rediredcPath: string) {
 		/**
-		 * Delete existing card with ID or alert if not success.
+		 * Delete existing card with ID.
 		 *
 		 * @param cardId - ID of card to delete
 		 */
-		try {
-			await this.delete('/cards/' + crdiId);
-			goto(rediredcPath);
-		} catch (error) {
-			console.error(`Error deleting card ${crdiId}: ${getErrorMessage(error)}`);
-		}
+		await this.delete('/cards/' + crdiId);
+		goto(rediredcPath);
 	}
 
 	public async getUsers(): Promise<UserPublic[]> {
 		/**
 		 * Get array of users.
 		 *
-		 * @returns array of users or an empty array if error
+		 * @returns array of users
 		 */
-		try {
-			return this.get<UserPublic[]>('/users');
-		} catch (error) {
-			console.error(`Error getting users: ${getErrorMessage(error)}`);
-			return [];
-		}
+		return await this.get<UserPublic[]>('/users');
 	}
 
 	public async getTags(): Promise<Tag[]> {
 		/**
 		 * Get array of tags.
 		 *
-		 * @returns array of tags or an empty array if error
+		 * @returns array of tags
 		 */
-		try {
-			return this.get<Tag[]>('/tags');
-		} catch (error) {
-			console.error(`Error getting tags: ${getErrorMessage(error)}`);
-			return [];
-		}
+		return await this.get<Tag[]>('/tags');
 	}
 
 	public async createUser(user: UserCreate) {
 		/**
-		 * Create new user or alert if not success.
+		 * Create new user.
 		 *
 		 * @param user - user object
 		 */
-		try {
-			this.post('/users', user);
-		} catch (error) {
-			console.error(`Error creating user: ${getErrorMessage(error)}`);
-		}
+		await this.post('/users', user);
+	}
+
+	public async logIn(user: UserLogin) {
+		/**
+		 * Get JWT token and save it to the session store.
+		 *
+		 * @param user - user object with username and passeord
+		 */
+		const response = await this.post<JWTToken>('/users/me', user);
+		this.jwtToken = response.access_token;
+		this.loggedIn = true;
+		this.currentUser = {
+			username: user.username,
+			id: response.user_id
+		};
+		tokens.set({
+			jwtToken: this.jwtToken,
+			username: this.currentUser.username,
+			userId: String(this.currentUser.id)
+		});
+	}
+
+	public logOut(rediredcPath: string) {
+		/**
+		 * Clear the session store.
+		 *
+		 * @param rediredcPath - where to redirect after logout
+		 */
+		this.jwtToken = '';
+		this.currentUser = null;
+		this.loggedIn = false;
+		clearSessionStorage();
+		goto(rediredcPath);
 	}
 }

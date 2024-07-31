@@ -1,32 +1,36 @@
 <script lang="ts">
-	import type { CardGet, Tag, CardType, CardCreate } from '$lib/interfaces';
+	import type { Tag, CardType, CardCreate } from '$lib/interfaces';
 	import { api } from '$lib/stores/store';
 	import { onMount } from 'svelte';
 
 	export let card: CardCreate;
 	export let cardTypes: CardType[];
 
-	let cardTypeProp = cardTypes.find((cardType) => {
-		cardType.id === card.card_type_id;
-	})!.name;
+	let currentCardType: CardType = { id: 0, name: '' };
 
-	$: {
-		card.card_type_id = cardTypes.find((cardType) => {
-			cardType.name === cardTypeProp;
-		})!.id;
-		if (cardTypeProp == 'Magický předmět') {
+	let tags: Tag[] = [];
+	onMount(async () => {
+		try {
+			tags = await $api.getTags();
+			console.log(tags);
+			cardTypes = await $api.getCardTypes();
+			currentCardType = cardTypes[0];
+		} catch {
+			alert('nejde to');
+		}
+	});
+
+	$: if (currentCardType) {
+		console.log('card types are here...');
+		card.card_type_id = currentCardType.id;
+		if (currentCardType.name == 'Magický předmět') {
 			card.in_set = false;
 			card.set_name = 'Jméno setu (počet itemů v setu)';
-		} else if (cardTypeProp == 'Volný aspekt') {
+		} else if (currentCardType.name == 'Volný aspekt') {
 			card.in_set = false;
 			card.set_name = 'Jméno rodiny aspektů';
 		}
 	}
-
-	let tags: Tag[] = [];
-	onMount(async () => {
-		tags = await $api.getTags();
-	});
 
 	function handleTagsChange(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -45,9 +49,9 @@
 
 		<input type="text" placeholder="Name" id="name" bind:value={card.name} />
 		<label for="type">Typ:</label>
-		<select bind:value={cardTypeProp}>
+		<select bind:value={currentCardType}>
 			{#each cardTypes as type (type)}
-				<option value={type}>{type}</option>
+				<option value={type}>{type.name}</option>
 			{/each}
 		</select>
 
@@ -57,7 +61,7 @@
 		<label for="efect">Efekt/pravidla:</label>
 		<textarea bind:value={card.effect} placeholder="efekt" id="efect" />
 
-		{#if cardTypeProp == 'Magický předmět'}
+		{#if currentCardType.name == 'Magický předmět'}
 			<label for="in_set">V setu:</label>
 			<input type="checkbox" class="checkbox" bind:checked={card.in_set} id="in_set" />
 			{#if card.in_set}
@@ -66,7 +70,7 @@
 			{/if}
 		{/if}
 
-		{#if cardTypeProp == 'Volný aspekt'}
+		{#if currentCardType.name == 'Volný aspekt'}
 			<label for="aspectFamily">V rodině apektů:</label>
 			<input type="checkbox" class="checkbox" bind:checked={card.in_set} id="aspectFamily" />
 			{#if card.in_set}

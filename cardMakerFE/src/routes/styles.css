@@ -13,6 +13,7 @@ body {
     font-optical-sizing: auto;
     font-style: normal; 
     color: #EEEEEE;
+    height: 100%;
 }
 nav {
     background-color: #222831;
@@ -65,28 +66,59 @@ input, select, textarea{
     font-size: 16px;
 }
 
-button {
+select {
+    cursor: pointer;
+}
+
+button, .submit-button {
     background-color: #31363F;
     color: #EEEEEE;
     border-radius: 20px;
     border-color: #00ADB5;
     font-size: 16px;
-    width: 100px;
-    height: 40px;
     font-weight: 600;
+    padding: 10px;
 }
 
-button:hover {
+button:hover, .submit-button:hover {
     background-color: #222831;
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    color: #8f8f8f;
+}
+
+button:disabled:hover {
+    background-color: #31363F;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: 200px;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
 }
 
 .header-block {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
     text-align: center;
     font-family: "Inknut Antiqua", serif;
-    text-transform: capitalize;
+    /*text-transform: capitalize;*/
     font-weight: 200;
     font-style: normal;
+    background-color: #222831;
 }
+
 
 .navbar {
     display: flex;
@@ -112,7 +144,7 @@ button:hover {
     flex-direction: row;
     flex-wrap: wrap;
     gap:20px;
-    margin: 20px;
+    margin: 30px;
     font-size: 16px;
 }
 
@@ -136,6 +168,7 @@ button:hover {
     height: 25px;
     width: 25px;
     margin: 10px;
+    cursor: pointer;
 }
 
 .all-checkboxes-container {
@@ -153,4 +186,42 @@ button:hover {
 
 
 input, textarea, select, button { font-family:inherit; }
+
+.login-form {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+    font-size: 20px;
+}
+
+.login-form-item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login-form-input {
+    font-size: 20px;
+}
+
+.warning {
+    color: #FF7F50;
+}
+
+.footer-block {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #222831;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal; 
+    color: #EEEEEE;
+    text-align: center;
+}
 

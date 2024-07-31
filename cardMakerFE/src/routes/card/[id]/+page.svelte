@@ -9,11 +9,13 @@
 
 	let mode: Mode = 'update';
 	let cardTypes: CardType[];
-
 	let card: CardCreate;
 	let cardComponent;
 
 	async function loadCard() {
+		/**
+		 * Load and initialize card from database.
+		 */
 		const cardData = await $api.getCard(data.cardId);
 		cardTypes = await $api.getCardTypes();
 		if (!cardData) {
@@ -27,13 +29,21 @@
 	{#await loadCard()}
 		<h1>loading...</h1>
 	{:then}
+		<div class="inputs">
+			<CardForm bind:card bind:cardTypes />
+		</div>
 		<div class="card-view">
-			<div class="inputs">
-				<CardForm bind:card bind:cardTypes />
-			</div>
+			{#if !$api.loggedIn}
+				<p class="warning">
+					Nejsi prihlaseny. Pro ulozeni ci smazani karty, se prihlas <a href="/login">zde</a>.
+				</p>
+			{/if}
 			<Card bind:card bind:mode bind:this={cardComponent} bind:cardTypes />
-			<button on:click={cardComponent.saveCard}>Save edit</button>
-			<button on:click={() => $api.deleteCard(data.cardId, '/card/list')}>Delete card</button>
+			<button on:click={cardComponent.downloadCard}>Stahnout</button>
+			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Ulozit zmeny</button>
+			<button on:click={() => $api.deleteCard(data.cardId, '/card/list')} disabled={!$api.loggedIn}
+				>Smazat kartu</button
+			>
 		</div>
 	{:catch}
 		<h1>Karta s id {data.cardId} neexistuje</h1>

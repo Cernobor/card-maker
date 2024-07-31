@@ -1,31 +1,55 @@
 <script lang="ts">
-    import type { UserCreate } from "$lib/interfaces";
-    import { Cookies } from "js-cookie";
-    let user: UserCreate;
+	import { goto } from '$app/navigation';
+	import type { UserLogin } from '$lib/interfaces';
+	import { api } from '$lib/stores/store';
 
-    function handleSubmit(e) {
-        try {
-            /*
-             * TODO: getTokenOrError
-             */
-            let JWTToken = "";
-            Cookies.set("token", JWTToken);
-        } catch {
-            e.prevendDefalt()
-            user.username = "";
-            user.password = "";
-            alert("Nesprávné uživatelské jméno nebo heslo.")
-        }
-    }
+	if ($api.loggedIn) {
+		goto('/');
+	}
 
+	let user: UserLogin = {
+		username: '',
+		password: ''
+	};
+	let passwordConfirm: string = '';
+
+	function wrongRegistration(alertText: string) {
+		user.username = '';
+		user.password = '';
+		alert(alertText);
+	}
+
+	async function handleSubmit(event: Event) {
+		if (user.password != passwordConfirm) {
+			event.preventDefault();
+			wrongRegistration('Heslo se musí shodovat!');
+		}
+		$api
+			.logIn(user)
+			.then(() => {
+				goto('/');
+			})
+			.catch(() => {
+				wrongRegistration('Nespravne uzivatelske jmeno nebo heslo');
+			});
+	}
 </script>
 
-<div>
-    <form on:submit={handleSubmit}>
-        <label for="username">Uživatelské jméno</label>
-        <input type="text" bind:value={user.username}/>
-        <label for="password">Heslo</label>
-        <input type="hidden" bind:value={user.password} />
-        <input type="submit" value="Přihlásit se" />
-    </form>
+<div class="login-form">
+	<form on:submit={handleSubmit} class="login-form">
+		<div class="login-form-item">
+			<label for="username">Uživatelské jméno</label>
+			<input type="text" bind:value={user.username} class="login-form-input" required />
+		</div>
+		<div class="login-form-item">
+			<label for="password">Heslo</label>
+			<input type="password" bind:value={user.password} class="login-form-input" />
+		</div>
+		<div class="login-form-item">
+			<input type="submit" value="Prihlasit se" class="submit-button" />
+		</div>
+	</form>
+	<div class="login-form-item">
+		<p>Nemas jeste ucet? <a href="/registration">Registruj se</a>.</p>
+	</div>
 </div>

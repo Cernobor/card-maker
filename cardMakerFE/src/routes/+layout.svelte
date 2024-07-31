@@ -1,5 +1,13 @@
-<script>
+<script lang="ts">
 	import './styles.css';
+	import { api } from '$lib/stores/store';
+
+	let loginText: string;
+	let loginPath: string;
+	$: {
+		loginText = $api.loggedIn ? 'Odhlasit se' : 'Prihlasit se';
+		loginPath = $api.loggedIn ? '/logout' : '/login';
+	}
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -10,13 +18,17 @@
 />
 
 <div class="header-block">
-	<h1>Card <img src="/images/cb_logo_white.png" width="50px" /> maker</h1>
+	<h1>Card <img alt="CB logo" src="/images/cb_logo_white.png" width="50px" /> Maker</h1>
 	<nav class="navbar">
 		<a href="/">Home</a>
 		<a href="/card">vytvoř kartu</a>
 		<a href="/card/list">databáze karet</a>
-		<p>Uživatel XY</p>
+		<a href={loginPath}>{loginText}</a>
 	</nav>
 </div>
-
-<slot />
+<div class="page-container">
+	<slot class="main-content" />
+</div>
+<footer class="footer-block">
+	<p>Černobor Cardmaker</p>
+</footer>

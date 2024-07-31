@@ -1,40 +1,56 @@
 <script lang="ts">
-    import type { UserCreate } from "$lib/interfaces";
-    let user: UserCreate;
-    let passwordConfirm: string;
+	import { goto } from '$app/navigation';
+	import type { UserCreate } from '$lib/interfaces';
+	import { api } from '$lib/stores/store';
 
+	let user: UserCreate = {
+		username: '',
+		password: '',
+		api_key: ''
+	};
+	let passwordConfirm: string = '';
 
-    function wrongRegistration(e, alertText: string) {
-        e.prevendDefalt()
-        user.username = "";
-        user.password = "";
-        passwordConfirm = "";
-        alert(alertText)
-    }
+	function wrongRegistration(alertText: string) {
+		user.username = '';
+		user.password = '';
+		passwordConfirm = '';
+		alert(alertText);
+	}
 
-    function handleSubmit(e) {
-        if (user.password != passwordConfirm) {
-            wrongRegistration(e, "Heslo se musí shodovat!")
-        }
-        try {
-            /*
-             * TODO: saveUserOrError
-             */
-        } catch {
-            wrongRegistration(e, `Uživatel ${user.username} už existuje.`)
-        }
-    }
-
+	async function handleSubmit(event: Event) {
+		if (user.password != passwordConfirm) {
+			event.preventDefault();
+			wrongRegistration('Heslo se musí shodovat!');
+		}
+		$api
+			.createUser(user)
+			.then(() => {
+				goto('/login');
+			})
+			.catch(() => {
+				wrongRegistration(`Uzivatel ${user.username} uz existuje!`);
+			});
+	}
 </script>
 
-<div>
-    <form on:submit={handleSubmit}>
-        <label for="username">Uživatelské jméno</label>
-        <input type="text" bind:value={user.username}/>
-        <label for="password">Heslo</label>
-        <input type="hidden" bind:value={user.password} />
-        <label for="passwordConfirm">Potvrdit heslo</label>
-        <input type="hidden" bind:value={passwordConfirm} />
-        <input type="submit" value="Registrovat se" />
-    </form>
+<div class="cardmaker-body">
+	<form on:submit={handleSubmit} class="login-form">
+		<div class="login-form-item">
+			<label for="username">Uživatelské jméno</label>
+			<input type="text" bind:value={user.username} class="login-form-input" required />
+		</div>
+		<div class="login-form-item">
+			<label for="password">Heslo</label>
+			<input type="password" bind:value={user.password} class="login-form-input" />
+		</div>
+		<div class="login-form-item">
+			<label for="passwordConfirm">Potvrdit heslo</label>
+			<input type="password" bind:value={passwordConfirm} class="login-form-input" />
+		</div>
+		<div class="login-form-item">
+			<label for="api-key">API key</label>
+			<input type="text" bind:value={user.api_key} required class="login-form-input" />
+		</div>
+		<input type="submit" value="Registrovat se" class="submit-button" />
+	</form>
 </div>
