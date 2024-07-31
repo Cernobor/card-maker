@@ -258,6 +258,8 @@ export default class CardMakerApi {
 		this.currentUser = null;
 		this.loggedIn = false;
 		clearSessionStorage();
-		goto(rediredcPath);
+		if (typeof window !== 'undefined') {
+			goto(rediredcPath);
+		}
 	}
 }
