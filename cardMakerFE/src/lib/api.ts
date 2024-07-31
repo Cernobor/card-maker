@@ -1,5 +1,7 @@
 import { goto } from '$app/navigation';
 import { clearSessionStorage, sessionData } from './stores/tokens';
+import HTTPError, { getErrorMessage } from './errors';
+import type { HttpErrorCode } from './errors';
 import type {
 	CardBase,
 	UserPublic,
@@ -11,6 +13,7 @@ import type {
 	UserLogin,
 	JWTToken
 } from './interfaces';
+import { error } from '@sveltejs/kit';
 
 export default class CardMakerApi {
 	/**
@@ -58,7 +61,10 @@ export default class CardMakerApi {
 		};
 		const response = await fetch(url, options);
 		if (!response.ok) {
-			throw new Error(`Response status: ${response.status}`);
+			throw new HTTPError({
+				code: response.status as HttpErrorCode,
+				message: getErrorMessage(error)
+			});
 		}
 		return response.json() as T;
 	}
@@ -88,7 +94,10 @@ export default class CardMakerApi {
 
 		const response = await fetch(url, options);
 		if (!response.ok) {
-			throw new Error(`Response status: ${response.status}}`);
+			throw new HTTPError({
+				code: response.status as HttpErrorCode,
+				message: getErrorMessage(error)
+			});
 		}
 		return response.json();
 	}
@@ -115,7 +124,10 @@ export default class CardMakerApi {
 
 		const response = await fetch(url, options);
 		if (!response.ok) {
-			throw new Error(`Response status: ${response.status}`);
+			throw new HTTPError({
+				code: response.status as HttpErrorCode,
+				message: getErrorMessage(error)
+			});
 		}
 	}
 
@@ -139,7 +151,10 @@ export default class CardMakerApi {
 
 		const response = await fetch(url, options);
 		if (!response.ok) {
-			throw new Error(`Response status: ${response.status}`);
+			throw new HTTPError({
+				code: response.status as HttpErrorCode,
+				message: getErrorMessage(error)
+			});
 		}
 	}
 
