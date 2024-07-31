@@ -28,11 +28,7 @@
 			effect: 'Efekt/pravidla karty',
 			in_set: false,
 			set_name: 'Jméno setu (počet itemů v setu)',
-			tags: [
-				{
-					name: 'Neodložitelný'
-				}
-			]
+			tags: []
 		};
 	}
 </script>

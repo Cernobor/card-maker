@@ -11,7 +11,9 @@
 		if (target.checked) {
 			activeTags = [...activeTags, { name: target.value }];
 		} else {
-			activeTags = activeTags.filter((_, i) => i !== activeTags.indexOf({ name: target.value }));
+			activeTags = activeTags.filter((tag) => {
+				return tag.name !== target.value;
+			});
 		}
 	}
 </script>

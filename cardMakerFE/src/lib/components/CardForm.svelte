@@ -15,9 +15,10 @@
 		 */
 		try {
 			tags = await $api.getTags();
-			console.log(tags);
 			cardTypes = await $api.getCardTypes();
 			currentCardType = cardTypes[0];
+			console.log(tags);
+			console.log(card.tags);
 		} catch {
 			alert('Problem s nacitanim tagu nebo typu karet.');
 		}
@@ -43,9 +44,23 @@
 		if (target.checked) {
 			card.tags.push({ name: target.value });
 		} else {
-			card.tags = card.tags.filter((_, i) => i !== card.tags.indexOf({ name: target.value }));
+			card.tags = card.tags.filter((tag) => {
+				return tag.name !== target.value;
+			});
 		}
-		console.log(card.tags);
+	}
+
+	function checkIfCardContainsTag(tag: Tag) {
+		/**
+		 * Compare given tag with card tags
+		 * and return true if card has tags else false
+		 */
+		for (const cardTag of card.tags) {
+			if (cardTag.name === tag.name) {
+				return true;
+			}
+		}
+		return false;
 	}
 </script>
 
@@ -92,6 +107,7 @@
 					id={tag.name}
 					class="checkbox"
 					value={tag.name}
+					checked={checkIfCardContainsTag(tag)}
 					on:change={handleTagsChange}
 				/>
 			{/each}
