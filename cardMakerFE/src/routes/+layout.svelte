@@ -17,9 +17,9 @@
 		<a href="/card">vytvoř kartu</a>
 		<a href="/card/list">databáze karet</a>
 		{#if $api.loggedIn}
-			<a href="/logout">Odhlasit se</a>
+			<a href="/logout">Odhlásit se</a>
 		{:else}
-			<a href="/login">Prihlasit se</a>
+			<a href="/login">Přihlásit se</a>
 		{/if}
 	</nav>
 </div>

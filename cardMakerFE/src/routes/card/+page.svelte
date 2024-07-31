@@ -51,8 +51,8 @@
 				</p>
 			{/if}
 			<Card bind:card bind:this={cardComponent} bind:cardTypes />
-			<button on:click={cardComponent.downloadCard}>Stahnout</button>
-			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Ulozit</button>
+			<button on:click={cardComponent.downloadCard}>Stáhnout</button>
+			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Uložit</button>
 		</div>
 	{:catch}
 		<h1>Nefunguje to #SorryJako</h1>
