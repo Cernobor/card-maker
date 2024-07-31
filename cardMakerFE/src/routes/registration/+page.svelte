@@ -20,7 +20,7 @@
 	async function handleSubmit(event: Event) {
 		if (user.password != passwordConfirm) {
 			event.preventDefault();
-			wrongRegistration('Heslo se musí shodovat!');
+			wrongRegistration('Hesla se musí shodovat!');
 		}
 		$api
 			.createUser(user)
@@ -28,7 +28,9 @@
 				goto('/login');
 			})
 			.catch(() => {
-				wrongRegistration(`Uzivatel ${user.username} uz existuje!`);
+				wrongRegistration(
+					`Nelze se registrovat, buď máš špatný tajný klíč nebo už existuje uživatel ${user.username}.`
+				);
 			});
 	}
 </script>
@@ -48,7 +50,7 @@
 			<input type="password" bind:value={passwordConfirm} class="login-form-input" />
 		</div>
 		<div class="login-form-item">
-			<label for="api-key">API key</label>
+			<label for="api-key">Tajný klíč</label>
 			<input type="text" bind:value={user.api_key} required class="login-form-input" />
 		</div>
 		<input type="submit" value="Registrovat se" class="submit-button" />

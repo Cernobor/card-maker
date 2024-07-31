@@ -33,20 +33,20 @@
 		if (mode == 'create') {
 			try {
 				await $api.createCard(card);
-				alert('Karta byla ulozena.');
+				alert('Karta byla úspěšně uložena.');
 			} catch {
-				alert('Karta nemuze byt ulozena.');
+				alert('Oops, kartu se nepodařilo uložit.');
 			}
 		} else if (mode == 'update') {
 			if (!cardId) {
-				alert('Kartu nelze ulozit.');
+				alert('Oops, kartu se nepodařilo uložit.');
 				return;
 			}
 			try {
 				await $api.updateCard(card, cardId);
-				alert('Karta byla ulozena.');
+				alert('Karta byla úspěšně uložena.');
 			} catch {
-				alert('Karta nemuze byt ulozena.');
+				alert('Oops, kartu se nepodařilo uložit.');
 			}
 		}
 	}
