@@ -38,7 +38,13 @@
 					Nejsi prihlaseny. Pro ulozeni ci smazani karty, se prihlas <a href="/login">zde</a>.
 				</p>
 			{/if}
-			<Card bind:card bind:mode bind:this={cardComponent} bind:cardTypes />
+			<Card
+				bind:card
+				bind:mode
+				bind:this={cardComponent}
+				bind:cardTypes
+				bind:cardId={data.cardId}
+			/>
 			<button on:click={cardComponent.downloadCard}>Stahnout</button>
 			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Ulozit zmeny</button>
 			<button on:click={() => $api.deleteCard(data.cardId, '/card/list')} disabled={!$api.loggedIn}

@@ -11,7 +11,6 @@
 		username: '',
 		password: ''
 	};
-	let passwordConfirm: string = '';
 
 	function wrongRegistration(alertText: string) {
 		user.username = '';
@@ -20,10 +19,6 @@
 	}
 
 	async function handleSubmit(event: Event) {
-		if (user.password != passwordConfirm) {
-			event.preventDefault();
-			wrongRegistration('Heslo se musí shodovat!');
-		}
 		$api
 			.logIn(user)
 			.then(() => {

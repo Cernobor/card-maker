@@ -39,7 +39,7 @@
 			}
 		} else if (mode == 'update') {
 			if (!cardId) {
-				alert('Kartu nelze ulozit');
+				alert('Kartu nelze ulozit.');
 				return;
 			}
 			try {
