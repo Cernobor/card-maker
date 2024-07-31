@@ -12,7 +12,7 @@
 	export let cardId: number | null = null;
 	export let cardTypes: CardType[];
 
-	export function saveCard() {
+	export function downloadCard() {
 		html2canvas(document.querySelector('#capture')!).then((canvas) => {
 			let a = document.createElement('a');
 			a.href = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'); // here is the most important part because if you dont replace you will get a DOM 18 exception.
@@ -21,43 +21,58 @@
 			document.body.appendChild(a);
 			a.click();
 		});
-		sentCardToAPI();
 	}
 
-	async function sentCardToAPI() {
+	export async function sentCardToAPI() {
 		if (mode == 'create') {
-			$api.createCard(card);
+			try {
+				await $api.createCard(card);
+				alert('Karta byla ulozena.');
+			} catch {
+				alert('Karta nemuze byt ulozena.');
+			}
 		} else if (mode == 'update') {
 			if (!cardId) {
-				alert('Kartu nelze ');
+				alert('Kartu nelze ulozit');
 				return;
 			}
-			$api.updateCard(card, cardId);
+			try {
+				await $api.updateCard(card, cardId);
+				alert('Karta byla ulozena.');
+			} catch {
+				alert('Karta nemuze byt ulozena.');
+			}
 		}
 	}
 
-	function pf_filter(text: string) {
+	function pfFilter(text: string) {
 		// TODO: přefiltruj text a naházej symoboly/bold text tam kam patří
 		return text;
 	}
 
-	let cssClass: CardTypeClass;
-	const cardType = cardTypes.find((cardType) => {
-		cardType.id == card.card_type_id;
-	})!.name;
-	$: cssClass = cardTypeClass[cardType as CardTypeKey];
+	let cardTypeName: string;
+	let cssClass: CardTypeClass = cardTypeClass['Magický předmět'];
+	$: if (cardTypes && card) {
+		let currentCardType = cardTypes.find((cardType) => {
+			return cardType.id == card.card_type_id;
+		});
+		if (currentCardType) {
+			cardTypeName = currentCardType.name;
+			cssClass = cardTypeClass[cardTypeName as CardTypeKey];
+		}
+	}
 </script>
 
 <div class="{cssClass} card" id="capture">
 	<section class="card-header">
 		<div class="card-name">{card.name}</div>
 		<div class="card-set">
-			{#if cardType == 'Magický předmět' || cardType == 'Volný aspekt'}
+			{#if cardTypeName == 'Magický předmět' || cardTypeName == 'Volný aspekt'}
 				<div class="card-in-set">{card.in_set ? card.set_name : ''}</div>
 			{/if}
 		</div>
-		<div class="card-type">{cardType}</div>
-		{#if cardType == 'Magický předmět'}
+		<div class="card-type">{cardTypeName}</div>
+		{#if cardTypeName == 'Magický předmět'}
 			<div class="irremovable">
 				{card.tags.includes({ name: 'Neodložitelný' }) ? 'Neodložitelný' : ''}
 			</div>
@@ -67,10 +82,10 @@
 	<div class="card-body">
 		<section class="card-content">
 			<div class="card-fluff">
-				{@html pf_filter(DOMPurify.sanitize(card.fluff || ''))}
+				{@html pfFilter(DOMPurify.sanitize(card.fluff || ''))}
 			</div>
 			<div class="card-effect">
-				{@html pf_filter(DOMPurify.sanitize(card.effect || ''))}
+				{@html pfFilter(DOMPurify.sanitize(card.effect || ''))}
 			</div>
 		</section>
 	</div>

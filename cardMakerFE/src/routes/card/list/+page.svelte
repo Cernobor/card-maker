@@ -12,6 +12,19 @@
 		selectedType: CardType | null,
 		activeTags: Tag[]
 	) {
+		/**
+		 * Filter cards array according to selected parameters.
+		 *
+		 * @param allCards - array of CardGet objects (all cards in database)
+		 * @param selectedAuthor - UserPublic object
+		 * 						(if null, all authors are selected)
+		 * @param selectedType - CardType object
+		 * 						(if null, all card types are selected)
+		 * @param activeTags - array of Tag objects
+		 * 						(if empty, all tags are selected)
+		 *
+		 * @returns array of filtered cards
+		 */
 		let cards = allCards;
 		if (selectedAuthor != null) {
 			cards = cards.filter((card: CardGet) => {
@@ -45,6 +58,9 @@
 	let activeTags: Tag[] = [];
 
 	onMount(async () => {
+		/**
+		 * Get resources from API.
+		 */
 		allCards = await $api.getCards();
 		users = await $api.getUsers();
 		types = await $api.getCardTypes();

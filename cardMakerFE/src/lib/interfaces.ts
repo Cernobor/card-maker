@@ -28,7 +28,7 @@ export interface CardCreate extends CardBase {
 	 * Interface for card creattion on '/api/cards' POST.
 	 * Also used as base interface for CardGet.
 	 */
-	user_id: number;
+	user_id: number | null;
 	card_type_id: number;
 }
 
@@ -46,11 +46,18 @@ interface UserBase {
 	username: string;
 }
 
-export interface UserCreate extends UserBase {
+export interface UserLogin extends UserBase {
+	/**
+	 * Interface used for '/api/users/me' POST.
+	 */
+	password: string;
+}
+
+export interface UserCreate extends UserLogin {
 	/**
 	 * Interface used for '/api/users' POST.
 	 */
-	password: string;
+	api_key: string;
 }
 
 export interface UserPublic extends UserBase {
@@ -61,19 +68,29 @@ export interface UserPublic extends UserBase {
 	id: number;
 }
 
+export interface JWTToken {
+	/**
+	 * Definition of response body in /users/me POST
+	 */
+	access_token: string;
+	token_type: string;
+	user_id: number;
+}
+
 export function isUserPublic(instance: unknown): instance is UserPublic {
 	/**
 	 * Determine if variable is of type UserPublic.
 	 *
 	 * @param instance - variable of unknown type
-	 * @returns predicate if variable is of type UsrePublic
+	 * @returns predicate if variable is of type UserPublic
 	 */
-	return (
-		typeof instance === 'object' &&
-		instance !== null &&
-		'message' in instance &&
-		typeof (instance as Record<string, unknown>).username === 'string'
-	);
+	if (typeof instance !== 'object' || instance === null) {
+		return false;
+	}
+
+	const obj = instance as Record<string, unknown>;
+
+	return typeof obj.username === 'string' && typeof obj.id === 'number';
 }
 
 export interface CardType {
