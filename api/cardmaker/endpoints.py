@@ -242,10 +242,11 @@ async def create_user(data: models.UserCreate):
 
     Raises:
         HTTP 500: database error
-        HTTP 403: wrong api key or existing username
+        HTTP 401" wron API key
+        HTTP 403: existing username
     """
     if not security.verify_api_key(data.api_key):
-        raise HTTPException(status_code=403, detail="Wrong API key!")
+        raise HTTPException(status_code=401, detail="Wrong API key!")
     if await statements.get_user_by_name(data.username):
         raise HTTPException(
             status_code=403,
