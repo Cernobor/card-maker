@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation';
-import { clearSessionStorage, tokens } from './stores/tokens';
+import { clearSessionStorage, sessionData } from './stores/tokens';
 import type {
 	CardBase,
 	UserPublic,
@@ -25,7 +25,7 @@ export default class CardMakerApi {
 		this.endpoint = api_endpoint;
 		// Get session values from store
 		if (typeof window !== undefined) {
-			tokens.subscribe((value) => {
+			sessionData.subscribe((value) => {
 				this.jwtToken = value.jwtToken;
 				if (value.username !== '' && value.userId !== '') {
 					this.currentUser = { username: value.username, id: Number(value.userId) };
@@ -241,7 +241,7 @@ export default class CardMakerApi {
 			username: user.username,
 			id: response.user_id
 		};
-		tokens.set({
+		sessionData.set({
 			jwtToken: this.jwtToken,
 			username: this.currentUser.username,
 			userId: String(this.currentUser.id)

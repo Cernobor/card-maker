@@ -4,6 +4,9 @@
 	export let activeTags: Tag[];
 
 	function handleChange(event: Event) {
+		/**
+		 * Update selected tags array according to checked checkboxes.
+		 */
 		const target = event.target as HTMLInputElement;
 		if (target.checked) {
 			activeTags = [...activeTags, { name: target.value }];
