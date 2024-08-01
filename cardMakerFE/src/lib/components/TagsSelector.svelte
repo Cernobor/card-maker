@@ -71,7 +71,7 @@
 					tags = [...tags, { name: newTag.trim() }];
 					newTag = '';
 				}
-			}}>Pridat tag</button
+			}}>Přidat tag</button
 		>
 	</div>
 </div>
