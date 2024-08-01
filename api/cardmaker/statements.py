@@ -224,6 +224,27 @@ async def connect_tags_with_card(tags: List[models.Tag], card_id: int):
         IOError: if cannot save data into database
     """
     with Session(engine) as session:
+        card_tags_names = [tag.name for tag in tags]
+        logger.info(card_tags_names)
+        statement = select(models.CardTagRelationship).where(
+            models.CardTagRelationship.card_id == card_id
+        )
+        card_tag_relationship = session.exec(statement).all()
+    with Session(engine) as session:
+        for i in range(len(card_tag_relationship)):
+            logger.info(card_tag_relationship[i].tag_id)
+            statement = select(models.Tag).where(
+                models.Tag.id == card_tag_relationship[i].tag_id
+            )
+            tag = session.exec(statement).first()
+            logger.info(tag)
+            if (
+                tag
+                and tag.name not in card_tags_names
+                and tag.description != "year"
+            ):
+                await delete_id_db(card_tag_relationship[i])
+
         for tag in tags:
             statement = select(models.Tag).where(models.Tag.name == tag.name)
             tag_instance = session.exec(statement).first()
