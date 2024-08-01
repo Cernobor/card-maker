@@ -23,6 +23,8 @@
 <div class="page-container">
 	<slot class="main-content" />
 </div>
+<div>
 <footer class="footer-block">
 	<p>Černobor Cardmaker</p>
 </footer>
+</div>
