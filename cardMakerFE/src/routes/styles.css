@@ -1,8 +1,3 @@
-
-/* TODO: import fonts locally, or there will be a big problem without internet*/
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-/*@import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-
 /* color schema: https://colorhunt.co/palette/222831393e4600adb5eeeeee */
 @font-face {
     font-family: "Inknut Antiqua";
@@ -10,7 +5,19 @@
     font-weight: 400;
     font-style: normal;
 }
+@font-face {
+    font-family: "Montserrat";
+    src: url('/fonts/Montserrat/Montserrat-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
 
+@font-face {
+    font-family: "Lingua Prima";
+    src: url('/fonts/lingua_prima_2019.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
 
 
 
@@ -308,4 +315,8 @@ input, textarea, select, button { font-family:inherit; }
     flex-direction: row;
     justify-content: center;
     gap: 10px;
+}
+
+.lingua-prima{
+    font-family: "Lingua Prima", "Montserrat";
 }
