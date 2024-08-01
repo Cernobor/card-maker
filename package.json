@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "cardmakerfe": "file:cardMakerFE"
+  }
+}

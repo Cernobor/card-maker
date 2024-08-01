@@ -52,7 +52,13 @@
 	}
 
 	function pfFilter(text: string) {
-		// TODO: přefiltruj text a naházej symoboly/bold text tam kam patří
+		text = text
+			.replace('$uhurus', '<p class="lingua-prima">A</p>')
+			.replace('$donozoros', '<p class="lingua-prima">B</p>')
+			.replace('$zalaras', '<p class="lingua-prima">C</p>')
+			.replace('$miniris', '<p class="lingua-prima">D</p>')
+			.replace('$tenemenes', '<p class="lingua-prima">E</p>');
+
 		return text;
 	}
 
