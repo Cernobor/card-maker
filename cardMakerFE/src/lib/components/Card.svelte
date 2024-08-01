@@ -51,7 +51,11 @@
 		}
 	}
 
-	function pfFilter(text: string) {
+	function cardTextFilter(text: string):string {
+		/**
+		 * Replace special symbols with corresponding html tags.
+		 * @param text - text to be filtered
+		 */
 		text = text
 			.replace('$uhurus', '<p class="lingua-prima">A</p>')
 			.replace('$donozoros', '<p class="lingua-prima">B</p>')
@@ -94,10 +98,10 @@
 	<div class="card-body">
 		<section class="card-content">
 			<div class="card-fluff">
-				{@html pfFilter(DOMPurify.sanitize(card.fluff || ''))}
+				{@html cardTextFilter(DOMPurify.sanitize(card.fluff || ''))}
 			</div>
 			<div class="card-effect">
-				{@html pfFilter(DOMPurify.sanitize(card.effect || ''))}
+				{@html cardTextFilter(DOMPurify.sanitize(card.effect || ''))}
 			</div>
 		</section>
 	</div>
