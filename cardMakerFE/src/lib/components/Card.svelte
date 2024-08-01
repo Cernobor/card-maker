@@ -58,6 +58,7 @@
 			.replace('$zalaras', '<p class="lingua-prima">C</p>')
 			.replace('$miniris', '<p class="lingua-prima">D</p>')
 			.replace('$tenemenes', '<p class="lingua-prima">E</p>');
+
 		return text;
 	}
 
