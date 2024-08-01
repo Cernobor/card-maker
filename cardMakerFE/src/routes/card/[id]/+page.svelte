@@ -30,7 +30,7 @@
 		<h1>loading...</h1>
 	{:then}
 		<div class="inputs">
-			<CardForm bind:card bind:cardTypes />
+			<CardForm bind:card bind:cardTypes bind:mode />
 		</div>
 		<div class="card-view">
 			{#if !$api.loggedIn}
