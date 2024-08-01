@@ -2,9 +2,12 @@
 	import type { Tag, CardType, CardCreate } from '$lib/interfaces';
 	import { api } from '$lib/stores/store';
 	import { onMount } from 'svelte';
+	import TagsSelector from './TagsSelector.svelte';
+	import type { Mode } from '$lib/interfaces';
 
 	export let card: CardCreate;
 	export let cardTypes: CardType[];
+	export let mode: Mode = 'create';
 
 	let currentCardType: CardType = { id: 0, name: '' };
 	let tags: Tag[] = [];
@@ -15,10 +18,14 @@
 		 */
 		try {
 			tags = await $api.getTags();
+			tags = tags.filter((tag) => {
+				return tag.description != 'year';
+			});
 			cardTypes = await $api.getCardTypes();
 			currentCardType = cardTypes[0];
-			console.log(tags);
-			console.log(card.tags);
+			if (mode == 'create') {
+				card.tags.push({ name: 'Neodložitelný' });
+			}
 		} catch {
 			alert('Problem s nacitanim tagu nebo typu karet.');
 		}
@@ -34,33 +41,6 @@
 			card.in_set = false;
 			card.set_name = 'Jméno rodiny aspektů';
 		}
-	}
-
-	function handleTagsChange(event: Event) {
-		/**
-		 * Update card tags according to checkboxes.
-		 */
-		const target = event.target as HTMLInputElement;
-		if (target.checked) {
-			card.tags.push({ name: target.value });
-		} else {
-			card.tags = card.tags.filter((tag) => {
-				return tag.name !== target.value;
-			});
-		}
-	}
-
-	function checkIfCardContainsTag(tag: Tag) {
-		/**
-		 * Compare given tag with card tags
-		 * and return true if card has tags else false
-		 */
-		for (const cardTag of card.tags) {
-			if (cardTag.name === tag.name) {
-				return true;
-			}
-		}
-		return false;
 	}
 </script>
 
@@ -99,19 +79,7 @@
 				<input type="text" bind:value={card.set_name} id="aspectFamilyName" />
 			{/if}
 		{/if}
-		<div class="checkbox-container">
-			{#each tags as tag}
-				<label for={tag.name}>{tag.name}</label>
-				<input
-					type="checkbox"
-					id={tag.name}
-					class="checkbox"
-					value={tag.name}
-					checked={checkIfCardContainsTag(tag)}
-					on:change={handleTagsChange}
-				/>
-			{/each}
-		</div>
+		<TagsSelector bind:card bind:tags />
 	</form>
 </div>
 
