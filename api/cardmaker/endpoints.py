@@ -10,11 +10,13 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from fastapi.security import HTTPBasicCredentials
 
-from . import models, security, statements, utils
+from . import models, security, utils
+from .database import CardMakerDatabase
 from .logger import Logger
 
 router = APIRouter()
 logger = Logger.get_instance()
+database = CardMakerDatabase()
 
 
 @router.get("/users")
@@ -29,7 +31,7 @@ async def get_users():
         HTTP 500: database error
     """
     json_data = jsonable_encoder(
-        await utils.get_or_raise_404(statements.get_users)
+        await utils.get_or_raise_404(database.get_users)
     )
     logger.info("Users requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
@@ -47,7 +49,7 @@ async def get_card_types():
         HTTP 500: database error
     """
     json_data = jsonable_encoder(
-        await utils.get_or_raise_404(statements.get_card_types)
+        await utils.get_or_raise_404(database.get_card_types)
     )
     logger.info("Card types requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
@@ -65,7 +67,7 @@ async def get_tags():
         HTTP 500: database error
     """
     json_data = jsonable_encoder(
-        await utils.get_or_raise_404(statements.get_tags)
+        await utils.get_or_raise_404(database.get_tags)
     )
     logger.info("Tags requested, response successful.")
     return JSONResponse(content=json_data, status_code=200)
@@ -91,7 +93,7 @@ async def get_cards(
     Raises:
         HTTP 500: database error
     """
-    cards = await statements.get_filtered_cards(
+    cards = await database.get_filtered_cards(
         user_id=user_id, card_type_id=card_type_id, tags=tags
     )
     if not cards:
@@ -105,7 +107,7 @@ async def get_cards(
         tags = [
             models.TagBase.model_validate(tag)
             for tag in await utils.get_or_raise_404(
-                statements.get_tags_of_card, card.id
+                database.get_tags_of_card, card.id
             )
         ]
         cards_new.append(
@@ -131,14 +133,14 @@ async def get_card_by_id(card_id: int):
     Raises:
         HTTP 500: database error
     """
-    card = await utils.get_or_raise_404(statements.get_card_by_id, card_id)
+    card = await utils.get_or_raise_404(database.get_card_by_id, card_id)
     card = models.CardGet.model_validate(
         card.model_dump(),
         update={
             "tags": [
                 models.TagBase.model_validate(tag)
                 for tag in await utils.get_or_raise_404(
-                    statements.get_tags_of_card, card.id
+                    database.get_tags_of_card, card.id
                 )
             ]
         },
@@ -164,11 +166,11 @@ async def create_card(data: models.CardCreate):
         HTTP 404: invalid user ID or card type ID
     """
     user = await utils.get_or_raise_404(
-        statements.get_user_by_id_or_default, data.user_id
+        database.get_user_by_id_or_default, data.user_id
     )
     data.user_id = user.id
     await utils.get_or_raise_404(
-        statements.get_card_type_by_id, data.card_type_id
+        database.get_card_type_by_id, data.card_type_id
     )
     card = await utils.save_or_raise_500(models.Card.model_validate(data))
     data.tags.append(
@@ -198,7 +200,7 @@ async def update_card(card_id: int, data: models.CardUpdate):
         HTTP 500: database error
         HTTP 404: invalid card ID
     """
-    card = await utils.get_or_raise_404(statements.get_card_by_id, card_id)
+    card = await utils.get_or_raise_404(database.get_card_by_id, card_id)
     if data.tags:
         await utils.connect_tags_or_raise_500(data.tags, card_id)
     await utils.save_or_raise_500(card.sqlmodel_update(data.model_dump()))
@@ -221,7 +223,7 @@ async def delete_card(card_id: int):
         HTTP 500: database error
         HTTP 404: invalid card ID
     """
-    card = await utils.get_or_raise_404(statements.get_card_by_id, card_id)
+    card = await utils.get_or_raise_404(database.get_card_by_id, card_id)
     await utils.delete_or_raise_500(card)
     logger.info(f"New card {card.name} deleted!")
     return Response(status_code=204)
@@ -247,7 +249,7 @@ async def create_user(data: models.UserCreate):
     """
     if not security.verify_api_key(data.api_key):
         raise HTTPException(status_code=401, detail="Wrong API key!")
-    if await statements.get_user_by_name(data.username):
+    if await database.get_user_by_name(data.username):
         raise HTTPException(
             status_code=403,
             detail=f"User with name {data.username} already exists!",

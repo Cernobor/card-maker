@@ -7,10 +7,13 @@ from typing import Callable
 from fastapi import HTTPException
 from sqlmodel import SQLModel
 
-from . import models, statements
+from . import models
 from .logger import Logger
+from .database import CardMakerDatabase
+
 
 logger = Logger.get_instance()
+database = CardMakerDatabase()
 
 
 async def save_or_raise_500(instance: SQLModel) -> SQLModel:
@@ -27,7 +30,7 @@ async def save_or_raise_500(instance: SQLModel) -> SQLModel:
         HTTP 500: when cannot save data into database
     """
     try:
-        return await statements.save_into_db(instance)
+        return await database.save_into_db(instance)
     except IOError as e:
         logger.error(f"Database error: {e}")
         raise HTTPException(
@@ -47,7 +50,7 @@ async def connect_tags_or_raise_500(tags, card_id):
         HTTP 500: when cannot save data into database
     """
     try:
-        await statements.connect_tags_with_card(tags, card_id)
+        await database.connect_tags_with_card(tags, card_id)
     except IOError as e:
         logger.error(f"Database error: {e}")
         raise HTTPException(
@@ -66,7 +69,7 @@ async def delete_or_raise_500(instance: SQLModel):
         HTTP 500: when cannot delete data in database
     """
     try:
-        await statements.delete_id_db(instance)
+        await database.delete_id_db(instance)
     except IOError as e:
         logger.error(f"Database error: {e}")
         raise HTTPException(
