@@ -172,7 +172,7 @@ async def create_card(data: models.CardCreate):
     )
     card = await utils.save_or_raise_500(models.Card.model_validate(data))
     data.tags.append(
-        models.Tag(name=str(datetime.now().year), description=None)
+        models.Tag(name=str(datetime.now().year), description="year")
     )
     await utils.connect_tags_or_raise_500(data.tags, card.id)
     logger.info(f"New card {card.name} created!")
