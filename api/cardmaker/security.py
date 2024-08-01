@@ -12,10 +12,13 @@ import jwt
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPBasic, HTTPBasicCredentials, HTTPBearer
 
-from . import models, statements
+from . import models
+from .database import CardMakerDatabase
 from .logger import Logger
 
 logger = Logger.get_instance()
+database = CardMakerDatabase()
+
 SECRET_KEY = os.getenv("SECRET_KEY")
 API_KEY = os.getenv("API_KEY")
 # just for development purposes
@@ -125,7 +128,7 @@ async def authenticate(username: str, password: str):
     Returns:
         models.User|None: db user object
     """
-    user = await statements.get_user_by_name(username)
+    user = await database.get_user_by_name(username)
     if not user:
         logger.debug(f"{username} not in db")
         return
@@ -159,7 +162,7 @@ async def verify_jwt(token: str):
         username = payload["username"]
         if not username:
             return
-        user = await statements.get_user_by_name(username)
+        user = await database.get_user_by_name(username)
         logger.debug(user)
         if not user:
             return
