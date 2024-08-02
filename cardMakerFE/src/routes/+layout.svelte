@@ -6,9 +6,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-
 <div class="header-block">
-	<h1>Card <img alt="CB logo" src="/images/cb_logo_white.png" width="50px" /> Maker</h1>
+	<h1 class="page-title">
+		Card <img alt="CB logo" src="/images/cb_logo_white.png" width="45px" /> Maker
+	</h1>
 	<nav class="navbar">
 		<a href="/">Home</a>
 		<a href="/card">Vytvoř kartu</a>
@@ -20,11 +21,13 @@
 		{/if}
 	</nav>
 </div>
-<div class="page-container">
-	<slot class="main-content" />
+<div class="content-container">
+	<div class="main-content">
+		<slot />
+	</div>
 </div>
 <div>
-<footer class="footer-block">
-	<p>Černobor Cardmaker</p>
-</footer>
+	<footer class="footer-block">
+		<p class="footer-text">Černobor Cardmaker</p>
+	</footer>
 </div>
