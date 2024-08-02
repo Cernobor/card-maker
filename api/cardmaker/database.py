@@ -19,24 +19,17 @@ def session_wrapper(function: Callable):
     async def wrapper(self, *args, **kwargs):
         with Session(self.engine) as session:
             return await function(self, session, *args, **kwargs)
-        return wrapper
+
+    return wrapper
 
 
 class CardMakerDatabase:
     """
     Class for communication with database
     """
-    _instance = None
 
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super(CardMakerDatabase, cls).__new__(cls)
-        return cls._instance
-
-    def __init__(self, database_url: str | None = None):
-        if not hasattr(self, 'initialized'):
-            self.engine = create_engine(os.getenv("DATABASE_URL"))
-            self.initialized = True
+    def __init__(self):
+        self.engine = create_engine(os.getenv("DATABASE_URL"))
 
     @session_wrapper
     async def save_into_db(self, session, instance: SQLModel) -> SQLModel:
@@ -247,8 +240,20 @@ class CardMakerDatabase:
         return session.exec(statement).first().tag_list
 
     @session_wrapper
-    def get_card_tag_relationship_of_card(self, session, card_id: int):
-        """ """
+    async def get_card_tag_relationship_of_card(
+        self, session, card_id: int
+    ) -> List[models.CardTagRelationship]:
+        """
+        Select from database instance of relationship between card and tag
+        based on card ID.
+
+        Args:
+            card_id (int): ID of card
+
+        Returns:
+            List[models.CardTagRelationship]:
+                        list of all relationship of this card
+        """
         statement = select(models.CardTagRelationship).where(
             models.CardTagRelationship.card_id == card_id
         )
@@ -305,7 +310,7 @@ class CardMakerDatabase:
             statement = select(models.Tag).where(models.Tag.name == tag.name)
             tag_instance = session.exec(statement).first()
             if not tag_instance:
-                tag_instance = await save_into_db(
+                tag_instance = await self.save_into_db(
                     models.Tag(name=tag.name, description=tag.description)
                 )
             statement = (
@@ -314,13 +319,15 @@ class CardMakerDatabase:
                 .where(models.CardTagRelationship.tag_id == tag_instance.id)
             )
             if not session.exec(statement).first():
-                await save_into_db(
+                await self.save_into_db(
                     models.CardTagRelationship(
                         card_id=card_id, tag_id=tag_instance.id
                     )
                 )
 
-    async def connect_tags_with_card(tags: List[models.Tag], card_id: int):
+    async def connect_tags_with_card(
+        self, tags: List[models.Tag], card_id: int
+    ):
         """
         Save tag into database if not exists,
         create new record to relationship table of tag and card if not exist,
@@ -336,7 +343,7 @@ class CardMakerDatabase:
         """
         try:
             await self._delete_removed_tags_from_card(
-                self.get_card_tag_relationship_of_card(card_id),
+                await self.get_card_tag_relationship_of_card(card_id),
                 [tag.name for tag in tags],
             )
             await self._save_added_tags_to_card(tags, card_id)
