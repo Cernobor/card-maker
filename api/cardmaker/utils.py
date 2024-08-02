@@ -77,7 +77,9 @@ async def delete_or_raise_500(instance: SQLModel):
         )
 
 
-async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
+async def get_or_raise_404(
+    get_function: Callable, instance, *args, **kwargs
+) -> SQLModel:
     """
     Get instance from databse or raise HTTP exeption.
 
@@ -91,7 +93,8 @@ async def get_or_raise_404(get_function: Callable, *args) -> SQLModel:
     Raises:
         HTTP 500: when cannot delete data in database
     """
-    data = await get_function(*args)
+    logger.debug(args)
+    data = await get_function(instance, *args, **kwargs)
     if not data:
         logger.warning("Resource not found.")
         raise HTTPException(status_code=404, detail="Resource not found.")
