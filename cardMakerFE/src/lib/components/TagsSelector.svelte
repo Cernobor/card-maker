@@ -6,7 +6,7 @@
 
 	let newTag: string = '';
 
-	function handleAddTag(event: Event) {
+	function handleAddTag(event: Event):void {
 		/**
 		 * Add tag to card tags if card does not contain it.
 		 */
