@@ -37,7 +37,7 @@ nav {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 20px 0 0 0;
     font-size: 18px;
     text-align: center;
 }
@@ -173,6 +173,7 @@ ul {
     font-size: 20px;
     color: #EEEEEE;
     text-align: center;
+    margin: 0;
 }
 
 .footer-text {
@@ -201,6 +202,8 @@ ul {
 
 .card-list-body {
     align-items: center;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .card-list-table {
