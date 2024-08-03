@@ -24,14 +24,14 @@
 		 */
 		const target = event.target as HTMLSelectElement;
 		if (target.value) {
-			if (!checkIfContainsTagName(target.value, activeTags)) {
+			if (!tagsContainTagName(target.value, activeTags)) {
 				activeTags = [...activeTags, { name: target.value }];
 			}
 			target.value = '';
 		}
 	}
 
-	export function checkIfContainsTagName(tagName: string, activeTags: Tag[]): boolean {
+	export function tagsContainTagName(tagName: string, activeTags: Tag[]): boolean {
 		/**
 		 * Compare given tag with card tags
 		 * and return true if card has tags else false

@@ -9,11 +9,11 @@
 
 	let newTag: string = '';
 	let dropdownComponent: ChangeTagDropdown;
-	let checkIfContainsTagName: Function;
+	let tagsContainTagName: Function;
 
 	onMount(() => {
-		checkIfContainsTagName = (newTag: string, activeTags: Tag[]): boolean => {
-			return dropdownComponent.checkIfContainsTagName(newTag, activeTags);
+		tagsContainTagName = (newTag: string, activeTags: Tag[]): boolean => {
+			return dropdownComponent.tagsContainTagName(newTag, activeTags);
 		};
 	});
 </script>
@@ -34,7 +34,7 @@
 				if (newTag.trim() === '') {
 					event.preventDefault();
 				} else {
-					if (checkIfContainsTagName(newTag, tags)) {
+					if (tagsContainTagName(newTag, tags)) {
 						event.preventDefault();
 						alert('Tento tag už existuje.');
 					} else {

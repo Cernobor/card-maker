@@ -67,6 +67,19 @@
 		return text;
 	}
 
+	function tagsContainTagName(tagName: string): boolean {
+		/**
+		 * Compare given tag with card tags
+		 * and return true if card has tags else false
+		 */
+		for (const cardTag of card.tags) {
+			if (cardTag.name === tagName) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	let cardTypeName: string;
 	let cssClass: CardTypeClass = cardTypeClass['Magický předmět'];
 	$: if (cardTypes && card) {
@@ -91,7 +104,7 @@
 		<div class="card-type">{cardTypeName}</div>
 		{#if cardTypeName == 'Magický předmět'}
 			<div class="irremovable">
-				{card.tags.includes({ name: 'Neodložitelný' }) ? 'Neodložitelný' : ''}
+				{tagsContainTagName('Neodložitelný') ? 'Neodložitelný' : ''}
 			</div>
 		{/if}
 	</section>
@@ -128,6 +141,7 @@
 	.card-location {
 		height: calc(7in);
 		width: calc(290mm);
+		font-size: 12pt;
 	}
 	.card-header {
 		display: flex;
@@ -136,6 +150,9 @@
 		text-align: center;
 		border-bottom: 2px solid black;
 		gap: 2px;
+	}
+	.card-location .card-name {
+		font-size: 14pt;
 	}
 	.card-name {
 		font-family: 'Inknut Antiqua', serif;
