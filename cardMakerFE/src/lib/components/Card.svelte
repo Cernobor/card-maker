@@ -24,6 +24,7 @@
 			document.body.appendChild(a);
 			a.click();
 		});
+		sentCardToAPI();
 	}
 
 	export async function sentCardToAPI() {

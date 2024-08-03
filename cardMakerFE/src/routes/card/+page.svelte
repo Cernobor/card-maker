@@ -47,7 +47,7 @@
 				</p>
 			{/if}
 			<Card bind:card bind:this={cardComponent} bind:cardTypes />
-			<button on:click={cardComponent.downloadCard}>Stáhnout</button>
+			<button on:click={cardComponent.downloadCard}>Uložit a stáhnout</button>
 			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Uložit</button>
 		</div>
 	{:catch}
