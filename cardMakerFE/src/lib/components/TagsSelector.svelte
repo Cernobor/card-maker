@@ -11,6 +11,24 @@
 	let dropdownComponent: ChangeTagDropdown;
 	let tagsContainTagName: Function;
 
+	function handleAddNewTag(event: Event) {
+		event.preventDefault();
+		if (newTag.trim() !== '' && !tagsContainTagName(newTag, card.tags)) {
+			if (!tagsContainTagName(newTag, tags)) {
+				tags = [...tags, { name: newTag.trim() }];
+			}
+			card.tags = [...card.tags, { name: newTag.trim() }];
+		}
+		newTag = '';
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			handleAddNewTag(event);
+		}
+	}
+
 	onMount(() => {
 		tagsContainTagName = (newTag: string, activeTags: Tag[]): boolean => {
 			return dropdownComponent.tagsContainTagName(newTag, activeTags);
@@ -27,24 +45,7 @@
 		cssClass="add-tag"
 	/>
 	<div class="center">
-		<input class="tag-input" type="text" bind:value={newTag} />
-		<button
-			class="add-tag"
-			on:click={(event) => {
-				if (newTag.trim() === '') {
-					event.preventDefault();
-				} else {
-					if (tagsContainTagName(newTag, card.tags)) {
-						event.preventDefault();
-					} else {
-						if (!tagsContainTagName(newTag, tags)) {
-							tags = [...tags, { name: newTag.trim() }];
-						}
-						card.tags = [...card.tags, { name: newTag.trim() }];
-					}
-					newTag = '';
-				}
-			}}>Nový tag</button
-		>
+		<input class="tag-input" type="text" bind:value={newTag} required on:keydown={handleKeydown} />
+		<button class="add-tag" on:click={handleAddNewTag}>Nový tag</button>
 	</div>
 </div>
