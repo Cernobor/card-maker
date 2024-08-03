@@ -32,15 +32,7 @@
 	});
 
 	$: if (currentCardType) {
-		console.log('card types are here...');
 		card.card_type_id = currentCardType.id;
-		if (currentCardType.name == 'Magický předmět') {
-			card.in_set = false;
-			card.set_name = 'Jméno setu (počet itemů v setu)';
-		} else if (currentCardType.name == 'Volný aspekt') {
-			card.in_set = false;
-			card.set_name = 'Jméno rodiny aspektů';
-		}
 	}
 </script>
 
