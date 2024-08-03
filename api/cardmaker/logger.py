@@ -49,7 +49,6 @@ class Logger(object):
         stream_handler.setFormatter(formatter)
 
         self.logger = logging.getLogger("CardmakerApi")
-        # it shall be changed to info or warning before deploy
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.WARNING)
         self.logger.addHandler(file_handler)
         self.logger.addHandler(stream_handler)
