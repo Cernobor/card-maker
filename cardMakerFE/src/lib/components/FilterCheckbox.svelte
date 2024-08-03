@@ -3,7 +3,7 @@
 	export let options: Tag[];
 	export let activeTags: Tag[];
 
-	function handleChange(event: Event) {
+	function handleChange(event: Event):boolean | void {
 		/**
 		 * Update selected tags array according to checked checkboxes.
 		 */
