@@ -109,8 +109,8 @@ class CardBase(SQLModel):
     """
 
     name: str
-    fluff: Optional[str]
-    effect: Optional[str]
+    fluff: Optional[str] = Field(max_length=4000)
+    effect: Optional[str] = Field(max_length=4000)
     in_set: bool
     set_name: Optional[str]
 
