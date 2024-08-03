@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { CardCreate, Tag } from '$lib/interfaces';
-	import { onMount } from 'svelte';
 
 	export let card: CardCreate;
 	export let tags: Tag[];
@@ -20,7 +19,7 @@
 		}
 	}
 
-	function checkIfCardContainsTag(tag: string) {
+	function checkIfCardContainsTag(tag: string):boolean {
 		/**
 		 * Compare given tag with card tags
 		 * and return true if card has tags else false
