@@ -27,7 +27,7 @@
 			fluff: 'Card Fluff',
 			effect: 'Efekt/pravidla karty',
 			in_set: false,
-			set_name: 'Jméno setu (počet itemů v setu)',
+			set_name: '',
 			tags: []
 		};
 	}
