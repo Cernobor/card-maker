@@ -57,7 +57,7 @@
 	let tags: Tag[] = [];
 	let activeTags: Tag[] = [];
 
-	onMount(async () => {
+	async function getResources (){
 		/**
 		 * Get resources from API.
 		 */
@@ -65,7 +65,7 @@
 		users = await $api.getUsers();
 		types = await $api.getCardTypes();
 		tags = await $api.getTags();
-	});
+	};
 
 	let selectedAuthor: UserPublic | null = null;
 	let selectedType: CardType | null = null;
@@ -87,9 +87,17 @@
 				<th>Autor</th>
 				<th>Typ</th>
 			</tr>
-			{#each filteredCards as card}
+			{#await getResources()}
+			<h1 style="text-align:center">loading...</h1>
+				
+			{:then} 
+				{#each filteredCards as card}
 				<TableRow {card} {users} {types} />
-			{/each}
+				{/each}
+			{/await}
+
+
+
 		</table>
 	</div>
 </div>
