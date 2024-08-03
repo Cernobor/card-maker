@@ -34,11 +34,12 @@
 				if (newTag.trim() === '') {
 					event.preventDefault();
 				} else {
-					if (tagsContainTagName(newTag, tags)) {
+					if (tagsContainTagName(newTag, card.tags)) {
 						event.preventDefault();
-						alert('Tento tag už existuje.');
 					} else {
-						tags = [...tags, { name: newTag.trim() }];
+						if (!tagsContainTagName(newTag, tags)) {
+							tags = [...tags, { name: newTag.trim() }];
+						}
 						card.tags = [...card.tags, { name: newTag.trim() }];
 					}
 					newTag = '';
