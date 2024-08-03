@@ -3,6 +3,7 @@
 	import { api } from '$lib/stores/store';
 	import { onMount } from 'svelte';
 	import TagsSelector from './TagsSelector.svelte';
+	import HelpText from './HelpText.svelte';
 	import type { Mode } from '$lib/interfaces';
 
 	export let card: CardCreate;
@@ -48,10 +49,23 @@
 			{/each}
 		</select>
 
-		<label for="fluff">Fluff:</label>
-
+		
+		<div class="tooltip">
+			<label for="fluff">Fluff:</label>
+			<div class="help-text">
+				<HelpText />
+			</div>
+		</div>
 		<textarea bind:value={card.fluff} placeholder="fluff" id="fluff" />
-		<label for="efect">Efekt/pravidla:</label>
+
+		<div class="tooltip">
+			<label for="efect">Efekt/pravidla:</label>
+			<div class="help-text">
+				<HelpText />
+			</div>
+		</div>
+		
+		
 		<textarea bind:value={card.effect} placeholder="efekt" id="efect" />
 
 		{#if currentCardType.name == 'Magický předmět'}
@@ -79,5 +93,21 @@
 	textarea {
 		width: 400px;
 		height: 100px;
+	}
+	.tooltip .help-text {
+		visibility: hidden;
+		width: 280px;
+		background-color: black;
+		color: #fff;
+		text-align: center;
+		border-radius: 6px;
+		padding: 5px 0;
+
+		/* Position the tooltip */
+		position: absolute;
+		z-index: 1;
+	}
+	.tooltip:hover .help-text{
+		visibility: visible;
 	}
 </style>
