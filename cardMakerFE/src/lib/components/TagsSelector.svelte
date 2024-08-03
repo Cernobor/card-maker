@@ -68,7 +68,9 @@
 					event.preventDefault();
 				} else {
 					tags = [...tags, { name: newTag.trim() }];
-					card.tags = [...card.tags, { name: newTag.trim() }];
+					if (!checkIfCardContainsTag(newTag)) {
+						card.tags = [...card.tags, { name: newTag.trim() }];
+					}
 					newTag = '';
 				}
 			}}>Nový tag</button
