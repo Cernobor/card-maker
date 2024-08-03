@@ -5,10 +5,10 @@ services:
     image: mysql:8.0.33
     container_name: db
     environment:
-      MYSQL_ROOT_PASSWORD: root 
-      MYSQL_DATABASE: Cardmaker
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -24,7 +24,9 @@ services:
     build: ./api
     container_name: api
     environment:
-      DATABASE_URL: "mysql+mysqlconnector://root:root@db:3306/Cardmaker"
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      API_KEY: ${API_KEY}
     depends_on:
       db:
         condition: service_healthy
