@@ -80,7 +80,7 @@
 		<FilterDropdown bind:selected={selectedType} filterName="Typ karty" options={types} />
 		<FilterCheckbox bind:activeTags options={tags} />
 	</div>
-	<div>
+	<div class="card-list-table">
 		<table>
 			<tr>
 				<th>Karta</th>
