@@ -21,6 +21,15 @@
 		card.card_type_id = currentCardType.id;
 		card.in_set = false;
 		card.set_name = '';
+		if (mode == 'create') {
+			if (currentCardType.name == 'Magický předmět') {
+				card.tags = [...card.tags, { name: 'Neodložitelný' }];
+			} else {
+				card.tags = card.tags.filter((tag) => {
+					return tag.name !== 'Neodložitelný';
+				});
+			}
+		}
 	}
 
 	onMount(async () => {
@@ -34,9 +43,6 @@
 			});
 			cardTypes = await $api.getCardTypes();
 			currentCardType = cardTypes[0];
-			if (mode == 'create') {
-				card.tags.push({ name: 'Neodložitelný' });
-			}
 		} catch {
 			alert('Problem s nacitanim tagu nebo typu karet.');
 		}
