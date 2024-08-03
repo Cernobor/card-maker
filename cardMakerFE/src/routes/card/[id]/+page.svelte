@@ -45,7 +45,7 @@
 				bind:cardTypes
 				bind:cardId={data.cardId}
 			/>
-			<button on:click={cardComponent.downloadCard}>Stáhnout</button>
+			<button on:click={cardComponent.downloadCard}>Uložit změny a stáhnout</button>
 			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Uložit změny</button>
 			<button on:click={() => $api.deleteCard(data.cardId, '/card/list')} disabled={!$api.loggedIn}
 				>Smazat kartu</button
