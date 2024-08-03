@@ -19,30 +19,42 @@
 	}
 
 	async function handleSubmit(event: Event) {
-		if (user.password != passwordConfirm) {
-			event.preventDefault();
-			wrongRegistration('Hesla se musí shodovat!');
+		event.preventDefault();
+		user.username = user.username.trim();
+
+		if ([...user.username].length < 4) {
+			wrongRegistration('Uživatelské jméno musí mít alespoň 4 znaky.');
+			return;
 		}
-		$api
-			.createUser(user)
-			.then(() => {
-				goto('/login');
-			})
-			.catch((error) => {
-				if (error instanceof HTTPError) {
-					if (error.code === 401) {
-						wrongRegistration('Zadaný tajný klíč je nesprávný!');
-					} else if (error.code === 403) {
-						wrongRegistration(
-							`Uživatel ${user.username} už existuje, zvol si jiné uživatelské jméno.`
-						);
-					} else {
-						wrongRegistration('Registrace se nezdařila.');
-					}
+
+		if ([...user.username].length > 20) {
+			wrongRegistration('Uživatelské jméno nemůže být delší než 20 znaků.');
+			return;
+		}
+
+		if (user.password !== passwordConfirm) {
+			wrongRegistration('Hesla se musí shodovat!');
+			return;
+		}
+
+		try {
+			await $api.createUser(user);
+			goto('/login');
+		} catch (error) {
+			if (error instanceof HTTPError) {
+				if (error.code === 401) {
+					wrongRegistration('Zadaný tajný klíč je nesprávný!');
+				} else if (error.code === 403) {
+					wrongRegistration(
+						`Uživatel ${user.username} už existuje, zvol si jiné uživatelské jméno.`
+					);
 				} else {
 					wrongRegistration('Registrace se nezdařila.');
 				}
-			});
+			} else {
+				wrongRegistration('Registrace se nezdařila.');
+			}
+		}
 	}
 </script>
 
@@ -50,7 +62,13 @@
 	<form on:submit={handleSubmit} class="login-form">
 		<div class="login-form-item">
 			<label for="username">Uživatelské jméno</label>
-			<input type="text" bind:value={user.username} class="login-form-input" required />
+			<input
+				type="text"
+				bind:value={user.username}
+				on:blur={() => (user.username = user.username.trim())}
+				class="login-form-input"
+				required
+			/>
 		</div>
 		<div class="login-form-item">
 			<label for="password">Heslo</label>
