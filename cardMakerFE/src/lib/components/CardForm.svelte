@@ -13,6 +13,16 @@
 	let currentCardType: CardType = { id: 0, name: '' };
 	let tags: Tag[] = [];
 
+	function handleCardTypeChange() {
+		/**
+		 * Set card type ID to selected card type
+		 * and reinitialize set parameters.
+		 */
+		card.card_type_id = currentCardType.id;
+		card.in_set = false;
+		card.set_name = '';
+	}
+
 	onMount(async () => {
 		/**
 		 * Get tags and card types.
@@ -31,10 +41,6 @@
 			alert('Problem s nacitanim tagu nebo typu karet.');
 		}
 	});
-
-	$: if (currentCardType) {
-		card.card_type_id = currentCardType.id;
-	}
 </script>
 
 <div class="inputs">
@@ -43,13 +49,12 @@
 
 		<input type="text" placeholder="Name" id="name" bind:value={card.name} />
 		<label for="type">Typ:</label>
-		<select bind:value={currentCardType}>
+		<select bind:value={currentCardType} on:change={handleCardTypeChange}>
 			{#each cardTypes as type (type)}
 				<option value={type}>{type.name}</option>
 			{/each}
 		</select>
 
-		
 		<div class="tooltip">
 			<label for="fluff">Fluff:</label>
 			<div class="help-text">
@@ -64,8 +69,7 @@
 				<HelpText />
 			</div>
 		</div>
-		
-		
+
 		<textarea bind:value={card.effect} placeholder="efekt" id="efect" />
 
 		{#if currentCardType.name == 'Magický předmět'}
@@ -107,7 +111,7 @@
 		position: absolute;
 		z-index: 1;
 	}
-	.tooltip:hover .help-text{
+	.tooltip:hover .help-text {
 		visibility: visible;
 	}
 </style>

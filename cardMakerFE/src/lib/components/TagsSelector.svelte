@@ -12,7 +12,7 @@
 	let checkIfContainsTagName: Function;
 
 	onMount(() => {
-		checkIfContainsTagName = (newTag: string, activeTags: Tag[]) => {
+		checkIfContainsTagName = (newTag: string, activeTags: Tag[]): boolean => {
 			return dropdownComponent.checkIfContainsTagName(newTag, activeTags);
 		};
 	});
