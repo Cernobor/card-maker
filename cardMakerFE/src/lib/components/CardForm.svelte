@@ -55,7 +55,11 @@
 
 		<input type="text" placeholder="Name" id="name" bind:value={card.name} />
 		<label for="type">Typ:</label>
-		<select bind:value={currentCardType} on:change={handleCardTypeChange}>
+		<select
+			bind:value={currentCardType}
+			on:change={handleCardTypeChange}
+			disabled="{mode === 'update'}"
+		>
 			{#each cardTypes as type (type)}
 				<option value={type}>{type.name}</option>
 			{/each}

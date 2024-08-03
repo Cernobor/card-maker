@@ -12,6 +12,9 @@
 	let tagsContainTagName: Function;
 
 	function handleAddNewTag(event: Event) {
+		/**
+		 * Add new tag to tag list and to card tags if it is not already there.
+		 */
 		event.preventDefault();
 		if (newTag.trim() !== '' && !tagsContainTagName(newTag, card.tags)) {
 			if (!tagsContainTagName(newTag, tags)) {
@@ -23,6 +26,9 @@
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
+		/**
+		 * Allow user to confirm tag adding by pressing enter key.
+		 */
 		if (event.key === 'Enter') {
 			event.preventDefault();
 			handleAddNewTag(event);

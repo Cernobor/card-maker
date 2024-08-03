@@ -92,6 +92,14 @@ select {
 	cursor: pointer;
 }
 
+select:disabled {
+	cursor: default;
+}
+
+select:disabled:hover {
+	background-color: #31363f;
+}
+
 button,
 .submit-button {
 	background-color: #31363f;
