@@ -3,7 +3,7 @@
 	import TableRow from '$lib/components/TableRow.svelte';
 	import type { CardGet, UserPublic, CardType, Tag } from '$lib/interfaces';
 	import { onMount } from 'svelte';
-	import FilterCheckbox from '$lib/components/FilterCheckbox.svelte';
+	import FilterLabels from '$lib/components/FilterLabels.svelte';
 	import { api } from '$lib/stores/store';
 
 	function getFilteredCards(
@@ -78,7 +78,7 @@
 	<div class="filters">
 		<FilterDropdown bind:selected={selectedAuthor} filterName="Autor" options={users} />
 		<FilterDropdown bind:selected={selectedType} filterName="Typ karty" options={types} />
-		<FilterCheckbox bind:activeTags options={tags} />
+		<FilterLabels bind:activeTags options={tags} />
 	</div>
 	<div class="card-list-table">
 		<table>
