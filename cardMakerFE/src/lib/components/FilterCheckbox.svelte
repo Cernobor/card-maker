@@ -35,6 +35,12 @@
 
 <div>
 	<h3 class="filter-title">Tagy</h3>
+	<select class="filter-tags" on:change={handleAddTag}>
+		<option value=""></option>
+		{#each options as tag}
+			<option value={tag.name}>{tag.name}</option>
+		{/each}
+	</select>
 	<div class="labels">
 		<ul class="labels">
 			{#each activeTags as tag}
@@ -53,11 +59,5 @@
 				</div>
 			{/each}
 		</ul>
-		<select class="add-tag" on:change={handleAddTag}>
-			<option value=""></option>
-			{#each options as tag}
-				<option value={tag.name}>{tag.name}</option>
-			{/each}
-		</select>
 	</div>
 </div>

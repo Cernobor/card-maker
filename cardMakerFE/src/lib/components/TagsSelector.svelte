@@ -53,7 +53,7 @@
 	</ul>
 	<div class="center">
 		<select class="add-tag" on:change={handleAddTag}>
-			<option value=""></option>
+			<option value="">Tagy</option>
 			{#each tags as tag}
 				<option value={tag.name}>{tag.name}</option>
 			{/each}
@@ -68,9 +68,10 @@
 					event.preventDefault();
 				} else {
 					tags = [...tags, { name: newTag.trim() }];
+					card.tags = [...card.tags, { name: newTag.trim() }];
 					newTag = '';
 				}
-			}}>Přidat tag</button
+			}}>Nový tag</button
 		>
 	</div>
 </div>

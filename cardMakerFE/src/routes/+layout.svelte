@@ -11,7 +11,7 @@
 		Card <img alt="CB logo" src="/images/cb_logo_white.png" width="45px" /> Maker
 	</h1>
 	<nav class="navbar">
-		<a href="/">Home</a>
+		<a href="/">Domů</a>
 		<a href="/card">Vytvoř kartu</a>
 		<a href="/card/list">Databáze karet</a>
 		{#if $api.loggedIn}
