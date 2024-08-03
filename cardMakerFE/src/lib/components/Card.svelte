@@ -51,7 +51,7 @@
 		}
 	}
 
-	function cardTextFilter(text: string):string {
+	function cardTextFilter(text: string): string {
 		/**
 		 * Replace special symbols with corresponding html tags.
 		 * @param text - text to be filtered
@@ -109,8 +109,6 @@
 
 <style>
 	.card {
-		width: calc(2.5in - 4mm);
-		height: calc(3.5in - 4mm);
 		font-size: 8pt;
 		border: 2mm solid black;
 		background-clip: border-box;
@@ -118,18 +116,17 @@
 		page-break-inside: avoid;
 		background-color: white;
 	}
-
 	.card-magical-item {
-		height: calc(2.5in - 4mm);
-		width: calc(3.5in - 4mm);
+		width: calc(95mm);
+		height: calc(75mm);
 	}
 	.card-free-aspect {
-		width: calc(2.5in - 4mm);
-		height: calc(3.5in - 4mm);
+		width: calc(75mm);
+		height: calc(95mm);
 	}
 	.card-location {
 		height: calc(7in);
-		width: calc(10in);
+		width: calc(290mm);
 	}
 	.card-header {
 		display: flex;
