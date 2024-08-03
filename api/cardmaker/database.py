@@ -288,7 +288,7 @@ class CardMakerDatabase:
                 and tag.name not in card_tags_names
                 and tag.description != "year"
             ):
-                await delete_id_db(card_tag_relationship[i])
+                await self.delete_id_db(card_tag_relationship[i])
 
     @session_wrapper
     async def _save_added_tags_to_card(
