@@ -10,7 +10,7 @@ from typing import Tuple
 import bcrypt
 import jwt
 from fastapi import HTTPException, Request
-from fastapi.security import HTTPBasic, HTTPBasicCredentials, HTTPBearer
+from fastapi.security import HTTPBasic, HTTPBearer
 
 from . import models
 from .database import CardMakerDatabase
@@ -21,10 +21,6 @@ database = CardMakerDatabase()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 API_KEY = os.getenv("API_KEY")
-# just for development purposes
-# this lines will be removed and new secret key will be generated
-SECRET_KEY = "6de9b7c10564fb4794c13a2c127b5a00e21259cd56df440aad5199dae182966b"
-API_KEY = "7d9e46b9-c8d9-429b-88b0-8de20a4268a0"
 ALGORITHM = "HS256"
 
 
