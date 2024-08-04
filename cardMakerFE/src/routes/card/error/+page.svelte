@@ -1,1 +1,3 @@
-<h1>404: Karta nebyla nalezena</h1>
+<div class="error-page">
+    <h1>404: Not found</h1>
+</div>
