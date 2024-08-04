@@ -42,7 +42,13 @@
 				return tag.description != 'year';
 			});
 			cardTypes = await $api.getCardTypes();
-			currentCardType = cardTypes[0];
+			if (mode === 'update') {
+				currentCardType = cardTypes.find((cardType) => {
+					return cardType.id === card.card_type_id;
+				})!;
+			} else {
+				currentCardType = cardTypes[0];
+			}
 		} catch {
 			alert('Problem s nacitanim tagu nebo typu karet.');
 		}
