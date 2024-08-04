@@ -161,6 +161,7 @@ ul {
 	font-style: normal;
 	background-color: #222831;
 	height: 15vh;
+	border-bottom: #00adb5 outset;
 }
 
 .page-title {
@@ -191,6 +192,7 @@ ul {
 	color: #eeeeee;
 	text-align: center;
 	margin: 0;
+	border-top: #00adb5 outset;
 }
 
 .footer-text {
@@ -224,6 +226,14 @@ ul {
 	justify-content: center;
 	align-items: center;
 	gap: 8px;
+}
+
+.inputs {
+	background-color: #222831;
+	padding: 50px;
+	border-radius: 25px;
+	border-style: outset;
+	border-color: #00adb5;
 }
 
 .cardmaker-body {
@@ -346,24 +356,23 @@ button {
 
 .tag-selector {
 	margin-top: 20px;
-	padding: 15px 15px 30px 15px;
-	border-radius: 20px;
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	background-color: #222831;
 }
 
 .add-tag {
 	font-size: 14px;
-	height: 35px;
-	border-radius: 15px;
+	border-radius: 20px;
 	font-size: 14px;
 	padding: 2px 10px;
 }
 
 .tag-input {
 	border-radius: 15px;
+	margin-top: 20px;
+	border-radius: 20px;
+	border-color: #00adb5;
 }
 
 .labels {
@@ -381,6 +390,13 @@ button {
 	flex-direction: row;
 	justify-content: center;
 	gap: 10px;
+}
+
+.vertical-center {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .lingua-prima {

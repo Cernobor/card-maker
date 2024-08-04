@@ -1,3 +1,5 @@
-<div class="error-page">
-    <h1>404: Not found</h1>
-</div>
+<script>
+    import ErrorMessage from "$lib/components/ErrorMessage.svelte";
+</script>
+
+<ErrorMessage errorMessage="Nenalezeno :(" />
