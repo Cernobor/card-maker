@@ -4,6 +4,7 @@
 	import Card from '$lib/components/Card.svelte';
 	import CardForm from '$lib/components/CardForm.svelte';
 	import type { CardCreate, CardType, Mode } from '$lib/interfaces';
+	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 
 	export let data: { cardId: number };
 
@@ -52,7 +53,7 @@
 			>
 		</div>
 	{:catch}
-		<h1>Karta s id {data.cardId} neexistuje</h1>
+		<ErrorMessage errorMessage="Karta s id {data.cardId} neexistuje" />
 	{/await}
 </div>
 

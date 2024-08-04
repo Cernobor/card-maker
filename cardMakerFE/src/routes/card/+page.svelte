@@ -37,7 +37,7 @@
 	{#await load()}
 		<h1>loading...</h1>
 	{:then}
-		<div class="inputs">
+		<div>
 			<CardForm bind:card bind:cardTypes />
 		</div>
 		<div class="card-view">
@@ -50,8 +50,6 @@
 			<button on:click={cardComponent.downloadCard}>Uložit a stáhnout</button>
 			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Uložit</button>
 		</div>
-	{:catch}
-		<h1>Nefunguje to #SorryJako</h1>
 	{/await}
 </div>
 
