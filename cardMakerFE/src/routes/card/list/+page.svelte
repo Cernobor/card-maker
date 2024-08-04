@@ -2,7 +2,6 @@
 	import FilterDropdown from '$lib/components/FilterDropdown.svelte';
 	import TableRow from '$lib/components/TableRow.svelte';
 	import type { CardGet, UserPublic, CardType, Tag } from '$lib/interfaces';
-	import { onMount } from 'svelte';
 	import FilterLabels from '$lib/components/FilterLabels.svelte';
 	import { api } from '$lib/stores/store';
 
