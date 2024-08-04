@@ -50,8 +50,9 @@ export default class CardMakerApi {
 		 * @throws HTTPError if not response ok
 		 */
 		const urlparams = new URLSearchParams(params);
-		let url = new URL(path, this.endpoint);
-		url.search = urlparams.toString();
+		//let url = new URL(path, this.endpoint);
+		//console.log(url);
+		//url.search = urlparams.toString();
 		const headers = {
 			accept: 'application/json'
 		};
@@ -59,7 +60,8 @@ export default class CardMakerApi {
 			method: 'GET',
 			headers: headers
 		};
-		const response = await fetch(url, options);
+		//console.log(url);
+		const response = await fetch("/api"+path, options);
 		if (!response.ok) {
 			throw new HTTPError({
 				code: response.status as HttpErrorCode,
@@ -80,7 +82,7 @@ export default class CardMakerApi {
 		 *
 		 * @throws HTTPError if not response ok
 		 */
-		let url = new URL(path, this.endpoint);
+		//let url = new URL(path, this.endpoint);
 		const headers = {
 			accept: 'application/json',
 			'Content-Type': 'application/json',
@@ -91,8 +93,7 @@ export default class CardMakerApi {
 			headers: headers,
 			body: JSON.stringify(body)
 		};
-
-		const response = await fetch(url, options);
+		const response = await fetch(this.endpoint+path, options);
 		if (!response.ok) {
 			throw new HTTPError({
 				code: response.status as HttpErrorCode,
@@ -111,7 +112,7 @@ export default class CardMakerApi {
 		 *
 		 * @throws HTTPError if not response ok
 		 */
-		let url = new URL(path, this.endpoint);
+		//let url = new URL(path, this.endpoint);
 		const headers = {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${this.jwtToken}`
@@ -122,7 +123,7 @@ export default class CardMakerApi {
 			body: JSON.stringify(body)
 		};
 
-		const response = await fetch(url, options);
+		const response = await fetch("/api"+path, options);
 		if (!response.ok) {
 			throw new HTTPError({
 				code: response.status as HttpErrorCode,
