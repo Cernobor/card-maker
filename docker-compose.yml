@@ -32,12 +32,8 @@ services:
         condition: service_healthy
     volumes:
       - ./api:/app
-    ports:
-      - "8000:8000"
     networks:
       - cardmaker
-    expose:
-      - 8000
     healthcheck:
         test: curl --fail http://localhost:8000/tags || exit 1
         timeout: 5s
@@ -46,12 +42,8 @@ services:
   frontend:
     build: ./cardMakerFE
     container_name: frontend
-    ports:
-      - "3000:3000"
     networks:
       - cardmaker
-    expose:
-      - 3000
     healthcheck:
         test: curl --fail http://localhost:3000/ || exit 1
         timeout: 5s
