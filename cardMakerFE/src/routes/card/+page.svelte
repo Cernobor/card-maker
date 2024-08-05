@@ -2,7 +2,7 @@
 	import Card from '$lib/components/Card.svelte';
 	import CardForm from '$lib/components/CardForm.svelte';
 	import { api } from '$lib/stores/store';
-	import type { CardCreate, Tag, CardType } from '$lib/interfaces';
+	import type { CardCreate, CardType } from '$lib/interfaces';
 
 	let cardComponent;
 	let cardTypes: CardType[];
@@ -28,7 +28,8 @@
 			effect: 'Efekt/pravidla karty',
 			in_set: false,
 			set_name: '',
-			tags: []
+			tags: [],
+			size: null,
 		};
 	}
 </script>
