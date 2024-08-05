@@ -21,6 +21,7 @@ export interface CardBase {
 	in_set: boolean;
 	set_name: string | null;
 	tags: Tag[];
+	size: string | null;
 }
 
 export interface CardCreate extends CardBase {

@@ -113,6 +113,7 @@ class CardBase(SQLModel):
     effect: Optional[str] = Field(max_length=4000)
     in_set: bool
     set_name: Optional[str]
+    size: Optional[str]
 
 
 class CardCreate(CardBase):
