@@ -59,7 +59,7 @@ export default class CardMakerApi {
 			method: 'GET',
 			headers: headers
 		};
-		const response = await fetch("/api"+path, options);
+		const response = await fetch(this.endpoint+path, options);
 		if (!response.ok) {
 			throw new HTTPError({
 				code: response.status as HttpErrorCode,
@@ -121,7 +121,7 @@ export default class CardMakerApi {
 			body: JSON.stringify(body)
 		};
 
-		const response = await fetch("/api"+path, options);
+		const response = await fetch(this.endpoint+path, options);
 		if (!response.ok) {
 			throw new HTTPError({
 				code: response.status as HttpErrorCode,
