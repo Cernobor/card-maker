@@ -87,12 +87,21 @@
 				<th>Typ</th>
 			</tr>
 			{#await getResources()}
+			
 				<h1 style="text-align:center">loading...</h1>
 			{:then}
+
 				{#each filteredCards as card}
 					<TableRow {card} {users} {types} />
 				{/each}
+				{#if filteredCards.length === 0}
+				<tr>
+					<td colspan="3">
+						<h1 style="text-align:center">Žádné karty nenalezeny</h1>
+					</td>
+				</tr>
+			   {/if}
 			{/await}
-		</table>
+		
 	</div>
 </div>
