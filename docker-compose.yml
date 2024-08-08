@@ -3,10 +3,12 @@ version: '3.8'
 services:
   db:
     image: mysql:8.0.33
-      - MYSQL_ROOT_PASSWORD: "root"  
-      - MYSQL_DATABASE: "Cardmaker"
-      - MYSQL_USER: "user"
-      - MYSQL_PASSWORD: "pass"
+    env_file: "cardmaker.env"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -21,10 +23,11 @@ services:
   api:
     image: localhost:5000/cardmaker-api:latest
     restart: on-failure
+    env_file: "cardmaker.env"
     environment:
-      - DATABASE_URL: "mysql+mysqlconnector://root:root@db:3306/Cardmaker"
-      - SECRET_KEY: "6de9b7c10564fb4794c13a2c127b5a00e21259cd56df440aad5199dae182966b"
-      - API_KEY: "a"
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      API_KEY: ${API_KEY}
     volumes:
       - ./api:/app
     networks:
