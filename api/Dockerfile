@@ -12,4 +12,4 @@ EXPOSE 8000
 
 VOLUME [ "/app" ]
 
-CMD ["./start.sh"]
+CMD ["./start-api.sh"]
