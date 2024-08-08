@@ -5,11 +5,11 @@ WORKDIR /app
 COPY . /app
 
 RUN pip install --upgrade pip
-
 RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
-VOLUME [ "/app" ]
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
 
-CMD ["./start-api.sh"]
+CMD ["/wait-for-it.sh", "cardmaker_db:3306", "--", "python", "app.py"]
