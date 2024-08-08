@@ -25,7 +25,10 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
       API_KEY: ${API_KEY}
+    restart: on-failure
     depends_on:
+      - db
+    links: 
       - db
     volumes:
       - ./api:/app

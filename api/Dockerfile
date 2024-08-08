@@ -12,4 +12,4 @@ EXPOSE 8000
 
 VOLUME [ "/app" ]
 
-CMD ["python", "main.py"]
+CMD ["./start.sh"]
