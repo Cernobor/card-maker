@@ -29,7 +29,7 @@ services:
       API_KEY: ${API_KEY}
     depends_on:
       - db:
-        condition: service_healthy
+          condition: service_healthy
     volumes:
       - ./api:/app
     networks:
@@ -60,9 +60,9 @@ services:
       - cardmaker
     depends_on:
       - api:
-        condition: service_healthy
+          condition: service_healthy
       - frontend:
-        condition: service_healthy
+          condition: service_healthy
     expose:
       - 9875
 
