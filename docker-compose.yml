@@ -20,7 +20,7 @@ services:
         retries: 10
 
   api:
-    image: 127.0.0.1:5000/api
+    image: localhost:5000/cardmaker-api:latest
     environment:
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
@@ -37,7 +37,7 @@ services:
         retries: 10
 
   frontend:
-    image: 127.0.0.1:5000/cardMakerFE
+    image: localhost:5000/cardmaker-fe:latest
     networks:
       - rpiserver
     healthcheck:
