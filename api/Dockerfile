@@ -1,6 +1,6 @@
 FROM python:3.12
 
-RUN apt-get update && apt-get install -y net-tools netcat-openbsd
+RUN apt-get update && apt-get install -y net-tools netcat-traditional
 
 WORKDIR /app
 
