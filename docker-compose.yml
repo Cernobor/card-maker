@@ -28,7 +28,7 @@ services:
       SECRET_KEY: ${SECRET_KEY}
       API_KEY: ${API_KEY}
     depends_on:
-      db:
+      - db:
         condition: service_healthy
     volumes:
       - ./api:/app
@@ -59,9 +59,9 @@ services:
     networks:
       - cardmaker
     depends_on:
-      api:
+      - api:
         condition: service_healthy
-      frontend:
+      - frontend:
         condition: service_healthy
     expose:
       - 9875
