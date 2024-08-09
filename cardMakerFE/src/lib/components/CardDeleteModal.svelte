@@ -37,21 +37,23 @@
 					<h2 class="flex-none text-xl">Smazat kartu</h2>
 				</div>
 			</div>
+            <div class="modal-body">
 			{#if errorMessage !== ''}
-				<p class="w-fit mx-auto mb-2 px-4 py-2 rounded text-center bg-red-800 text-gray-100">
+				<p class="modal-error">
 					{errorMessage}
 				</p>
 			{/if}
-			<div>
-				<p>
-					Určitě chcete smazat kartu <strong>{cardName}</strong>? To confirm type or copy and paste
-					name into the following field:
-				</p>
-				<input type="text" class="text-black" bind:value={confirmationName} />
-				<button class="bg-red-700 text-white px-2 py-1 rounded-lg" on:click={handleDelete}
-					>Potvrdit smazání</button
-				>
-			</div>
+                <div class="modal-confirm">
+                    <p>
+                        Určitě chcete smazat kartu <strong>{cardName}</strong>? Pro potvrzení napište název karty.
+                    </p>
+                    <div>
+                    <input type="text" class="text-black" style ="margin-right:15px;" bind:value={confirmationName} />
+                    <button on:click={handleDelete}>Potvrdit smazání</button
+                    >
+                    </div>
+                </div>
+            </div>
 		</div>
 	</div>
 {/if}
@@ -96,6 +98,14 @@
 		width: 40px;
 		height: 40px;
 	}
+    .modal-error {
+        color: orangered;
+    }
+    .modal-confirm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
 	h2 {
 		text-align: center;
