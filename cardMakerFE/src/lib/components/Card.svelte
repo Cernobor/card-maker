@@ -94,7 +94,9 @@
 	}
 </script>
 
+
 <div class="{cssClass} {(cardTypeName === 'Lokace') ? 'vertical-center' : 'normal'} card" id="capture">
+
 	<section class="card-header">
 		<div class="card-name">{card.name}</div>
 		<div class="card-set">

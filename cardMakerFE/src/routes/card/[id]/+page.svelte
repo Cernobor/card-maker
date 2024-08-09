@@ -53,10 +53,7 @@
 			/>
 			<button on:click={cardComponent.downloadCard}>Uložit změny a stáhnout</button>
 			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Uložit změny</button>
-			<button on:click={() => $api.deleteCard(data.name, '/card/list')} disabled={!$api.loggedIn}
-				>Smazat kartu</button
-			>
-			<button  on:click={() => {openModal(CardDeleteModal, {cardName: card.name, cardId : data.cardId})}}>DELETE</button>
+			<button  on:click={() => {openModal(CardDeleteModal, {cardName: card.name, cardId : data.cardId})}}>Smazat kartu</button>
 		</div>
 	{:catch}
 		<ErrorMessage errorMessage="Karta s id {data.cardId} neexistuje" />

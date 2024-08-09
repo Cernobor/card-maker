@@ -31,7 +31,7 @@
 		<div class="modal-contents">
 			<div class="modal-header">
 				<div class="modal-close-button">
-					<button on:click={closeModal} class="close-modal"> X </button>
+					<button on:click={closeModal} class="close-modal">X</button>
 				</div>
 				<div class="modal-title">
 					<h2 class="flex-none text-xl">Smazat kartu</h2>
@@ -92,7 +92,7 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        margin-bottom: -35px;
+        margin-bottom: -15px;
     }
 	.close-modal {
 		width: 40px;
