@@ -28,30 +28,31 @@
 
 {#if isOpen}
 	<div role="dialog" class="modal">
-        <div class="modal-contents">
-            <div class="flex flex-row justify-between mb-2">
-                <h2 class="flex-none text-xl">Smazat kartu</h2>
-                <button on:click={closeModal} class="flex-none">
-                    X
-                    </button
-                >
-            </div>
-            {#if errorMessage !== ''}
-                <p class="w-fit mx-auto mb-2 px-4 py-2 rounded text-center bg-red-800 text-gray-100">
-                    {errorMessage}
-                </p>
-            {/if}
-            <div>
-                <p>
-                    Určitě chcete smazat kartu <strong>{cardName}</strong>? To confirm type or copy and paste
-                    name into the following field:
-                </p>
-                <input type="text" class="text-black" bind:value={confirmationName} />
-                <button class="bg-red-700 text-white px-2 py-1 rounded-lg" on:click={handleDelete}
-                    >Delete</button
-                >
-            </div>
-        </div>
+		<div class="modal-contents">
+			<div class="modal-header">
+				<div class="modal-close-button">
+					<button on:click={closeModal} class="close-modal"> X </button>
+				</div>
+				<div class="modal-title">
+					<h2 class="flex-none text-xl">Smazat kartu</h2>
+				</div>
+			</div>
+			{#if errorMessage !== ''}
+				<p class="w-fit mx-auto mb-2 px-4 py-2 rounded text-center bg-red-800 text-gray-100">
+					{errorMessage}
+				</p>
+			{/if}
+			<div>
+				<p>
+					Určitě chcete smazat kartu <strong>{cardName}</strong>? To confirm type or copy and paste
+					name into the following field:
+				</p>
+				<input type="text" class="text-black" bind:value={confirmationName} />
+				<button class="bg-red-700 text-white px-2 py-1 rounded-lg" on:click={handleDelete}
+					>Potvrdit smazání</button
+				>
+			</div>
+		</div>
 	</div>
 {/if}
 
@@ -65,21 +66,35 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-        background: rgba(193, 192, 183, 0.33)  
+		background: rgba(193, 192, 183, 0.33);
 	}
 
 	.modal-contents {
-		min-width: 240px;
+		min-width: 140px;
 		padding: 16px;
-        background-color: #31363f;
-        color: #eeeeee;
-        border-radius: 20px;
-        border-color: #00adb5;
-        border-style: outset;
+		background-color: #31363f;
+		color: #eeeeee;
+		border-radius: 20px;
+		border-color: #00adb5;
+		border-style: outset;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		pointer-events: auto;
+	}
+	.modal-header {
+		display: flex;
+		flex-direction: column;
+	}
+    .modal-close-button {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        margin-bottom: -35px;
+    }
+	.close-modal {
+		width: 40px;
+		height: 40px;
 	}
 
 	h2 {
@@ -90,12 +105,5 @@
 	p {
 		text-align: center;
 		margin-top: 16px;
-	}
-
-	.actions {
-		margin-top: 32px;
-		display: flex;
-		justify-content: space-between;
-		gap: 8px;
 	}
 </style>
