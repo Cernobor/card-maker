@@ -134,7 +134,10 @@ export const cardTypeClass = {
 	 */
 	'Magický předmět': 'card-magical-item',
 	'Volný aspekt': 'card-free-aspect',
-	Lokace: 'card-location'
+	'Lokace': 'card-location',
+	'Zaříkadlo': 'card-spell',
+	'Recept': 'card-recipe',
+
 } as const;
 
 export type CardTypeKey = keyof typeof cardTypeClass;

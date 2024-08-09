@@ -82,6 +82,7 @@
 
 	let cardTypeName: string;
 	let cssClass: CardTypeClass = cardTypeClass['Magický předmět'];
+
 	$: if (cardTypes && card) {
 		let currentCardType = cardTypes.find((cardType) => {
 			return cardType.id == card.card_type_id;
@@ -101,7 +102,10 @@
 				<div class="card-in-set">{card.in_set ? card.set_name : ''}</div>
 			{/if}
 		</div>
-		<div class="card-type">{cardTypeName}</div>
+		{#if cardTypeName != 'Lokace'}
+			<div class="card-type">{cardTypeName}</div>
+		{/if}
+		
 		{#if cardTypeName == 'Magický předmět'}
 			<div class="irremovable">
 				{tagsContainTagName('Neodložitelný') ? 'Neodložitelný' : ''}
@@ -142,6 +146,14 @@
 		height: calc(7in);
 		width: calc(290mm);
 		font-size: 12pt;
+	}
+	.card-recipe {
+		width: calc(105mm);
+		height: calc(115mm);
+	}
+	.card-spell {
+		width: calc(105mm);
+		height: calc(115mm);
 	}
 	.card-header {
 		display: flex;
