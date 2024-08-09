@@ -34,7 +34,7 @@
 					<button on:click={closeModal} class="close-modal">X</button>
 				</div>
 				<div class="modal-title">
-					<h2 class="flex-none text-xl">Smazat kartu</h2>
+					<h2 style="margin-top:0px">Smazat kartu</h2>
 				</div>
 			</div>
             <div class="modal-body">
@@ -92,7 +92,6 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        margin-bottom: -15px;
     }
 	.close-modal {
 		width: 40px;
