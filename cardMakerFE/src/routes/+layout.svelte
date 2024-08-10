@@ -1,6 +1,7 @@
 <script lang="ts">
 	import './styles.css';
 	import { api } from '$lib/stores/store';
+	import { Modals, closeAllModals } from 'svelte-modals';
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,6 +26,10 @@
 	<div class="main-content">
 		<slot />
 	</div>
+<Modals>
+	<div slot="backdrop" class="fixed top-0 bottom-0 right-0 left-0 bg-black/50" on:click={closeAllModals}></div>
+</Modals>
+	
 </div>
 <div>
 	<footer class="footer-block">

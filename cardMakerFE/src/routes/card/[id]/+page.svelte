@@ -24,6 +24,11 @@
 		}
 		card = { ...cardData };
 	}
+
+
+	import { openModal } from 'svelte-modals'
+	import CardDeleteModal from '$lib/components/CardDeleteModal.svelte';
+
 </script>
 
 <div class="cardmaker-body">
@@ -48,13 +53,12 @@
 			/>
 			<button on:click={cardComponent.downloadCard}>Uložit změny a stáhnout</button>
 			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Uložit změny</button>
-			<button on:click={() => $api.deleteCard(data.cardId, '/card/list')} disabled={!$api.loggedIn}
-				>Smazat kartu</button
-			>
+			<button  on:click={() => {openModal(CardDeleteModal, {cardName: card.name, cardId : data.cardId})}}>Smazat kartu</button>
 		</div>
 	{:catch}
 		<ErrorMessage errorMessage="Karta s id {data.cardId} neexistuje" />
 	{/await}
+	
 </div>
 
 <style>

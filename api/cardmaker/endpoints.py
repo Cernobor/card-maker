@@ -98,10 +98,6 @@ async def get_cards(
     )
     if not cards:
         logger.warning("Invalid resource requested in GET '/cards'")
-        raise HTTPException(
-            status_code=404,
-            detail="Resource does not exist!",
-        )
     cards_new = []
     for card in cards:
         tags = [
