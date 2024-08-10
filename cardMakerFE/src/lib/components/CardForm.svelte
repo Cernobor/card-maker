@@ -24,10 +24,16 @@
 		if (mode == 'create') {
 			if (currentCardType.name == 'Magický předmět') {
 				card.tags = [...card.tags, { name: 'Neodložitelný' }];
-			} else {
+			}  else {
 				card.tags = card.tags.filter((tag) => {
 					return tag.name !== 'Neodložitelný';
 				});
+			}
+			if(currentCardType.name == 'Lokace'){
+				card.size = 'medium';
+				
+			} else {
+				card.size = undefined;
 			}
 		}
 	}
@@ -81,13 +87,13 @@
 
 		<div class="sizes">
 			<label>
-				<input  on:change={handleSizeChange} type="radio" name="amount" value="small" /> malá
+				<input checked={card.size==="small"} on:change={handleSizeChange} type="radio" name="amount" value="small" /> malá
 			</label>
 			<label>
-				<input  on:change={handleSizeChange}  type="radio" name="amount" value="medium" /> střední
+				<input  checked={card.size==="medium"} on:change={handleSizeChange}  type="radio" name="amount" value="medium" /> střední
 			</label>
 			<label>
-				<input   on:change={handleSizeChange} type="radio" name="amount" value="large" /> velká
+				<input  checked={card.size==="large"}  on:change={handleSizeChange} type="radio" name="amount" value="large" /> velká
 			</label>
 		</div>
 		{/if}
