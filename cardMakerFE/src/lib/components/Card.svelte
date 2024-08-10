@@ -81,6 +81,7 @@
 	}
 
 	let cardTypeName: string;
+	let cardTypeNameClass: string;
 	let cssClass: CardTypeClass = cardTypeClass['Magický předmět'];
 
 	$: if (cardTypes && card) {
@@ -88,8 +89,18 @@
 			return cardType.id == card.card_type_id;
 		});
 		if (currentCardType) {
-			cardTypeName = currentCardType.name;
-			cssClass = cardTypeClass[cardTypeName as CardTypeKey];
+			if (currentCardType.name == 'Lokace') {
+				cardTypeNameClass = currentCardType.name+"-" +card.size;
+				cardTypeName= currentCardType.name
+
+				cssClass = cardTypeClass[cardTypeNameClass as CardTypeKey];
+			} else {
+				cardTypeName = currentCardType.name;
+				cssClass = cardTypeClass[cardTypeName as CardTypeKey];
+			}
+
+		console.log(cssClass)
+			
 		}
 	}
 </script>
@@ -99,7 +110,6 @@
 
 	<section class="card-header">
 		<div class="card-name">{card.name}</div>
-		{card.size}
 		<div class="card-set">
 			{#if cardTypeName == 'Magický předmět' || cardTypeName == 'Volný aspekt'}
 				<div class="card-in-set">{card.in_set ? card.set_name : ''}</div>
@@ -145,8 +155,18 @@
 		width: calc(75mm);
 		height: calc(95mm);
 	}
-	.card-location {
+	.card-location-large {
 		height: calc(7in);
+		width: calc(290mm);
+		font-size: 12pt;
+	}
+	.card-location-medium {
+		height: calc(4in);
+		width: calc(290mm);
+		font-size: 12pt;
+	}
+	.card-location-small {
+		height: calc(2.2in);
 		width: calc(290mm);
 		font-size: 12pt;
 	}
@@ -166,7 +186,13 @@
 		border-bottom: 2px solid black;
 		gap: 2px;
 	}
-	.card-location .card-name {
+	.card-location-small .card-name {
+		font-size: 60pt;
+	}
+	.card-location-medium .card-name {
+		font-size: 60pt;
+	}
+	.card-location-large .card-name {
 		font-size: 60pt;
 	}
 	.card-name {

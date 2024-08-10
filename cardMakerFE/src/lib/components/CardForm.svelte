@@ -24,14 +24,13 @@
 		if (mode == 'create') {
 			if (currentCardType.name == 'Magický předmět') {
 				card.tags = [...card.tags, { name: 'Neodložitelný' }];
-			}  else {
+			} else {
 				card.tags = card.tags.filter((tag) => {
 					return tag.name !== 'Neodložitelný';
 				});
 			}
-			if(currentCardType.name == 'Lokace'){
+			if (currentCardType.name == 'Lokace') {
 				card.size = 'medium';
-				
 			} else {
 				card.size = undefined;
 			}
@@ -63,7 +62,6 @@
 	function handleSizeChange(event) {
 		card.size = event.target.value;
 	}
-
 </script>
 
 <div class="inputs">
@@ -75,7 +73,7 @@
 		<select
 			bind:value={currentCardType}
 			on:change={handleCardTypeChange}
-			disabled="{mode === 'update'}"
+			disabled={mode === 'update'}
 		>
 			{#each cardTypes as type (type)}
 				<option value={type}>{type.name}</option>
@@ -83,19 +81,37 @@
 		</select>
 
 		{#if currentCardType.name == 'Lokace'}
-		<label>Velikost karty:</label>
+			<label>Velikost karty:</label>
 
-		<div class="sizes">
-			<label>
-				<input checked={card.size==="small"} on:change={handleSizeChange} type="radio" name="amount" value="small" /> malá
-			</label>
-			<label>
-				<input  checked={card.size==="medium"} on:change={handleSizeChange}  type="radio" name="amount" value="medium" /> střední
-			</label>
-			<label>
-				<input  checked={card.size==="large"}  on:change={handleSizeChange} type="radio" name="amount" value="large" /> velká
-			</label>
-		</div>
+			<div class="sizes">
+				<label>
+					<input
+						checked={card.size === 'small'}
+						on:change={handleSizeChange}
+						type="radio"
+						name="amount"
+						value="small"
+					/> malá
+				</label>
+				<label>
+					<input
+						checked={card.size === 'medium'}
+						on:change={handleSizeChange}
+						type="radio"
+						name="amount"
+						value="medium"
+					/> střední
+				</label>
+				<label>
+					<input
+						checked={card.size === 'large'}
+						on:change={handleSizeChange}
+						type="radio"
+						name="amount"
+						value="large"
+					/> velká
+				</label>
+			</div>
 		{/if}
 
 		<div class="tooltip">
