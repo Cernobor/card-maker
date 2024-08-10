@@ -99,6 +99,7 @@
 
 	<section class="card-header">
 		<div class="card-name">{card.name}</div>
+		{card.size}
 		<div class="card-set">
 			{#if cardTypeName == 'Magický předmět' || cardTypeName == 'Volný aspekt'}
 				<div class="card-in-set">{card.in_set ? card.set_name : ''}</div>

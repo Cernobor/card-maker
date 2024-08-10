@@ -53,6 +53,11 @@
 			alert('Problem s nacitanim tagu nebo typu karet.');
 		}
 	});
+
+	function handleSizeChange(event) {
+		card.size = event.target.value;
+	}
+
 </script>
 
 <div class="inputs">
@@ -70,6 +75,22 @@
 				<option value={type}>{type.name}</option>
 			{/each}
 		</select>
+
+		{#if currentCardType.name == 'Lokace'}
+		<label>Velikost karty:</label>
+
+		<div class="sizes">
+			<label>
+				<input  on:change={handleSizeChange} type="radio" name="amount" value="small" /> malá
+			</label>
+			<label>
+				<input  on:change={handleSizeChange}  type="radio" name="amount" value="medium" /> střední
+			</label>
+			<label>
+				<input   on:change={handleSizeChange} type="radio" name="amount" value="large" /> velká
+			</label>
+		</div>
+		{/if}
 
 		<div class="tooltip">
 			<label for="fluff">Fluff:</label>
