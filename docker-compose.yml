@@ -3,7 +3,6 @@ version: '3'
 services:
   db:
     image: mysql:8.0.33
-    container_name: db
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -22,7 +21,6 @@ services:
 
   api:
     build: ./api
-    container_name: api
     environment:
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
@@ -41,7 +39,6 @@ services:
 
   frontend:
     build: ./cardMakerFE
-    container_name: frontend
     networks:
       - cardmaker
     healthcheck:
@@ -51,7 +48,6 @@ services:
 
   proxy:
     image: nginx:alpine
-    container_name: proxy
     ports:
       - "9875:9875"
     volumes:
