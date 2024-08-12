@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   db:
     image: mysql:8.0.33
@@ -8,8 +6,9 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_TCP_PORT: ${MYSQL_TCP_PORT}
     ports:
-      - "3306:3306"
+      - "3307:3307"
     volumes:
       - "db_data:/var/lib/mysql"
     networks:
@@ -32,8 +31,10 @@ services:
       - ./api:/app
     networks:
       - cardmaker
+    ports:
+      - "8003:8003"
     healthcheck:
-        test: curl --fail http://localhost:8000/tags || exit 1
+        test: curl --fail http://localhost:8003/tags || exit 1
         timeout: 5s
         retries: 10
 
@@ -41,8 +42,10 @@ services:
     build: ./cardMakerFE
     networks:
       - cardmaker
+    ports:
+      - "3005:3005"
     healthcheck:
-        test: curl --fail http://localhost:3000/ || exit 1
+        test: curl --fail http://localhost:3005/ || exit 1
         timeout: 5s
         retries: 10
 
