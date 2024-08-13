@@ -3,6 +3,7 @@
 	import HTTPError from '$lib/errors';
 	import type { UserCreate } from '$lib/interfaces';
 	import { api } from '$lib/stores/store';
+	import { PUBLIC_USE_API_KEY } from '$env/static/public';
 
 	let user: UserCreate = {
 		username: '',
@@ -78,10 +79,12 @@
 			<label for="passwordConfirm">Potvrdit heslo</label>
 			<input type="password" bind:value={passwordConfirm} class="login-form-input" />
 		</div>
+		{#if PUBLIC_USE_API_KEY==="True"}
 		<div class="login-form-item">
 			<label for="api-key">Tajný klíč</label>
-			<input type="text" bind:value={user.api_key} required class="login-form-input" />
+			<input type="text" bind:value={user.api_key} class="login-form-input" />
 		</div>
+		{/if}
 		<input type="submit" value="Registrovat se" class="submit-button" />
 	</form>
 </div>
