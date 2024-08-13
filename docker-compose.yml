@@ -24,6 +24,7 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
       API_KEY: ${API_KEY}
+      USE_API_KEY: ${USE_API_KEY}
     depends_on:
       db:
         condition: service_healthy
@@ -40,6 +41,8 @@ services:
 
   frontend:
     build: ./cardMakerFE
+    environment:
+      USE_API_KEY: ${USE_API_KEY}
     networks:
       - cardmaker
     ports:
