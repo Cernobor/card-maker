@@ -32,7 +32,7 @@ class UserCreate(UserBase):
     """
 
     password: str
-    api_key: str | None
+    api_key: Optional[str]
 
 
 class UserPublic(UserBase):
