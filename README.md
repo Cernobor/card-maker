@@ -7,7 +7,7 @@ obsahuje nastavení adresy pro FE, liší se podle toho jestli FE běží v kont
 ```
 PUBLIC_BASE_API_URL="http://localhost:8003" # For development
 PUBLIC_BASE_API_URL="/api" # For production
-PUBLIC_USE_API_KEY="False" # "True" for use api key
+PUBLIC_USE_API_KEY="false" # "true" for use api key
 ```
 
 
