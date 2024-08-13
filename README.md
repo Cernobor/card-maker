@@ -7,6 +7,7 @@ obsahuje nastavení adresy pro FE, liší se podle toho jestli FE běží v kont
 ```
 PUBLIC_BASE_API_URL="http://localhost:8000" # For development
 PUBLIC_BASE_API_URL="/api" # For production
+PUBLIC_USE_API_KEY="False" # "True" for use api key
 ```
 
 
@@ -17,6 +18,7 @@ obsahuje nastavení pro docker-compose:
 DATABASE_URL= "mysql+mysqlconnector://root:root@db:3307/Cardmaker"
 SECRET_KEY= "6de9b7c10564fb4794c13a2c127b5a00e21259cd56df440aad5199dae182966b"
 API_KEY="viroujimesalat"
+API_KEY_USE="False" # "True" for use api key
 
 MYSQL_ROOT_PASSWORD="root"  
 MYSQL_DATABASE= "Cardmaker"
