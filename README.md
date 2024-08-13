@@ -18,7 +18,7 @@ obsahuje nastavení pro docker-compose:
 DATABASE_URL= "mysql+mysqlconnector://root:root@db:3307/Cardmaker"
 SECRET_KEY= "6de9b7c10564fb4794c13a2c127b5a00e21259cd56df440aad5199dae182966b"
 API_KEY="viroujimesalat"
-API_KEY_USE="False" # "True" for use api key
+API_KEY_USE="false" # "true" for use api key
 
 MYSQL_ROOT_PASSWORD="root"  
 MYSQL_DATABASE= "Cardmaker"
