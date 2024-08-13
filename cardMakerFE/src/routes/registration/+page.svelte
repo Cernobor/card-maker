@@ -79,7 +79,7 @@
 			<label for="passwordConfirm">Potvrdit heslo</label>
 			<input type="password" bind:value={passwordConfirm} class="login-form-input" />
 		</div>
-		{#if PUBLIC_USE_API_KEY==="True"}
+		{#if PUBLIC_USE_API_KEY==="true"}
 			<div class="login-form-item">
 				<label for="api-key">Tajný klíč</label>
 				<input type="text" bind:value={user.api_key} required class="login-form-input" />
