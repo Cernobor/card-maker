@@ -80,10 +80,10 @@
 			<input type="password" bind:value={passwordConfirm} class="login-form-input" />
 		</div>
 		{#if PUBLIC_USE_API_KEY==="True"}
-		<div class="login-form-item">
-			<label for="api-key">Tajný klíč</label>
-			<input type="text" bind:value={user.api_key} class="login-form-input" />
-		</div>
+			<div class="login-form-item">
+				<label for="api-key">Tajný klíč</label>
+				<input type="text" bind:value={user.api_key} required class="login-form-input" />
+			</div>
 		{/if}
 		<input type="submit" value="Registrovat se" class="submit-button" />
 	</form>
