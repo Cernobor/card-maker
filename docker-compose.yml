@@ -32,8 +32,6 @@ services:
       - ./api:/app
     networks:
       - cardmaker
-    ports:
-      - "8003:8003"
     healthcheck:
         test: curl --fail http://localhost:8003/tags || exit 1
         timeout: 5s
@@ -43,8 +41,6 @@ services:
     build: ./cardMakerFE
     networks:
       - cardmaker
-    ports:
-      - "3005:3005"
     healthcheck:
         test: curl --fail http://localhost:3005/ || exit 1
         timeout: 5s
