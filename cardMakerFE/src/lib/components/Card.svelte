@@ -109,7 +109,7 @@
 <div class="{cssClass} {(cardTypeName === 'Lokace') ? 'vertical-center' : 'normal'} card" id="capture">
 
 	<section class="card-header">
-		<div class="card-name">{card.name}</div>
+		<div class="card-name">{(cardTypeName === 'Lokace') ? card.name.toUpperCase() : card.name}</div>
 		<div class="card-set">
 			{#if cardTypeName == 'Magický předmět' || cardTypeName == 'Volný aspekt'}
 				<div class="card-in-set">{card.in_set ? card.set_name : ''}</div>
