@@ -5,7 +5,7 @@ je potřeba nastavit 2 .env files:
 
 obsahuje nastavení adresy pro FE, liší se podle toho jestli FE běží v kontejneru (produkce) nebo samostatně (vývoj) :
 ```
-PUBLIC_BASE_API_URL="http://localhost:8000" # For development
+PUBLIC_BASE_API_URL="http://localhost:8003" # For development
 PUBLIC_BASE_API_URL="/api" # For production
 PUBLIC_USE_API_KEY="False" # "True" for use api key
 ```
