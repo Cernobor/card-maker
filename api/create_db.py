@@ -80,8 +80,6 @@ def create_db():
     Reinitialize database - drop all tables and create new tables
     This is just for debugging purposes! It will be removed.
     """
-    SQLModel.metadata.drop_all(engine)
-    logger.warning(f"Database dropped")
     SQLModel.metadata.create_all(engine)
     logger.info(f"Database successfully initialized")
     json_to_db("initial_data.json")
