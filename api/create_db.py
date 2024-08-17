@@ -8,7 +8,7 @@ import os
 
 from cardmaker import models
 from cardmaker.logger import Logger
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, SQLModel, create_engine, select
 
 logger = Logger.get_instance()
 engine = create_engine(os.getenv("DATABASE_URL"))
@@ -75,11 +75,26 @@ def json_to_db(json_path: str) -> list:
         save_tags(data["tags"])
 
 
+def db_initialized():
+    try:
+        with Session(engine) as session:
+            statement = select(models.CardType)
+            if session.execute(statement).scalars().all():
+                return True
+            return False
+    except Exception as e:
+        # if database communucation fails, build it again.
+        raise e
+
+
 def create_db():
     """
     Reinitialize database - drop all tables and create new tables
     This is just for debugging purposes! It will be removed.
     """
+    # uncomment if database should be dropped:
+    #SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
     logger.info(f"Database successfully initialized")
-    json_to_db("initial_data.json")
+    if not db_initialized():
+        json_to_db("initial_data.json")
