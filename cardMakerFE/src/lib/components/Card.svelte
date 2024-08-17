@@ -109,7 +109,7 @@
 <div class="{cssClass} {(cardTypeName === 'Lokace') ? 'vertical-center' : 'normal'} card" id="capture">
 
 	<section class="card-header">
-		<div class="card-name">{(cardTypeName === 'Lokace') ? card.name.toUpperCase() : card.name}</div>
+		<div class="card-name">{card.name}</div>
 		<div class="card-set">
 			{#if cardTypeName == 'Magický předmět' || cardTypeName == 'Volný aspekt'}
 				<div class="card-in-set">{card.in_set ? card.set_name : ''}</div>
@@ -127,7 +127,7 @@
 	</section>
 
 	<div class="card-body">
-		<section class="card-content">
+		<section class="card-content {(cardTypeName === 'Lokace') ? 'location-text' : ''}">
 			<div class="card-fluff">
 				{@html cardTextFilter(DOMPurify.sanitize(card.fluff || ''))}
 			</div>
@@ -141,7 +141,6 @@
 <style>
 	.card {
 		font-size: 8pt;
-		border: 2mm solid black;
 		background-clip: border-box;
 		page-break-after: auto;
 		page-break-inside: avoid;
@@ -150,10 +149,12 @@
 	.card-magical-item {
 		width: calc(95mm);
 		height: calc(75mm);
+		border: 2mm solid black;
 	}
 	.card-free-aspect {
 		width: calc(75mm);
 		height: calc(95mm);
+		border: 2mm solid black;
 	}
 	.card-location-large {
 		height: calc(7in);
@@ -173,10 +174,12 @@
 	.card-recipe {
 		width: calc(105mm);
 		height: calc(115mm);
+		border: 2mm solid black;
 	}
 	.card-spell {
 		width: calc(105mm);
 		height: calc(115mm);
+		border: 2mm solid black;
 	}
 	.card-header {
 		display: flex;
@@ -200,7 +203,7 @@
 		font-size: 10pt;
 		line-height: 1.7em;
 		font-weight: bold;
-		text-transform: capitalize;
+		font-variant: small-caps;
 	}
 	.card-type {
 		font-family: 'Montserrat', sans-serif;
@@ -219,6 +222,10 @@
 	.card-set {
 		text-align: center;
 		font-size: 6pt;
+	}
+	.location-text {
+		padding-left: 10%;
+		padding-right: 10%;
 	}
 	:global(section.content p) {
 		padding-bottom: 2pt;
