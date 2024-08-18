@@ -16,7 +16,15 @@
 		/**
 		 * Download card as png image.
 		 */
-		html2canvas(document.querySelector('#capture')!).then((canvas) => {
+		let capture = document.querySelector('#capture')!;
+		let scale = 12;
+		html2canvas(capture, {
+			onclone: (doc) => {
+				console.log(doc);
+				doc.querySelector('#capture')!.style.transform = `scale(${scale})`;
+			},
+		}).then((canvas) => {
+
 			let a = document.createElement('a');
 			a.href = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'); // here is the most important part because if you dont replace you will get a DOM 18 exception.
 			a.download = slugify(card.name) + '-card.png';
@@ -105,7 +113,6 @@
 	}
 </script>
 
-
 <div class="{cssClass} {(cardTypeName === 'Lokace') ? 'vertical-center' : 'normal'} card" id="capture">
 
 	<section class="card-header">
@@ -157,8 +164,8 @@
 		border: 2mm solid black;
 	}
 	.card-location-large {
-		height: calc(7in);
-		width: calc(290mm);
+		height: 7in;
+		width: 290mm;
 		font-size: 12pt;
 	}
 	.card-location-medium {
