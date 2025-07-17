@@ -4,6 +4,7 @@
 	export let card: CardGet;
 	export let users: UserPublic[];
 	export let types: CardType[];
+	export let selectedCards: CardGet[];
 
 	let cardAuthor: string = 'waiting...';
 	let cardType: string = 'waiting...';
@@ -28,9 +29,27 @@
 			cardType = response.name;
 		})();
 	}
+
+	function handleCheckboxChange(event: Event) {
+		const input = event.target as HTMLInputElement;
+		if (input.checked) {
+			if (!selectedCards.some(c => c.id == card.id)) {
+				selectedCards = [...selectedCards, card];
+			}
+		} else {
+			selectedCards = selectedCards.filter(c => c.id != card.id);
+		}
+	}
 </script>
 
 <tr>
+	<td class="checkbox-column">
+		<input
+			class="checkbox"
+			type="checkbox"
+			on:change={(e) => handleCheckboxChange(e)}
+		/>
+	</td>
 	<td><a href="/card/{card.id}"><b>{card.name}</b></a></td>
 	<td>{cardAuthor}</td>
 	<td>{cardType}</td>

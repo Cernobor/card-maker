@@ -125,7 +125,7 @@ export function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
 	);
 }
 
-export type Mode = 'create' | 'update';
+export type Mode = 'create' | 'update' | 'preview';
 
 export const cardTypeClass = {
 	/**
