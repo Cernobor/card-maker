@@ -9,6 +9,7 @@
 	import { api } from '$lib/stores/store';
 	import Card from '$lib/components/Card.svelte';
 	import Checkbox from '$lib/components/Checkbox.svelte';
+	import PdfPreviewModal from '$lib/components/PdfPreviewModal.svelte';
 
 	function getFilteredCards(
 		allCards: CardGet[] | [],
@@ -151,8 +152,14 @@
 	return pdf;
 }
 
-	function showPreview() {
+	let showPdfModal = false;
+	let pdfBlobUrl: string | null = null;
 
+	async function showPreview() {
+		const pdf = await createPdf(selectedCards, selectedCopies);
+		const blob =  pdf.output("blob");
+		pdfBlobUrl = URL.createObjectURL(blob);
+		showPdfModal = true;
 	}
 
 	async function downloadCards(pdf?: jsPDF) {
@@ -244,6 +251,12 @@
 		<div class="lds-dual-ring"></div>
 	</div>
 {/if}
+
+<PdfPreviewModal
+	open={showPdfModal}
+	blobUrl={pdfBlobUrl}
+	onClose={() => showPdfModal = false}
+/>
 
 </div>
 
