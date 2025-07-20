@@ -30,16 +30,28 @@
 		})();
 	}
 
+	let selected = false;
+
 	function handleCheckboxChange(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (input.checked) {
 			if (!selectedCards.some(c => c.id == card.id)) {
 				selectedCards = [...selectedCards, card];
+				selected = true;
 			}
 		} else {
 			selectedCards = selectedCards.filter(c => c.id != card.id);
+			selected = false;
 		}
 	}
+
+	function updateCheckbox(selectedCards: CardGet[]) {
+		if (selected && !selectedCards.includes(card) || !selected && selectedCards.includes(card)) {
+			selected = !selected;
+		}
+	}
+
+	$: updateCheckbox(selectedCards);
 </script>
 
 <tr>
@@ -48,6 +60,7 @@
 			class="checkbox"
 			type="checkbox"
 			on:change={(e) => handleCheckboxChange(e)}
+			checked={selected}
 		/>
 	</td>
 	<td><a href="/card/{card.id}"><b>{card.name}</b></a></td>
