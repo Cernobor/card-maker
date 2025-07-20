@@ -263,17 +263,6 @@ ul {
 	border-collapse: collapse;
 }
 
-.card-list-table th.checkbox-column,
-.card-list-table td.checkbox-column {
-	width: 40px;
-	min-width: 40px;
-	max-width: 40px;
-	text-align: center;
-	padding: 0;
-	padding-left: 5px;
-}
-
-
 .filter-title {
 	font-family: 'Inknut Antiqua', serif;
 }
@@ -291,10 +280,23 @@ ul {
 }
 
 .checkbox {
-	height: 25px;
+	appearance: none;
 	width: 25px;
-	margin: 10px;
+	height: 25px;
+	margin: 0;
 	cursor: pointer;
+	border: 2px solid #00adb5;
+	border-radius: 4px;
+	background-color: #1f1f1f;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.checkbox:checked::after {
+	content: "✔";
+	color: #1f1f1f;
+	font-size: 16px;
 }
 
 .all-checkboxes-container {
