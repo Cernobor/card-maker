@@ -81,8 +81,17 @@
 		return filteredCards.includes(card);
 	});
 
-	function selectAll() {
-		selectedCards = filteredCards;
+	let checkedAll = false;
+
+	function handleCheckboxChange(event: Event) {
+		const input = event.target as HTMLInputElement;
+		if (input.checked) {
+			selectedCards = filteredCards;
+			checkedAll = true;
+		} else {
+			selectedCards = [];
+			checkedAll = false;
+		}
 	}
 
 	let isBusy: boolean = false;
@@ -156,20 +165,38 @@
 		<FilterLabels bind:activeTags options={tags} />
 	</div>
 
-	{#if selectedCards.length > 0}
-		<div class="card-table-actions">
-			<span>Vybráno {selectedCards.length} karet</span>
-			<button on:click={showPreview}>Náhled</button>
-			<button on:click={() => downloadCards()}>Stáhnout vybrané</button>
-			<button on:click={() => selectedCards = []}>Zrušit výběr</button>
-		</div>
-	{/if}
+	<div class={`card-table-actions ${selectedCards.length > 0 ? "actions-active" : ""}`}>
+		<span>
+			{selectedCards.length === 0
+			  ? "Žádná karta nevybrána"
+			  : `${selectedCards.length} ${
+				  selectedCards.length === 1
+					? "karta vybrána"
+					: selectedCards.length >= 2 && selectedCards.length <= 4
+					? "karty vybrány"
+					: "karet vybráno"
+				}`}
+		  </span>		  
+		<button on:click={showPreview} disabled={selectedCards.length === 0}>👁️ Náhled</button>
+		<button on:click={() => downloadCards()} disabled={selectedCards.length === 0}>⬇️ Stáhnout vybrané</button>
+		<button on:click={() => {
+			selectedCards = [];
+			checkedAll = false;
+		}}
+		disabled={selectedCards.length === 0}
+		>❌ Zrušit výběr</button>
+	</div>
 
 	<div class="card-list-table">
 		<table>
 			<tr>
 				<th class="checkbox-column">
-					<button on:click={selectAll}>Vybrat vše</button>
+					<input
+						type="checkbox"
+						class="checkbox"
+						on:change={(e) => handleCheckboxChange(e)}
+						checked={checkedAll}
+					/>
 				</th>
 				<th>Karta</th>
 				<th>Autor</th>
@@ -216,6 +243,33 @@
 </div>
 
 <style>
+.card-table-actions {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+	margin-top: 10px;
+	background-color: #222831;
+	padding: 10px;
+	opacity: 0.5;
+}
+
+.card-table-actions button {
+	cursor: not-allowed;
+}
+
+.card-table-actions button:hover {
+	background-color: #31363f;
+}
+
+.actions-active {
+	opacity: 1;
+}
+
+.actions-active button {
+	cursor: pointer;
+}
+
 .card-pdf-render {
 	color: black;
 	position: absolute;
