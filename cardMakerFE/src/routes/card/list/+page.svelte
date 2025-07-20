@@ -160,6 +160,8 @@
 			pdf = await createPdf(selectedCards, selectedCopies);
 		}
 		pdf.save("cards.pdf")
+		selectedCards = [];
+		checkedAll = false;
 	}
 </script>
 
@@ -269,7 +271,7 @@
 	background-color: #222831;
 	padding: 10px;
 	opacity: 0.5;
-	transition: opacity 0.2s ease;
+	transition: opacity 0.5s ease;
 }
 
 .actions-active {
