@@ -91,7 +91,7 @@
 	min-width: 80px;
 	max-width: 80px;
 	padding: 0;
-	padding-left: 12px;
+	padding-left: 11px;
 	text-align: left;
 }
 

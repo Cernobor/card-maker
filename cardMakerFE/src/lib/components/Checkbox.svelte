@@ -43,7 +43,7 @@
 	border: 2px solid #00adb5;
 	border-radius: 4px;
 	background-color: #1f1f1f;
-	transition: all 0.2s ease;
+	transition: all 0.5s ease;
 }
 
 .custom-checkbox:checked + .custom-checkbox-ui {
