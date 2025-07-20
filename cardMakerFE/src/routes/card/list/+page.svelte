@@ -8,6 +8,7 @@
 	import FilterLabels from '$lib/components/FilterLabels.svelte';
 	import { api } from '$lib/stores/store';
 	import Card from '$lib/components/Card.svelte';
+	import Checkbox from '$lib/components/Checkbox.svelte';
 
 	function getFilteredCards(
 		allCards: CardGet[] | [],
@@ -83,9 +84,8 @@
 
 	let checkedAll = false;
 
-	function handleCheckboxChange(event: Event) {
-		const input = event.target as HTMLInputElement;
-		if (input.checked) {
+	function handleCheckboxChange(checked: boolean) {
+		if (checked) {
 			selectedCards = filteredCards;
 			checkedAll = true;
 		} else {
@@ -191,11 +191,9 @@
 		<table>
 			<tr>
 				<th class="checkbox-column">
-					<input
-						type="checkbox"
-						class="checkbox"
-						on:change={(e) => handleCheckboxChange(e)}
+					<Checkbox
 						checked={checkedAll}
+						onChange={handleCheckboxChange}
 					/>
 				</th>
 				<th>Karta</th>
@@ -243,33 +241,50 @@
 </div>
 
 <style>
+/* === TABLE HEADER STYLING === */
+.card-list-table th {
+	padding: 8px 12px;
+}
+
+.card-list-table th:first-child {
+	width: 80px;
+	min-width: 80px;
+	max-width: 80px;
+	text-align: left;
+	padding-left: 15px;
+	box-sizing: border-box;
+}
+
+/* === ACTION BAR BELOW FILTERS === */
 .card-table-actions {
 	display: flex;
-	flex-direction: row;
 	justify-content: space-evenly;
 	align-items: center;
 	margin-top: 10px;
 	background-color: #222831;
 	padding: 10px;
 	opacity: 0.5;
-}
-
-.card-table-actions button {
-	cursor: not-allowed;
-}
-
-.card-table-actions button:hover {
-	background-color: #31363f;
+	transition: opacity 0.2s ease;
 }
 
 .actions-active {
 	opacity: 1;
 }
 
+.card-table-actions button {
+	cursor: not-allowed;
+	transition: background-color 0.2s ease;
+}
+
 .actions-active button {
 	cursor: pointer;
 }
 
+.card-table-actions button:hover {
+	background-color: #31363f;
+}
+
+/* === PDF RENDER ZONE (HIDDEN) === */
 .card-pdf-render {
 	color: black;
 	position: absolute;
@@ -281,6 +296,7 @@
 	height: 0;
 }
 
+/* === SPINNER === */
 .spinner-overlay {
 	position: fixed;
 	top: 0;
@@ -299,6 +315,7 @@
 	width: 80px;
 	height: 80px;
 }
+
 .lds-dual-ring:after {
 	content: " ";
 	display: block;

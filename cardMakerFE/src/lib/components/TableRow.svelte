@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { UserPublic, CardType, CardGet } from '$lib/interfaces';
+	import Checkbox from './Checkbox.svelte';
 
 	export let card: CardGet;
 	export let users: UserPublic[];
@@ -32,9 +33,8 @@
 
 	let selected = false;
 
-	function handleCheckboxChange(event: Event) {
-		const input = event.target as HTMLInputElement;
-		if (input.checked) {
+	function handleCheckboxChange(checked: boolean) {
+		if (checked) {
 			if (!selectedCards.some(c => c.id == card.id)) {
 				selectedCards = [...selectedCards, card];
 				selected = true;
@@ -55,15 +55,67 @@
 </script>
 
 <tr>
-	<td class="checkbox-column">
-		<input
-			class="checkbox"
-			type="checkbox"
-			on:change={(e) => handleCheckboxChange(e)}
-			checked={selected}
-		/>
-	</td>
+	<script lang="ts">
+		import Checkbox from '$lib/components/Checkbox.svelte';
+	</script>
+	
+	<td class="checkbox-cell">
+		<div class="checkbox-wrapper">
+			<Checkbox
+				checked={selected}
+				onChange={(val) => handleCheckboxChange(val)}
+			/>
+			{#if selected}
+				<input type="number" class="cards-number" min="1" />
+			{/if}
+		</div>
+	</td>	
 	<td><a href="/card/{card.id}"><b>{card.name}</b></a></td>
 	<td>{cardAuthor}</td>
 	<td>{cardType}</td>
 </tr>
+
+<style>
+.checkbox-cell {
+	width: 80px;
+	min-width: 80px;
+	max-width: 80px;
+	padding: 0;
+	padding-left: 12px;
+	text-align: left;
+}
+
+.checkbox-wrapper {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 4px;
+	box-sizing: border-box;
+}
+
+.cards-number {
+	width: 38px;
+	font-size: 0.9em;
+	padding: 3px 4px;
+	border-radius: 5px;
+	text-align: center;
+	background-color: #222831;
+	color: #00adb5;
+	border: 1px solid #00adb5;
+	outline: none;
+	flex-shrink: 0;
+	appearance: textfield;
+}
+
+/* Remove spin buttons (Chrome, Safari) */
+.cards-number::-webkit-outer-spin-button,
+.cards-number::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Remove spin buttons (Firefox) */
+.cards-number[type=number] {
+	-moz-appearance: textfield;
+}
+</style>
