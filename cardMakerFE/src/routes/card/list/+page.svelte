@@ -77,6 +77,9 @@
 	$: filteredCards = getFilteredCards(allCards, selectedAuthor, selectedType, activeTags);
 
 	let selectedCards: CardGet[] = [];
+	$: selectedCards = selectedCards.filter((card: CardGet) => {
+		return filteredCards.includes(card);
+	});
 
 	function selectAll() {
 		selectedCards = filteredCards;
