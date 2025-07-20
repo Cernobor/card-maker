@@ -217,7 +217,7 @@
 				{/each}
 				{#if filteredCards.length === 0}
 				<tr>
-					<td colspan="3">
+					<td colspan="4">
 						<h1 style="text-align:center">Žádné karty nenalezeny</h1>
 					</td>
 				</tr>
