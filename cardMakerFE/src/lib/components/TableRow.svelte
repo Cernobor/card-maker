@@ -6,6 +6,7 @@
 	export let users: UserPublic[];
 	export let types: CardType[];
 	export let selectedCards: CardGet[];
+	export let selectedCopies: Record<number, number>;
 
 	let cardAuthor: string = 'waiting...';
 	let cardType: string = 'waiting...';
@@ -52,6 +53,12 @@
 	}
 
 	$: updateCheckbox(selectedCards);
+
+	selectedCopies[card.id] = 1;
+	function handleNumberOfCardsChange(event: Event) {
+		const input = event.target as HTMLInputElement;
+		selectedCopies[card.id] = Number(input.value);
+	}
 </script>
 
 <tr>
@@ -66,7 +73,7 @@
 				onChange={(val) => handleCheckboxChange(val)}
 			/>
 			{#if selected}
-				<input type="number" class="cards-number" min="1" />
+				<input type="number" class="cards-number" min="1" value={selectedCopies[card.id]} on:change={(e) => handleNumberOfCardsChange(e)} />
 			{/if}
 		</div>
 	</td>	

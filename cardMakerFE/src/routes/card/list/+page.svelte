@@ -95,24 +95,28 @@
 	}
 
 	let isBusy: boolean = false;
+	let selectedCopies: Record<number, number> = {};
 
-	async function createPdf(cards: CardGet[]): Promise<jsPDF> {
-		isBusy = true;
-		await tick();
+	async function createPdf(cards: CardGet[], selectedCopies: Record<number, number>): Promise<jsPDF> {
+	isBusy = true;
+	await tick();
 
-		const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
-		const pageWidth = 297;
-		const pageHeight = 210;
-		const margin = 5;
+	const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
+	const pageWidth = 297;
+	const pageHeight = 210;
+	const margin = 5;
 
-		let x = margin;
-		let y = margin;
-		let rowHeight = 0;
+	let x = margin;
+	let y = margin;
+	let rowHeight = 0;
 
-		for (let i = 0; i < cards.length; i++) {
-			const el = document.getElementById(`card-${cards[i].id}`);
+	for (const card of cards) {
+		const copies = selectedCopies[card.id] ?? 1;
+
+		for (let copy = 0; copy < copies; copy++) {
+			const el = document.getElementById(`card-${card.id}`);
 			if (!el) {
-				console.warn(`Element card-${cards[i].id} not found`);
+				console.warn(`Element card-${card.id} not found`);
 				continue;
 			}
 
@@ -120,7 +124,6 @@
 			const imgData = canvas.toDataURL('image/png');
 
 			const PX_TO_MM = 25.4 / 96;
-
 			const width = el.offsetWidth * PX_TO_MM;
 			const height = el.offsetHeight * PX_TO_MM;
 
@@ -141,7 +144,9 @@
 
 			x += width + margin;
 			if (height > rowHeight) rowHeight = height;
+		}
 	}
+
 	isBusy = false;
 	return pdf;
 }
@@ -152,7 +157,7 @@
 
 	async function downloadCards(pdf?: jsPDF) {
 		if (!pdf) {
-			pdf = await createPdf(selectedCards);
+			pdf = await createPdf(selectedCards, selectedCopies);
 		}
 		pdf.save("cards.pdf")
 	}
@@ -206,7 +211,7 @@
 			{:then}
 
 				{#each filteredCards as card}
-					<TableRow {card} {users} {types} bind:selectedCards />
+					<TableRow {card} {users} {types} bind:selectedCards bind:selectedCopies />
 				{/each}
 				{#if filteredCards.length === 0}
 				<tr>
