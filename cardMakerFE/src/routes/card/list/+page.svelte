@@ -161,6 +161,7 @@
 			<span>Vybráno {selectedCards.length} karet</span>
 			<button on:click={showPreview}>Náhled</button>
 			<button on:click={() => downloadCards()}>Stáhnout vybrané</button>
+			<button on:click={() => selectedCards = []}>Zrušit výběr</button>
 		</div>
 	{/if}
 
