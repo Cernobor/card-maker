@@ -39,16 +39,19 @@
 			if (!selectedCards.some(c => c.id == card.id)) {
 				selectedCards = [...selectedCards, card];
 				selected = true;
+				selectedCopies[card.id] = 1;
 			}
 		} else {
 			selectedCards = selectedCards.filter(c => c.id != card.id);
 			selected = false;
+			selectedCopies[card.id] = 1;
 		}
 	}
 
 	function updateCheckbox(selectedCards: CardGet[]) {
 		if (selected && !selectedCards.includes(card) || !selected && selectedCards.includes(card)) {
 			selected = !selected;
+			selectedCopies[card.id] = 1;
 		}
 	}
 
