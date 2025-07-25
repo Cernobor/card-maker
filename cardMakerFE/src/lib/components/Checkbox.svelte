@@ -2,6 +2,7 @@
 	export let checked: boolean = false;
 	export let disabled: boolean = false;
 	export let onChange: (checked: boolean) => void = () => {};
+	export let id: string | undefined = undefined
 
 	function handleChange(event: Event) {
 		const input = event.target as HTMLInputElement;
@@ -16,6 +17,7 @@
 		checked={checked}
 		disabled={disabled}
 		on:change={handleChange}
+		{id}
 	/>
 	<span class="custom-checkbox-ui" aria-hidden="true"></span>
 </label>
