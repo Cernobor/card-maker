@@ -12,16 +12,24 @@
 	export let cardId: number | null = null;
 	export let cardTypes: CardType[];
 
-	export function downloadCard() {
+	export function save(download: boolean, format?: string) {
+		if (download) {
+			downloadCard(format);
+		}
+		sentCardToAPI();
+	}
+
+	export function downloadCard(format?: string) {
 		/**
 		 * Download card as png image.
 		 */
-		let capture = document.querySelector('#capture')!;
-		let scale = 12;
+		const capture = document.querySelector('#capture') as HTMLElement;
+		const scale = 12;
 		html2canvas(capture, {
 			onclone: (doc) => {
 				console.log(doc);
-				doc.querySelector('#capture')!.style.transform = `scale(${scale})`;
+				const newCapture = doc.querySelector('#capture') as HTMLElement;
+				newCapture.style.transform = `scale(${scale})`;
 			},
 		}).then((canvas) => {
 
@@ -32,7 +40,6 @@
 			document.body.appendChild(a);
 			a.click();
 		});
-		sentCardToAPI();
 	}
 
 	export async function sentCardToAPI() {

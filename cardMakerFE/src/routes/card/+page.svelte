@@ -3,6 +3,7 @@
 	import CardForm from '$lib/components/CardForm.svelte';
 	import { api } from '$lib/stores/store';
 	import type { CardCreate, CardType } from '$lib/interfaces';
+	import DropdownButton from '$lib/components/DropdownButton.svelte';
 
 	let cardComponent;
 	let cardTypes: CardType[];
@@ -48,8 +49,9 @@
 				</p>
 			{/if}
 			<Card bind:card bind:this={cardComponent} bind:cardTypes />
-			<button on:click={cardComponent.downloadCard}>Uložit a stáhnout</button>
-			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Uložit</button>
+			{#if cardComponent}
+				<DropdownButton onSave={cardComponent.save} />
+			{/if}
 		</div>
 	{/await}
 </div>
