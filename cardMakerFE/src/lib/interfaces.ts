@@ -144,3 +144,5 @@ export const cardTypeClass = {
 
 export type CardTypeKey = keyof typeof cardTypeClass;
 export type CardTypeClass = (typeof cardTypeClass)[CardTypeKey];
+
+export type Format = undefined | "pdf" | "png";

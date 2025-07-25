@@ -33,7 +33,7 @@
 			if (currentCardType.name == 'Lokace') {
 				card.size = 'medium';
 			} else {
-				card.size = undefined;
+				card.size = null;
 			}
 		}
 	}
@@ -60,8 +60,9 @@
 		}
 	});
 
-	function handleSizeChange(event) {
-		card.size = event.target.value;
+	function handleSizeChange(event: Event) {
+		const input = event.currentTarget as HTMLInputElement;
+		card.size = input.value;
 	}
 </script>
 
@@ -82,9 +83,9 @@
 		</select>
 
 		{#if currentCardType.name == 'Lokace'}
-			<label>Velikost karty:</label>
+			<label for="sizes">Velikost karty:</label>
 
-			<div class="sizes">
+			<div class="sizes" id="sizes">
 				<label>
 					<input
 						checked={card.size === 'small'}

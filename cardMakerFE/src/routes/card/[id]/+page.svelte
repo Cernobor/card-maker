@@ -1,17 +1,20 @@
 <script lang="ts">
+	import { openModal } from 'svelte-modals'
+	import CardDeleteModal from '$lib/components/CardDeleteModal.svelte';
 	import { api } from '$lib/stores/store';
 	/** @type {import('./$types').PageData} */
 	import Card from '$lib/components/Card.svelte';
 	import CardForm from '$lib/components/CardForm.svelte';
 	import type { CardCreate, CardType, Mode } from '$lib/interfaces';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+	import DropdownButton from '$lib/components/DropdownButton.svelte';
 
 	export let data: { cardId: number };
 
 	let mode: Mode = 'update';
 	let cardTypes: CardType[];
 	let card: CardCreate;
-	let cardComponent;
+	let cardComponent: Card;
 
 	async function loadCard() {
 		/**
@@ -24,11 +27,6 @@
 		}
 		card = { ...cardData };
 	}
-
-
-	import { openModal } from 'svelte-modals'
-	import CardDeleteModal from '$lib/components/CardDeleteModal.svelte';
-
 </script>
 
 <div class="cardmaker-body">
@@ -51,8 +49,9 @@
 				bind:cardTypes
 				bind:cardId={data.cardId}
 			/>
-			<button on:click={cardComponent.downloadCard}>Uložit změny a stáhnout</button>
-			<button on:click={cardComponent.sentCardToAPI} disabled={!$api.loggedIn}>Uložit změny</button>
+			{#if cardComponent}
+				<DropdownButton onSave={cardComponent.save}/>
+			{/if}
 			<button  on:click={() => {openModal(CardDeleteModal, {cardName: card.name, cardId : data.cardId})}}>Smazat kartu</button>
 		</div>
 	{:catch}
