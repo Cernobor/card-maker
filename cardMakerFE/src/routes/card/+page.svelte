@@ -5,7 +5,7 @@
 	import type { CardCreate, CardType } from '$lib/interfaces';
 	import DropdownButton from '$lib/components/DropdownButton.svelte';
 
-	let cardComponent;
+	let cardComponent: Card;
 	let cardTypes: CardType[];
 	let card: CardCreate;
 	let currentUserId: number | null = null;
@@ -50,7 +50,7 @@
 			{/if}
 			<Card bind:card bind:this={cardComponent} bind:cardTypes />
 			{#if cardComponent}
-				<DropdownButton onSave={cardComponent.save} />
+		<DropdownButton onSave={(...args) => cardComponent.save(...args)} />
 			{/if}
 		</div>
 	{/await}

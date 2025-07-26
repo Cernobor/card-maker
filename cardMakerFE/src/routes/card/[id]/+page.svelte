@@ -50,7 +50,7 @@
 				bind:cardId={data.cardId}
 			/>
 			{#if cardComponent}
-				<DropdownButton onSave={cardComponent.save} />
+				<DropdownButton onSave={(...args) => cardComponent.save(...args)} />
 			{/if}
 			<button
 				on:click={() => {

@@ -6,6 +6,7 @@
 	import type { CardCreate, CardGet, Mode } from '$lib/interfaces';
 	import { cardTypeClass } from '$lib/interfaces';
 	import type { CardTypeKey, CardTypeClass, CardType } from '$lib/interfaces';
+	import jsPDF from 'jspdf';
 
 	export let mode: Mode = 'create';
 	export let card: CardCreate | CardGet;
@@ -19,26 +20,70 @@
 		sentCardToAPI();
 	}
 
-	export function downloadCard(format?: string, copies?: number) {
-		/**
-		 * Download card as png image.
-		 */
+	async function generateCardPng(): Promise<string> {
 		const capture = document.querySelector('#capture') as HTMLElement;
 		const scale = 12;
-		html2canvas(capture, {
+		const canvas = await html2canvas(capture, {
+			useCORS: true,
 			onclone: (doc) => {
-				console.log(doc);
 				const newCapture = doc.querySelector('#capture') as HTMLElement;
 				newCapture.style.transform = `scale(${scale})`;
 			}
-		}).then((canvas) => {
-			let a = document.createElement('a');
-			a.href = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'); // here is the most important part because if you dont replace you will get a DOM 18 exception.
-			a.download = slugify(card.name) + '-card.png';
-
-			document.body.appendChild(a);
-			a.click();
 		});
+		return canvas.toDataURL('image/png');
+	}
+
+	function createPdfFromImage(imgData: string, copies: number): void {
+		const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
+		const pageWidth = 297;
+		const pageHeight = 210;
+		const margin = 5;
+
+		const capture = document.querySelector('#capture') as HTMLElement;
+		const PX_TO_MM = 25.4 / 96;
+		const width = capture.offsetWidth * PX_TO_MM;
+		const height = capture.offsetHeight * PX_TO_MM;
+
+		let x = margin;
+		let y = margin;
+		let rowHeight = 0;
+
+		for (let copy = 0; copy < copies; copy++) {
+			if (x + width + margin > pageWidth) {
+				x = margin;
+				y += rowHeight + margin;
+				rowHeight = 0;
+			}
+
+			if (y + height + margin > pageHeight) {
+				pdf.addPage();
+				x = margin;
+				y = margin;
+				rowHeight = 0;
+			}
+
+			pdf.addImage(imgData, 'PNG', x, y, width, height);
+			x += width + margin;
+			if (height > rowHeight) rowHeight = height;
+		}
+
+		pdf.save(slugify(card.name) + '-card.pdf');
+	}
+
+	export async function downloadCard(format?: string, copies: number = 1) {
+		const imgData = await generateCardPng();
+
+		if (format === 'pdf') {
+			createPdfFromImage(imgData, copies);
+			return;
+		}
+
+		const a = document.createElement('a');
+		a.href = imgData.replace('image/png', 'image/octet-stream'); // prevent DOM 18 error
+		a.download = slugify(card.name) + '-card.png';
+		document.body.appendChild(a);
+		a.click();
+		a.remove();
 	}
 
 	export async function sentCardToAPI() {
