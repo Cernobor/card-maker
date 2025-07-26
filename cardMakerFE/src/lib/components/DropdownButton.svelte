@@ -13,6 +13,7 @@
 	let download: boolean;
 	let format: Format;
     let buttonText: string;
+    let copies: number;
 
     let container: HTMLDivElement;
 
@@ -43,6 +44,7 @@
         download = false;
         format = undefined;
         buttonText = justSaveText;
+        copies = 0;
         hideMenu();
     }
 
@@ -50,6 +52,7 @@
         download = true;
         format = "pdf";
         buttonText = downloadPdfText;
+        copies = 1;
         hideMenu();
     }
 
@@ -57,7 +60,13 @@
         download = true;
         format = "png";
         buttonText = downloadPngText;
+        copies = 0;
         hideMenu();
+    }
+
+    function setCopies(event: Event) {
+        const input = event.currentTarget as HTMLInputElement;
+        copies = Number(input.value);
     }
 </script>
 
@@ -68,13 +77,19 @@
             {showMenu ? "▲" :"▼"}
         </button>
     </div>
+    {#if format === "pdf"}
+    <span class="number-of-copies-wrapper">
+        <label for="number-of-copies">Počet kopií karty:</label>
+        <input type="number" id="number-of-copies" min="1" value={copies} on:change={(e) => setCopies(e)} />
+    </span>
+    {/if}
     {#if showMenu}
-    <div class="dropdown">
-        <button on:click={selectJustSave}>{justSaveText}</button>
-        <button on:click={selectDownloadPdf}>{downloadPdfText}</button>
-        <button on:click={selectDownloadPng}>{downloadPngText}</button>
-    </div>
-{/if}
+        <div class="dropdown">
+            <button on:click={selectJustSave}>{justSaveText}</button>
+            <button on:click={selectDownloadPdf}>{downloadPdfText}</button>
+            <button on:click={selectDownloadPng}>{downloadPngText}</button>
+        </div>
+    {/if}
 </div>
 
 <style>
@@ -125,6 +140,27 @@
 
     .dropdown button:hover {
         color: #00adb5;
+    }
+
+    .number-of-copies-wrapper {
+        display: inline-block;
+        padding-top: 10px;
+        padding-left: 10px;
+        color: white;
+    }
+
+    #number-of-copies {
+        width: 38px;
+        font-size: 0.9em;
+        padding: 3px 4px;
+        border-radius: 5px;
+        text-align: center;
+        background-color: #222831;
+        color: #00adb5;
+        border: 1px solid #00adb5;
+        outline: none;
+        flex-shrink: 0;
+        appearance: textfield;
     }
 </style>
 
