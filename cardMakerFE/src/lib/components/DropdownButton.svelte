@@ -2,7 +2,7 @@
 	import type { Format } from '$lib/interfaces';
 	import { onMount, onDestroy } from 'svelte';
 
-	export let onSave: (download: boolean, format?: string) => void;
+	export let onSave: (download: boolean, format?: string, copies?: number) => void;
 
 	let showMenu = false;
 
@@ -72,7 +72,7 @@
 
 <div bind:this={container}>
 	<div class="button-group">
-		<button class="main-button" on:click={() => onSave(download, format)}>{buttonText}</button>
+		<button class="main-button" on:click={() => onSave(download, format, copies)}>{buttonText}</button>
 		<button class="arrow-button" on:click={toggleMenu}>
 			{showMenu ? '▲' : '▼'}
 		</button>
