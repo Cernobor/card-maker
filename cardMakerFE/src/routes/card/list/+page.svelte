@@ -236,7 +236,6 @@
 		
 	</div>
 
-<!-- Skrytý render karet pro PDF export -->
 <div class="card-pdf-render" aria-hidden="true">
 	{#each selectedCards as card}
 	<span id={"card-" + card.id} >
@@ -264,7 +263,6 @@
 </div>
 
 <style>
-/* === TABLE HEADER STYLING === */
 .card-list-table th {
 	padding: 8px 12px;
 }
@@ -278,7 +276,6 @@
 	box-sizing: border-box;
 }
 
-/* === ACTION BAR BELOW FILTERS === */
 .card-table-actions {
 	display: flex;
 	justify-content: space-evenly;
@@ -307,7 +304,6 @@
 	background-color: #31363f;
 }
 
-/* === PDF RENDER ZONE (HIDDEN) === */
 .card-pdf-render {
 	color: black;
 	position: absolute;
@@ -319,7 +315,6 @@
 	height: 0;
 }
 
-/* === SPINNER === */
 .spinner-overlay {
 	position: fixed;
 	top: 0;
