@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { openModal } from 'svelte-modals'
+	import { openModal } from 'svelte-modals';
 	import CardDeleteModal from '$lib/components/CardDeleteModal.svelte';
 	import { api } from '$lib/stores/store';
 	/** @type {import('./$types').PageData} */
@@ -50,14 +50,17 @@
 				bind:cardId={data.cardId}
 			/>
 			{#if cardComponent}
-				<DropdownButton onSave={cardComponent.save}/>
+				<DropdownButton onSave={cardComponent.save} />
 			{/if}
-			<button  on:click={() => {openModal(CardDeleteModal, {cardName: card.name, cardId : data.cardId})}}>Smazat kartu</button>
+			<button
+				on:click={() => {
+					openModal(CardDeleteModal, { cardName: card.name, cardId: data.cardId });
+				}}>Smazat kartu</button
+			>
 		</div>
 	{:catch}
 		<ErrorMessage errorMessage="Karta s id {data.cardId} neexistuje" />
 	{/await}
-	
 </div>
 
 <style>

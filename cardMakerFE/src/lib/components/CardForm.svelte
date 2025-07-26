@@ -135,7 +135,7 @@
 
 		{#if currentCardType.name == 'Magický předmět'}
 			<label for="in_set">V setu:</label>
-			<Checkbox checked={card.in_set} onChange={(checked) => card.in_set = checked} id="in_set" />
+			<Checkbox checked={card.in_set} onChange={(checked) => (card.in_set = checked)} id="in_set" />
 			{#if card.in_set}
 				<label for="set_name">Jméno setu:</label>
 				<input type="text" bind:value={card.set_name} id="set_name" />
@@ -144,7 +144,11 @@
 
 		{#if currentCardType.name == 'Volný aspekt'}
 			<label for="aspectFamily">V rodině apektů:</label>
-			<Checkbox checked={card.in_set} onChange={(checked) => card.in_set = checked} id="aspectFamily" />
+			<Checkbox
+				checked={card.in_set}
+				onChange={(checked) => (card.in_set = checked)}
+				id="aspectFamily"
+			/>
 			{#if card.in_set}
 				<label for="aspectFamilyName">Jméno rodiny aspektů:</label>
 				<input type="text" bind:value={card.set_name} id="aspectFamilyName" />

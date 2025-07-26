@@ -98,59 +98,62 @@
 	let isBusy: boolean = false;
 	let selectedCopies: Record<number, number> = {};
 
-	async function createPdf(cards: CardGet[], selectedCopies: Record<number, number>): Promise<jsPDF> {
-	isBusy = true;
-	await tick();
+	async function createPdf(
+		cards: CardGet[],
+		selectedCopies: Record<number, number>
+	): Promise<jsPDF> {
+		isBusy = true;
+		await tick();
 
-	const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
-	const pageWidth = 297;
-	const pageHeight = 210;
-	const margin = 5;
+		const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
+		const pageWidth = 297;
+		const pageHeight = 210;
+		const margin = 5;
 
-	let x = margin;
-	let y = margin;
-	let rowHeight = 0;
+		let x = margin;
+		let y = margin;
+		let rowHeight = 0;
 
-	for (const card of cards) {
-		const copies = selectedCopies[card.id] ?? 1;
+		for (const card of cards) {
+			const copies = selectedCopies[card.id] ?? 1;
 
-		for (let copy = 0; copy < copies; copy++) {
-			const el = document.getElementById(`card-${card.id}`);
-			if (!el) {
-				console.warn(`Element card-${card.id} not found`);
-				continue;
+			for (let copy = 0; copy < copies; copy++) {
+				const el = document.getElementById(`card-${card.id}`);
+				if (!el) {
+					console.warn(`Element card-${card.id} not found`);
+					continue;
+				}
+
+				const canvas = await html2canvas(el, { scale: 4, useCORS: true });
+				const imgData = canvas.toDataURL('image/png');
+
+				const PX_TO_MM = 25.4 / 96;
+				const width = el.offsetWidth * PX_TO_MM;
+				const height = el.offsetHeight * PX_TO_MM;
+
+				if (x + width + margin > pageWidth) {
+					x = margin;
+					y += rowHeight + margin;
+					rowHeight = 0;
+				}
+
+				if (y + height + margin > pageHeight) {
+					pdf.addPage();
+					x = margin;
+					y = margin;
+					rowHeight = 0;
+				}
+
+				pdf.addImage(imgData, 'PNG', x, y, width, height);
+
+				x += width + margin;
+				if (height > rowHeight) rowHeight = height;
 			}
-
-			const canvas = await html2canvas(el, { scale: 4, useCORS: true });
-			const imgData = canvas.toDataURL('image/png');
-
-			const PX_TO_MM = 25.4 / 96;
-			const width = el.offsetWidth * PX_TO_MM;
-			const height = el.offsetHeight * PX_TO_MM;
-
-			if (x + width + margin > pageWidth) {
-				x = margin;
-				y += rowHeight + margin;
-				rowHeight = 0;
-			}
-
-			if (y + height + margin > pageHeight) {
-				pdf.addPage();
-				x = margin;
-				y = margin;
-				rowHeight = 0;
-			}
-
-			pdf.addImage(imgData, 'PNG', x, y, width, height);
-
-			x += width + margin;
-			if (height > rowHeight) rowHeight = height;
 		}
-	}
 
-	isBusy = false;
-	return pdf;
-}
+		isBusy = false;
+		return pdf;
+	}
 
 	let showPdfModal = false;
 	let pdfBlobUrl: string | null = null;
@@ -159,7 +162,7 @@
 
 	async function showPreview() {
 		const pdf = await createPdf(selectedCards, selectedCopies);
-		const blob =  pdf.output("blob");
+		const blob = pdf.output('blob');
 		pdfBlobUrl = URL.createObjectURL(blob);
 		previewButton?.blur();
 		showPdfModal = true;
@@ -169,7 +172,7 @@
 		if (!pdf) {
 			pdf = await createPdf(selectedCards, selectedCopies);
 		}
-		pdf.save("cards.pdf")
+		pdf.save('cards.pdf');
 		selectedCards = [];
 		checkedAll = false;
 	}
@@ -182,176 +185,171 @@
 		<FilterLabels bind:activeTags options={tags} />
 	</div>
 
-	<div class={`card-table-actions ${selectedCards.length > 0 ? "actions-active" : ""}`}>
+	<div class={`card-table-actions ${selectedCards.length > 0 ? 'actions-active' : ''}`}>
 		<span>
 			{selectedCards.length === 0
-			  ? "Žádná karta nevybrána"
-			  : `${selectedCards.length} ${
-				  selectedCards.length === 1
-					? "karta vybrána"
-					: selectedCards.length >= 2 && selectedCards.length <= 4
-					? "karty vybrány"
-					: "karet vybráno"
-				}`}
-		  </span>		  
-		<button on:click={showPreview} bind:this={previewButton} disabled={selectedCards.length === 0}>👁️ Náhled</button>
-		<button on:click={() => downloadCards()} disabled={selectedCards.length === 0}>⬇️ Stáhnout vybrané</button>
-		<button on:click={() => {
-			selectedCards = [];
-			checkedAll = false;
-		}}
-		disabled={selectedCards.length === 0}
-		>❌ Zrušit výběr</button>
+				? 'Žádná karta nevybrána'
+				: `${selectedCards.length} ${
+						selectedCards.length === 1
+							? 'karta vybrána'
+							: selectedCards.length >= 2 && selectedCards.length <= 4
+								? 'karty vybrány'
+								: 'karet vybráno'
+					}`}
+		</span>
+		<button on:click={showPreview} bind:this={previewButton} disabled={selectedCards.length === 0}
+			>👁️ Náhled</button
+		>
+		<button on:click={() => downloadCards()} disabled={selectedCards.length === 0}
+			>⬇️ Stáhnout vybrané</button
+		>
+		<button
+			on:click={() => {
+				selectedCards = [];
+				checkedAll = false;
+			}}
+			disabled={selectedCards.length === 0}>❌ Zrušit výběr</button
+		>
 	</div>
 
 	<div class="card-list-table">
 		<table>
 			<tr>
 				<th class="checkbox-column">
-					<Checkbox
-						checked={checkedAll}
-						onChange={handleCheckboxChange}
-					/>
+					<Checkbox checked={checkedAll} onChange={handleCheckboxChange} />
 				</th>
 				<th>Karta</th>
 				<th>Autor</th>
 				<th>Typ</th>
 			</tr>
 			{#await getResources()}
-			
 				<h1 style="text-align:center">loading...</h1>
 			{:then}
-
 				{#each filteredCards as card}
 					<TableRow {card} {users} {types} bind:selectedCards bind:selectedCopies />
 				{/each}
 				{#if filteredCards.length === 0}
-				<tr>
-					<td colspan="4">
-						<h1 style="text-align:center">Žádné karty nenalezeny</h1>
-					</td>
-				</tr>
-			   {/if}
+					<tr>
+						<td colspan="4">
+							<h1 style="text-align:center">Žádné karty nenalezeny</h1>
+						</td>
+					</tr>
+				{/if}
 			{/await}
-		
+		</table>
 	</div>
 
-<div class="card-pdf-render" aria-hidden="true">
-	{#each selectedCards as card}
-	<span id={"card-" + card.id} >
-		<Card
-			card={card}
-			cardTypes={types}
-			mode="preview"
-		/>
-	</span>
-	{/each}
-</div>
-
-{#if isBusy}
-	<div class="spinner-overlay">
-		<div class="lds-dual-ring"></div>
+	<div class="card-pdf-render" aria-hidden="true">
+		{#each selectedCards as card}
+			<span id={'card-' + card.id}>
+				<Card {card} cardTypes={types} mode="preview" />
+			</span>
+		{/each}
 	</div>
-{/if}
 
-<PdfPreviewModal
-	open={showPdfModal}
-	blobUrl={pdfBlobUrl}
-	onClose={() => showPdfModal = false}
-/>
+	{#if isBusy}
+		<div class="spinner-overlay">
+			<div class="lds-dual-ring"></div>
+		</div>
+	{/if}
 
+	<PdfPreviewModal
+		open={showPdfModal}
+		blobUrl={pdfBlobUrl}
+		onClose={() => (showPdfModal = false)}
+	/>
 </div>
 
 <style>
-.card-list-table th {
-	padding: 8px 12px;
-}
-
-.card-list-table th:first-child {
-	width: 80px;
-	min-width: 80px;
-	max-width: 80px;
-	text-align: left;
-	padding-left: 15px;
-	box-sizing: border-box;
-}
-
-.card-table-actions {
-	display: flex;
-	justify-content: space-evenly;
-	align-items: center;
-	margin-top: 10px;
-	background-color: #222831;
-	padding: 10px;
-	opacity: 0.5;
-	transition: opacity 0.5s ease;
-}
-
-.actions-active {
-	opacity: 1;
-}
-
-.card-table-actions button {
-	cursor: not-allowed;
-	transition: background-color 0.2s ease;
-}
-
-.actions-active button {
-	cursor: pointer;
-}
-
-.card-table-actions button:hover {
-	background-color: #31363f;
-}
-
-.card-pdf-render {
-	color: black;
-	position: absolute;
-	top: -9999px;
-	left: 0;
-	opacity: 0;
-	pointer-events: none;
-	width: 0;
-	height: 0;
-}
-
-.spinner-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background: rgba(0, 0, 0, 0.5);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 9999;
-}
-
-.lds-dual-ring {
-	display: inline-block;
-	width: 80px;
-	height: 80px;
-}
-
-.lds-dual-ring:after {
-	content: " ";
-	display: block;
-	width: 64px;
-	height: 64px;
-	margin: 8px;
-	border-radius: 50%;
-	border: 6px solid #00adb5;
-	border-color: #00adb5 transparent #00adb5 transparent;
-	animation: lds-dual-ring 1.2s linear infinite;
-}
-
-@keyframes lds-dual-ring {
-	0% {
-		transform: rotate(0deg);
+	.card-list-table th {
+		padding: 8px 12px;
 	}
-	100% {
-		transform: rotate(360deg);
+
+	.card-list-table th:first-child {
+		width: 80px;
+		min-width: 80px;
+		max-width: 80px;
+		text-align: left;
+		padding-left: 15px;
+		box-sizing: border-box;
 	}
-}
+
+	.card-table-actions {
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+		margin-top: 10px;
+		background-color: #222831;
+		padding: 10px;
+		opacity: 0.5;
+		transition: opacity 0.5s ease;
+	}
+
+	.actions-active {
+		opacity: 1;
+	}
+
+	.card-table-actions button {
+		cursor: not-allowed;
+		transition: background-color 0.2s ease;
+	}
+
+	.actions-active button {
+		cursor: pointer;
+	}
+
+	.card-table-actions button:hover {
+		background-color: #31363f;
+	}
+
+	.card-pdf-render {
+		color: black;
+		position: absolute;
+		top: -9999px;
+		left: 0;
+		opacity: 0;
+		pointer-events: none;
+		width: 0;
+		height: 0;
+	}
+
+	.spinner-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 9999;
+	}
+
+	.lds-dual-ring {
+		display: inline-block;
+		width: 80px;
+		height: 80px;
+	}
+
+	.lds-dual-ring:after {
+		content: ' ';
+		display: block;
+		width: 64px;
+		height: 64px;
+		margin: 8px;
+		border-radius: 50%;
+		border: 6px solid #00adb5;
+		border-color: #00adb5 transparent #00adb5 transparent;
+		animation: lds-dual-ring 1.2s linear infinite;
+	}
+
+	@keyframes lds-dual-ring {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
 </style>

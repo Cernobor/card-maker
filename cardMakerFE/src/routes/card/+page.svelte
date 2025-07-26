@@ -30,7 +30,7 @@
 			in_set: false,
 			set_name: '',
 			tags: [],
-			size: null,
+			size: null
 		};
 	}
 </script>
