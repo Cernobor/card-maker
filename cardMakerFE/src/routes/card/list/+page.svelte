@@ -155,10 +155,13 @@
 	let showPdfModal = false;
 	let pdfBlobUrl: string | null = null;
 
+	let previewButton: HTMLButtonElement;
+
 	async function showPreview() {
 		const pdf = await createPdf(selectedCards, selectedCopies);
 		const blob =  pdf.output("blob");
 		pdfBlobUrl = URL.createObjectURL(blob);
+		previewButton?.blur();
 		showPdfModal = true;
 	}
 
@@ -191,7 +194,7 @@
 					: "karet vybráno"
 				}`}
 		  </span>		  
-		<button on:click={showPreview} disabled={selectedCards.length === 0}>👁️ Náhled</button>
+		<button on:click={showPreview} bind:this={previewButton} disabled={selectedCards.length === 0}>👁️ Náhled</button>
 		<button on:click={() => downloadCards()} disabled={selectedCards.length === 0}>⬇️ Stáhnout vybrané</button>
 		<button on:click={() => {
 			selectedCards = [];
