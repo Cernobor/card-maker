@@ -12,14 +12,14 @@
 	export let cardId: number | null = null;
 	export let cardTypes: CardType[];
 
-	export function save(download: boolean, format?: string) {
+	export function save(download: boolean, format?: string, copies?: number) {
 		if (download) {
-			downloadCard(format);
+			downloadCard(format, copies);
 		}
 		sentCardToAPI();
 	}
 
-	export function downloadCard(format?: string) {
+	export function downloadCard(format?: string, copies?: number) {
 		/**
 		 * Download card as png image.
 		 */
