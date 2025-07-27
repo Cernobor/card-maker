@@ -8,21 +8,24 @@
 	import { cardTypeClass, Color } from '$lib/interfaces';
 	import type { CardTypeKey, CardTypeClass, CardType } from '$lib/interfaces';
 	import jsPDF from 'jspdf';
+	import { tick } from 'svelte';
 
 	export let mode: Mode = 'create';
 	export let card: CardCreate | CardGet;
 	export let cardId: number | null = null;
 	export let cardTypes: CardType[];
 
-	export let message: string = "";
+	export let message: string = '';
 	export let messageColor: ColorType = Color.green;
 	export let popUpDisplayed: boolean = false;
 
-	export function save(download: boolean, format?: string, copies?: number) {
+	export async function save(download: boolean, format?: string, copies?: number) {
+		popUpDisplayed = false;
+		await tick();
 		if (download) {
-			downloadCard(format, copies);
+			await downloadCard(format, copies);
 		}
-		sentCardToAPI();
+		await sentCardToAPI();
 	}
 
 	async function generateCardPng(): Promise<string> {
@@ -95,12 +98,20 @@
 		message = 'Karta byla úspěšně vytvořena.';
 		messageColor = Color.green;
 		popUpDisplayed = true;
+
+		setTimeout(() => {
+			popUpDisplayed = false;
+		}, 4000);
 	}
 
 	function setFailPopUp() {
 		message = 'Oops, kartu se nepodařilo uložit.';
 		messageColor = Color.red;
 		popUpDisplayed = true;
+
+		setTimeout(() => {
+			popUpDisplayed = false;
+		}, 4000);
 	}
 
 	export async function sentCardToAPI() {

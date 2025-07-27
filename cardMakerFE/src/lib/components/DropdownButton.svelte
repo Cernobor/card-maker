@@ -15,6 +15,8 @@
 	let buttonText: string;
 	let copies: number;
 
+	let isBusy = false;
+
 	let container: HTMLDivElement;
 
 	function handleClickOutside(event: MouseEvent) {
@@ -68,11 +70,20 @@
 		const input = event.currentTarget as HTMLInputElement;
 		copies = Number(input.value);
 	}
+
+	async function handleSave() {
+		isBusy = true;
+		try {
+			await onSave(download, format, copies);
+		} finally {
+			isBusy = false;
+		}
+	}
 </script>
 
 <div bind:this={container}>
 	<div class="button-group">
-		<button class="main-button" on:click={() => onSave(download, format, copies)}>{buttonText}</button>
+		<button class="main-button" on:click={handleSave}>{buttonText}</button>
 		<button class="arrow-button" on:click={toggleMenu}>
 			{showMenu ? '▲' : '▼'}
 		</button>
@@ -94,6 +105,11 @@
 			<button on:click={selectJustSave}>{justSaveText}</button>
 			<button on:click={selectDownloadPdf}>{downloadPdfText}</button>
 			<button on:click={selectDownloadPng}>{downloadPngText}</button>
+		</div>
+	{/if}
+	{#if isBusy}
+		<div class="spinner-overlay">
+			<div class="lds-dual-ring"></div>
 		</div>
 	{/if}
 </div>
@@ -169,5 +185,45 @@
 		outline: none;
 		flex-shrink: 0;
 		appearance: textfield;
+	}
+
+	.spinner-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 9999;
+	}
+
+	.lds-dual-ring {
+		display: inline-block;
+		width: 80px;
+		height: 80px;
+	}
+
+	.lds-dual-ring:after {
+		content: ' ';
+		display: block;
+		width: 64px;
+		height: 64px;
+		margin: 8px;
+		border-radius: 50%;
+		border: 6px solid #00adb5;
+		border-color: #00adb5 transparent #00adb5 transparent;
+		animation: lds-dual-ring 1.2s linear infinite;
+	}
+
+	@keyframes lds-dual-ring {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
 	}
 </style>
