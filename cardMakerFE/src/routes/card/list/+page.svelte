@@ -1,15 +1,24 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import html2canvas from 'html2canvas';
 	import jsPDF from 'jspdf';
+	import { fade } from 'svelte/transition';
 	import FilterDropdown from '$lib/components/FilterDropdown.svelte';
 	import TableRow from '$lib/components/TableRow.svelte';
-	import type { CardGet, UserPublic, CardType, Tag } from '$lib/interfaces';
+	import {
+		type CardGet,
+		type UserPublic,
+		type CardType,
+		type Tag,
+		type ColorType,
+		Color
+	} from '$lib/interfaces';
 	import FilterLabels from '$lib/components/FilterLabels.svelte';
 	import { api } from '$lib/stores/store';
 	import Card from '$lib/components/Card.svelte';
 	import Checkbox from '$lib/components/Checkbox.svelte';
 	import PdfPreviewModal from '$lib/components/PdfPreviewModal.svelte';
+	import PopUpMessage from '$lib/components/PopUpMessage.svelte';
 
 	function getFilteredCards(
 		allCards: CardGet[] | [],
@@ -78,10 +87,40 @@
 	let filteredCards: CardGet[] = allCards;
 	$: filteredCards = getFilteredCards(allCards, selectedAuthor, selectedType, activeTags);
 
-	let selectedCards: CardGet[] = [];
-	$: selectedCards = selectedCards.filter((card: CardGet) => {
-		return filteredCards.includes(card);
+	let popUpMessage: string = 'Karta byla úspěšně vytvořena.';
+	let popUpColor: ColorType = Color.green;
+	let popUpDisplayed: boolean = false;
+	export let data: { cardCreated: boolean };
+
+	onMount(() => {
+		if (data.cardCreated) {
+			popUpDisplayed = true;
+			popUpColor = Color.green;
+			popUpMessage = 'Karta byla úspěšně vytvořena.';
+		}
 	});
+
+	let selectedCards: CardGet[] = [];
+
+	function handleSelectedCardsChange() {
+		const previousCount = selectedCards.length;
+		const updatedSelectedCards = selectedCards.filter((card: CardGet) =>
+			filteredCards.includes(card)
+		);
+		const removedCount = previousCount - updatedSelectedCards.length;
+
+		if (removedCount > 0) {
+			popUpDisplayed = true;
+			popUpColor = Color.blue;
+			popUpMessage = `${removedCount} ${removedCount === 1 ? 'karta byla' : 'karet bylo'} odstraněno z výběru kvůli filtru.`;
+		}
+
+		selectedCards = updatedSelectedCards;
+	}
+
+	$: if (filteredCards || selectedCards) {
+		handleSelectedCardsChange();
+	}
 
 	let checkedAll = false;
 
@@ -179,6 +218,11 @@
 </script>
 
 <div class="card-list-body">
+	{#if popUpDisplayed}
+		<div class="pop-up-wrapper" in:fade={{ duration: 300 }} out:fade={{ duration: 200 }}>
+			<PopUpMessage message={popUpMessage} color={popUpColor} bind:isDisplayed={popUpDisplayed} />
+		</div>
+	{/if}
 	<div class="filters">
 		<FilterDropdown bind:selected={selectedAuthor} filterName="Autor" options={users} />
 		<FilterDropdown bind:selected={selectedType} filterName="Typ karty" options={types} />
@@ -351,5 +395,12 @@
 		100% {
 			transform: rotate(360deg);
 		}
+	}
+
+	.pop-up-wrapper {
+		width: 100vw;
+		justify-content: center;
+		display: flex;
+		margin-top: 15px;
 	}
 </style>
