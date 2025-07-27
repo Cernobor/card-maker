@@ -1,14 +1,20 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import Card from '$lib/components/Card.svelte';
 	import CardForm from '$lib/components/CardForm.svelte';
 	import { api } from '$lib/stores/store';
-	import type { CardCreate, CardType } from '$lib/interfaces';
+	import { type CardCreate, type CardType, type ColorType, Color } from '$lib/interfaces';
 	import DropdownButton from '$lib/components/DropdownButton.svelte';
+	import PopUpMessage from '$lib/components/PopUpMessage.svelte';
 
 	let cardComponent: Card;
 	let cardTypes: CardType[];
 	let card: CardCreate;
 	let currentUserId: number | null = null;
+
+	let popUpDisplayed: boolean = false;
+	let popUpMessage: string = '';
+	let popUpColor: ColorType = Color.green;
 
 	async function load() {
 		/***
@@ -36,6 +42,15 @@
 </script>
 
 <div class="cardmaker-body">
+	{#if popUpDisplayed}
+		<div in:fade={{ duration: 300 }} out:fade={{ duration: 200 }}>
+			<PopUpMessage
+				message={popUpMessage}
+				color={popUpColor}
+				bind:isDisplayed={popUpDisplayed}
+			/>
+		</div>
+	{/if}
 	{#await load()}
 		<h1>loading...</h1>
 	{:then}
@@ -48,7 +63,13 @@
 					Nejsi přihlášený. Pro uložení karty se přihlaš <a href="/login">zde</a>.
 				</p>
 			{/if}
-			<Card bind:card bind:this={cardComponent} bind:cardTypes />
+			<Card
+			bind:card bind:this={cardComponent}
+			bind:cardTypes
+			bind:message={popUpMessage}
+			bind:messageColor={popUpColor}
+			bind:popUpDisplayed={popUpDisplayed}
+			/>
 			{#if cardComponent}
 		<DropdownButton onSave={(...args) => cardComponent.save(...args)} />
 			{/if}

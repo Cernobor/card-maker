@@ -2,9 +2,10 @@
 	import { slugify } from '$lib/slugify';
 	import html2canvas from 'html2canvas';
 	import DOMPurify from 'isomorphic-dompurify';
+	import { goto } from '$app/navigation';
 	import { api } from '$lib/stores/store';
-	import type { CardCreate, CardGet, Mode } from '$lib/interfaces';
-	import { cardTypeClass } from '$lib/interfaces';
+	import type { CardCreate, CardGet, ColorType, Mode } from '$lib/interfaces';
+	import { cardTypeClass, Color } from '$lib/interfaces';
 	import type { CardTypeKey, CardTypeClass, CardType } from '$lib/interfaces';
 	import jsPDF from 'jspdf';
 
@@ -12,6 +13,10 @@
 	export let card: CardCreate | CardGet;
 	export let cardId: number | null = null;
 	export let cardTypes: CardType[];
+
+	export let message: string = "";
+	export let messageColor: ColorType = Color.green;
+	export let popUpDisplayed: boolean = false;
 
 	export function save(download: boolean, format?: string, copies?: number) {
 		if (download) {
@@ -86,6 +91,18 @@
 		a.remove();
 	}
 
+	function setSuccessPopUp() {
+		message = 'Karta byla úspěšně vytvořena.';
+		messageColor = Color.green;
+		popUpDisplayed = true;
+	}
+
+	function setFailPopUp() {
+		message = 'Oops, kartu se nepodařilo uložit.';
+		messageColor = Color.red;
+		popUpDisplayed = true;
+	}
+
 	export async function sentCardToAPI() {
 		/**
 		 * Send POST or PUT request to API.
@@ -93,20 +110,21 @@
 		if (mode == 'create') {
 			try {
 				await $api.createCard(card);
-				alert('Karta byla úspěšně uložena.');
+				setSuccessPopUp();
+				goto('/card/list?created=true');
 			} catch {
-				alert('Oops, kartu se nepodařilo uložit.');
+				setFailPopUp();
 			}
 		} else if (mode == 'update') {
 			if (!cardId) {
-				alert('Oops, kartu se nepodařilo uložit.');
+				setFailPopUp();
 				return;
 			}
 			try {
 				await $api.updateCard(card, cardId);
-				alert('Karta byla úspěšně uložena.');
+				setSuccessPopUp();
 			} catch {
-				alert('Oops, kartu se nepodařilo uložit.');
+				setFailPopUp();
 			}
 		}
 	}

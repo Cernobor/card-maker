@@ -146,3 +146,11 @@ export type CardTypeKey = keyof typeof cardTypeClass;
 export type CardTypeClass = (typeof cardTypeClass)[CardTypeKey];
 
 export type Format = undefined | "pdf" | "png";
+
+export const Color = {
+	"red": "#990000",
+	"green": "#336600",
+	"blue": "#006699"
+} as const;
+
+export type ColorType = (typeof Color)[keyof typeof Color]
