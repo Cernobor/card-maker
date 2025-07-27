@@ -7,8 +7,8 @@
 </script>
 
 <div>
-	<h3 class="filter-title">{filterName}</h3>
-	<select bind:value={selected}>
+	<label for={filterName}>{filterName}</label>
+	<select id={filterName} bind:value={selected}>
 		<option value={null}>Vše</option>
 		{#each options as optionValue}
 			{#if isUserPublic(optionValue)}

@@ -3,7 +3,6 @@
 
 	export let activeTags: Tag[];
 	export let tags: Tag[];
-	export let cssClass: string;
 
 	$: tags = tags.sort((tag1: Tag, tag2: Tag): number => {
 		/**
@@ -45,8 +44,9 @@
 	}
 </script>
 
-<div class="center">
-	<select class={cssClass} on:change={handleAddTag}>
+<div>
+	<label for="tag-dropdown">Tagy</label>
+	<select id="tag-dropdown" on:change={handleAddTag}>
 		<option value="">Tagy</option>
 		{#each tags as tag}
 			<option value={tag.name}>{tag.name}</option>

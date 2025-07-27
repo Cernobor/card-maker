@@ -95,4 +95,8 @@
 		gap: 20px;
 		color: black;
 	}
+
+	.page-buttons {
+
+	}
 </style>
