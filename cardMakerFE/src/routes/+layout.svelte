@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import './styles.css';
 	import { api } from '$lib/stores/store';
 	import { Modals, closeAllModals } from 'svelte-modals';
@@ -11,7 +12,7 @@
 	<h1 class="page-title">
 		Card <img alt="CB logo" src="/images/cb_logo_white.png" width="45px" /> Maker
 	</h1>
-	<nav class="navbar">
+	<!-- <nav class="navbar">
 		<a href="/">Domů</a>
 		<a href="/card">Vytvoř kartu</a>
 		<a href="/card/list">Databáze karet</a>
@@ -20,9 +21,14 @@
 		{:else}
 			<a href="/login">Přihlásit se</a>
 		{/if}
-	</nav>
+	</nav> -->
 </div>
 <div class="content-container">
+	{#if $page.url.pathname !== '/card/list'}
+	<div class="page-buttons">
+		<a href="/card/list">🗂️ Zobrazit seznam karet</a>
+	</div>
+	{/if}
 	<div class="main-content">
 		<slot />
 	</div>

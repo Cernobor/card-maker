@@ -13,12 +13,12 @@
 		type ColorType,
 		Color
 	} from '$lib/interfaces';
-	import FilterLabels from '$lib/components/FilterLabels.svelte';
 	import { api } from '$lib/stores/store';
 	import Card from '$lib/components/Card.svelte';
 	import Checkbox from '$lib/components/Checkbox.svelte';
 	import PdfPreviewModal from '$lib/components/PdfPreviewModal.svelte';
 	import PopUpMessage from '$lib/components/PopUpMessage.svelte';
+	import Filters from '$lib/components/Filters.svelte';
 
 	function getFilteredCards(
 		allCards: CardGet[] | [],
@@ -223,11 +223,15 @@
 			<PopUpMessage message={popUpMessage} color={popUpColor} bind:isDisplayed={popUpDisplayed} />
 		</div>
 	{/if}
-	<div class="filters">
-		<FilterDropdown bind:selected={selectedAuthor} filterName="Autor" options={users} />
-		<FilterDropdown bind:selected={selectedType} filterName="Typ karty" options={types} />
-		<FilterLabels bind:activeTags options={tags} />
-	</div>
+
+	<Filters
+		bind:selectedAuthor
+		bind:selectedType
+		bind:activeTags
+		{users}
+		{types}
+		{tags}
+	/>
 
 	<div class={`card-table-actions ${selectedCards.length > 0 ? 'actions-active' : ''}`}>
 		<span>
@@ -319,15 +323,19 @@
 	}
 
 	.card-table-actions {
-		display: flex;
-		justify-content: space-evenly;
-		align-items: center;
-		margin-top: 10px;
-		background-color: #222831;
-		padding: 10px;
-		opacity: 0.5;
-		transition: opacity 0.5s ease;
-	}
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	margin: 1rem;
+	background-color: #1f232a;
+	padding: 0.75rem 1rem;
+	opacity: 0.5;
+	transition: opacity 0.5s ease;
+	border-radius: 12px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
 
 	.actions-active {
 		opacity: 1;
@@ -403,4 +411,48 @@
 		display: flex;
 		margin-top: 15px;
 	}
+
+	.above-the-table {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: flex-start;
+	background-color: #1f232a;
+	padding: 1.25rem 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+	gap: 1.5rem;
+	margin: 1.5rem 1rem;
+}
+
+.filters-wrapper {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.filters {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: flex-end;
+	gap: 1.25rem;
+	align-items: center;
+	padding-top: 10px;
+}
+
+.filter-heading {
+	grid-column: 1 / -1;
+	margin-bottom: 0.25rem;
+	font-size: 1.3rem;
+	font-weight: 600;
+	color: #eeeeee;
+	border-bottom: 2px solid #00adb5;
+	padding-bottom: 0.2rem;
+}
+
+.page-buttons {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
 </style>
