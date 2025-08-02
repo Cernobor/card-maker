@@ -42,16 +42,56 @@
 	});
 </script>
 
-<div class="tag-selector">
-	<TagLabels bind:activeLabels={card.tags} />
-	<ChangeTagDropdown
+<div class="tag-selector columns">
+	<div class="form-item">
+		<ChangeTagDropdown
 		bind:this={dropdownComponent}
 		bind:activeTags={card.tags}
 		bind:tags
-		cssClass="add-tag"
+		inDetailTab={true}
 	/>
-	<div class="center">
-		<input class="tag-input" type="text" bind:value={newTag} required on:keydown={handleKeydown} />
-		<button class="add-tag" on:click={handleAddNewTag}>Nový tag</button>
+	</div>
+	<div class="form-item">
+		<label for="">Nový tag</label>
+		<input on:change={handleAddNewTag} type="text" bind:value={newTag} required on:keydown={handleKeydown} />
 	</div>
 </div>
+<div class="tag-selector">
+	<TagLabels bind:activeLabels={card.tags} />
+</div>
+
+<style>
+		input {
+		height: 30px;
+		border-radius: 6px;
+	}
+
+	.tag-selector {
+		display: flex;
+		flex-direction: row;
+		margin: 0;
+		padding: 0;
+		max-width: 100%;
+	}
+
+	.columns {
+		display: flex;
+		flex-direction: row;
+		gap: 15px;
+		flex: 1;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.columns .form-item {
+		width: 50%;
+	}
+
+	.form-item {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		margin: 0;
+		gap: 7px;
+	}
+</style>

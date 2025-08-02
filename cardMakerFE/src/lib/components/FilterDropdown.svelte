@@ -19,3 +19,11 @@
 		{/each}
 	</select>
 </div>
+
+<style>
+	select {
+	height: 38px;
+	box-sizing: border-box;
+	padding: 0 5px;
+}
+</style>

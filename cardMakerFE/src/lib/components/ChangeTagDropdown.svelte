@@ -3,6 +3,7 @@
 
 	export let activeTags: Tag[];
 	export let tags: Tag[];
+	export let inDetailTab: boolean = false;
 
 	$: tags = tags.sort((tag1: Tag, tag2: Tag): number => {
 		/**
@@ -44,7 +45,7 @@
 	}
 </script>
 
-<div>
+<div class={inDetailTab ? "select-tags form-item" : ""}>
 	<label for="tag-dropdown">Tagy</label>
 	<select id="tag-dropdown" on:change={handleAddTag}>
 		<option value="">Tagy</option>
@@ -53,3 +54,24 @@
 		{/each}
 	</select>
 </div>
+
+<style>
+	.select-tags {
+		display: flex;
+		flex-direction: column;
+	}
+
+	select {
+	height: 38px; /* or your desired value */
+	box-sizing: border-box;
+	padding: 0 5px; /* control padding so content fits */
+}
+
+.form-item {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		margin: 0;
+		gap: 7px;
+	}
+</style>

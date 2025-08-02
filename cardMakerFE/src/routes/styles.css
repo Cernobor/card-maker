@@ -1,4 +1,4 @@
-/* color schema: https://colorhunt.co/palette/1f232a393e4600adb5eeeeee */
+/* color schema: https://colorhunt.co/palette/161a20393e4600adb5eeeeee */
 @font-face {
 	font-family: 'Inknut Antiqua';
 	src: url('/fonts/Inknut_Antiqua/InknutAntiqua-Regular.ttf') format('truetype');
@@ -22,7 +22,7 @@
 body {
 	margin: 0;
 	padding: 0;
-	background-color: #31363f;
+	background-color: #24282e;
 	font-family: 'Montserrat', sans-serif;
 	font-optical-sizing: auto;
 	font-style: normal;
@@ -34,7 +34,7 @@ h1 {
 }
 
 nav {
-	background-color: #1f232a;
+	background-color: #161a20;
 }
 
 table {
@@ -46,7 +46,7 @@ table {
 }
 
 th {
-	background-color: #1f232a;
+	background-color: #161a20;
 	padding-top: 12px;
 	padding-bottom: 12px;
 	border-bottom: 2px solid #00adb5;
@@ -59,7 +59,7 @@ td {
 }
 
 tr:hover {
-	background-color: #1f232a;
+	background-color: #161a20;
 }
 
 a {
@@ -82,17 +82,18 @@ h3 {
 textarea:focus,
 input:focus,
 select:hover {
-	background-color: #1f232a;
+	background-color: #24282e;
 }
 
 input,
 select,
 textarea {
-	background-color: #31363f;
+	background-color: #161a20;
 	color: #00adb5;
-	border-radius: 10px;
+	border-radius: 6px;
 	border-color: #00adb5;
 	font-size: 16px;
+	border-style: inset;
 }
 
 select {
@@ -104,24 +105,25 @@ select:disabled {
 }
 
 select:disabled:hover {
-	background-color: #31363f;
+	background-color: #161a20;
 }
 
 button,
 .submit-button {
-	background-color: #31363f;
+	background-color: #24282e;
 	color: #eeeeee;
-	border-radius: 20px;
+	border-radius: 8px;
 	border-color: #00adb5;
 	font-size: 16px;
 	font-weight: 600;
 	padding: 10px;
 	border-width: 2px;
+	border-style: inset;
 }
 
 button:hover,
 .submit-button:hover {
-	background-color: #1f232a;
+	background-color: #161a20;
 	cursor: pointer;
 }
 
@@ -131,7 +133,7 @@ button:disabled {
 }
 
 button:disabled:hover {
-	background-color: #31363f;
+	background-color: #24282e;
 }
 
 li {
@@ -144,110 +146,9 @@ ul {
 	margin: 0;
 }
 
-.content-container {
-	margin: 0;
-	margin-top: 8vh;
-	padding: 0;
-	min-height: 85vh;
-}
-
-.main-content {
-	padding: 0;
-	padding-top: 10px;
-}
-
-.header-block {
-	margin: 0;
-	padding: 0;
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	text-align: center;
-	font-family: 'Inknut Antiqua', serif;
-	font-weight: 200;
-	font-style: normal;
-	background-color: #1f232a;
-	height: 8vh;
-	border-bottom: #00adb5 outset;
-}
-
-.page-title {
-	margin-top: 0;
-	font-size: 32px;
-	padding-bottom: 0;
-	margin-bottom: 0;
-}
-
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0px 15%;
-	font-size: 20px;
-	font-weight: 500;
-}
-
-.footer-block {
-	position: relative;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	height: 7vh;
-	background-color: #1f232a;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 14px;
-	color: #eeeeee;
-	text-align: center;
-	margin: 0;
-	border-top: #00adb5 outset;
-}
-
-.footer-text {
-	display: inline-block;
-	vertical-align: middle;
-	font-family: 'Inknut Antiqua', serif;
-	padding: 0;
-}
-
-.home-page {
-	text-align: center;
-	display: flex;
-	flex-direction: row;
-	gap: 50px;
-	margin: 60px 10%;
-	font-size: 18px;
-}
-
-.home-page-item {
-	flex: 1 1 0;
-	padding: 0 50px 50px;
-	border-radius: 25px;
-	border-style: outset;
-	border-color: #00adb5;
-	background-color: #1f232a;
-}
-
-.card-input-form {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 8px;
-}
-
-.inputs {
-	background-color: #1f232a;
-	padding: 50px;
-	border-radius: 25px;
-	border-style: outset;
-	border-color: #00adb5;
-}
-
 .cardmaker-body {
 	display: flex;
 	justify-content: space-evenly;
-	align-items: center;
 	flex-direction: row;
 	flex-wrap: wrap;
 	gap: 20px;
@@ -255,30 +156,19 @@ ul {
 	font-size: 16px;
 }
 
-.card-list-body {
-	align-items: center;
-	margin-bottom: 0;
-	padding-bottom: 0;
+.cardmaker-body-wrapper {
+	flex: 1;
+	align-content: center;
 }
 
-.card-list-table {
-	width: 100%;
-	margin: 0;
+.content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 	padding: 0;
-}
-.card-list-table table {
-	width: 100%;
-	table-layout: fixed;
-	border-collapse: collapse;
-	margin-top: 0;
-}
-
-.filter-title {
-	font-family: 'Inknut Antiqua', serif;
-}
-
-.filter-tags {
-	margin-bottom: 15px;
+	margin: 0;
+	position: relative;
+	min-height: 100%;
 }
 
 .checkbox {
@@ -288,16 +178,16 @@ ul {
 	margin: 0;
 	cursor: pointer;
 	border: 2px solid #00adb5;
-	border-radius: 4px;
-	background-color: #1f1f1f;
+	border-radius: 6px;
+	background-color: #161a20;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 }
 
 .checkbox:checked::after {
-	content: "✔";
-	color: #1f1f1f;
+	content: '✔';
+	color: #161a20;
 	font-size: 16px;
 }
 
@@ -348,7 +238,7 @@ button {
 .tag-label-button {
 	border: none;
 	background-color: #00adb5;
-	color: #31363f;
+	color: #161a20;
 	padding: 0px;
 	padding-left: 2px;
 }
@@ -367,7 +257,7 @@ button {
 	background-color: #00adb5;
 	padding: 2px 10px;
 	font-size: 14px;
-	color: #1f232a;
+	color: #161a20;
 	justify-content: center;
 	margin: 5px;
 }
@@ -430,7 +320,7 @@ button {
 }
 
 .page-buttons a {
-	background-color: #31363f;
+	background-color: #24282e;
 	color: #eeeeee;
 	border-style: outset;
 	border-radius: 20px;
@@ -443,5 +333,46 @@ button {
 
 .page-buttons a:hover {
 	cursor: pointer;
-	background-color: #1f232a;
+	background-color: #161a20;
+}
+
+.cancel-button {
+	border: none;
+	background-color: transparent;
+	margin: 0;
+	padding: 0;
+}
+
+.cancel-button:hover {
+	background-color: transparent;
+}
+
+.cancel-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	background-color: transparent;
+}
+
+.cancel-button:disabled:hover {
+	background-color: transparent;
+}
+
+.page-name {
+	text-align: left;
+	font-family: 'Inknut Antiqua', serif;
+	margin-top: 30px;
+	padding: 0;
+	line-height: 200%;
+	padding-left: 25px;
+	border-bottom: inset 3px #00adb5;
+}
+
+.box {
+	background-color: #161a20;
+	padding: 50px;
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
 }

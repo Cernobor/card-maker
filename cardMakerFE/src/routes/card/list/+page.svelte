@@ -11,7 +11,8 @@
 		type CardType,
 		type Tag,
 		type ColorType,
-		Color
+		Color,
+		type FlashMessage
 	} from '$lib/interfaces';
 	import { api } from '$lib/stores/store';
 	import Card from '$lib/components/Card.svelte';
@@ -24,7 +25,8 @@
 		allCards: CardGet[] | [],
 		selectedAuthor: UserPublic | null,
 		selectedType: CardType | null,
-		activeTags: Tag[]
+		activeTags: Tag[],
+		search: string
 	) {
 		/**
 		 * Filter cards array according to selected parameters.
@@ -62,6 +64,11 @@
 				});
 			}
 		}
+		if (search !== '') {
+			cards = cards.filter((c) => {
+				return c.name.toLocaleLowerCase().includes(search.toLocaleLowerCase());
+			});
+		}
 		return cards;
 	}
 
@@ -69,7 +76,9 @@
 	let users: UserPublic[] = [];
 	let types: CardType[] = [];
 	let tags: Tag[] = [];
-	let activeTags: Tag[] = [];
+	const year = new Date().getFullYear().toString();
+	let activeTags: Tag[] = [{ name: year }];
+	let search: string = '';
 
 	async function getResources() {
 		/**
@@ -85,20 +94,23 @@
 	let selectedType: CardType | null = null;
 
 	let filteredCards: CardGet[] = allCards;
-	$: filteredCards = getFilteredCards(allCards, selectedAuthor, selectedType, activeTags);
+	$: filteredCards = getFilteredCards(allCards, selectedAuthor, selectedType, activeTags, search);
 
-	let popUpMessage: string = 'Karta byla úspěšně vytvořena.';
-	let popUpColor: ColorType = Color.green;
-	let popUpDisplayed: boolean = false;
+	let flashMessages: FlashMessage[] = [];
 	export let data: { cardCreated: boolean };
 
 	onMount(() => {
+		flashMessages = [];
 		if (data.cardCreated) {
-			popUpDisplayed = true;
-			popUpColor = Color.green;
-			popUpMessage = 'Karta byla úspěšně vytvořena.';
+			flashMessages = [...flashMessages, {
+				message: '✅ Karta byla úspěšně vytvořena.',
+				color: Color.green,
+				id: Date.now() + Math.random()
+			}];
 		}
 	});
+
+	$: flashMessages;
 
 	let selectedCards: CardGet[] = [];
 
@@ -108,11 +120,12 @@
 			filteredCards.includes(card)
 		);
 		const removedCount = previousCount - updatedSelectedCards.length;
-
 		if (removedCount > 0) {
-			popUpDisplayed = true;
-			popUpColor = Color.blue;
-			popUpMessage = `${removedCount} ${removedCount === 1 ? 'karta byla' : 'karet bylo'} odstraněno z výběru kvůli filtru.`;
+			flashMessages = [...flashMessages, {
+				message: `ℹ️ ${removedCount} ${removedCount === 1 ? 'karta byla' : 'karet bylo'} odstraněno z výběru kvůli filtru.`,
+				color: Color.blue,
+				id: Date.now() + Math.random()
+			}];
 		}
 
 		selectedCards = updatedSelectedCards;
@@ -218,13 +231,23 @@
 </script>
 
 <div class="card-list-body">
-	{#if popUpDisplayed}
-		<div class="pop-up-wrapper" in:fade={{ duration: 300 }} out:fade={{ duration: 200 }}>
-			<PopUpMessage message={popUpMessage} color={popUpColor} bind:isDisplayed={popUpDisplayed} />
-		</div>
-	{/if}
+	<div class="flash-message-wrapper">
+		{#each flashMessages as message (message.id)}
+			<div class="pop-up-wrapper" in:fade={{ duration: 300 }} out:fade={{ duration: 200 }}>
+				<PopUpMessage
+					{message}
+					on:close={() => {
+						flashMessages = flashMessages.filter((m) => m !== message);
+					}}
+				/>
+			</div>
+		{/each}
+	</div>
+
+	<h2 class="page-name">🗂️ Seznam karet</h2>
 
 	<Filters
+		bind:search
 		bind:selectedAuthor
 		bind:selectedType
 		bind:activeTags
@@ -234,6 +257,14 @@
 	/>
 
 	<div class={`card-table-actions ${selectedCards.length > 0 ? 'actions-active' : ''}`}>
+		<button
+			on:click={() => {
+				selectedCards = [];
+				checkedAll = false;
+			}}
+			class="cancel-button"
+			disabled={selectedCards.length === 0}>❌</button
+		>
 		<span>
 			{selectedCards.length === 0
 				? 'Žádná karta nevybrána'
@@ -250,13 +281,6 @@
 		>
 		<button on:click={() => downloadCards()} disabled={selectedCards.length === 0}
 			>⬇️ Stáhnout vybrané</button
-		>
-		<button
-			on:click={() => {
-				selectedCards = [];
-				checkedAll = false;
-			}}
-			disabled={selectedCards.length === 0}>❌ Zrušit výběr</button
 		>
 	</div>
 
@@ -311,6 +335,8 @@
 <style>
 	.card-list-table th {
 		padding: 8px 12px;
+		font-family: 'Inknut Antiqua', serif;
+		line-height: 85%;
 	}
 
 	.card-list-table th:first-child {
@@ -323,19 +349,22 @@
 	}
 
 	.card-table-actions {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 0.75rem;
-	margin: 1rem;
-	background-color: #1f232a;
-	padding: 0.75rem 1rem;
-	opacity: 0.5;
-	transition: opacity 0.5s ease;
-	border-radius: 12px;
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin: 1rem;
+		background-color: #161a20;
+		padding: 0.75rem 1rem;
+		opacity: 0.5;
+		transition: opacity 0.5s ease;
+		border-radius: 12px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+		z-index: 1;
+		font-family: 'Inknut Antiqua', serif;
+		line-height: 85%;
+	}
 
 	.actions-active {
 		opacity: 1;
@@ -344,6 +373,8 @@
 	.card-table-actions button {
 		cursor: not-allowed;
 		transition: background-color 0.2s ease;
+		font-family: 'Inknut Antiqua', serif;
+		line-height: 85%;
 	}
 
 	.actions-active button {
@@ -351,7 +382,15 @@
 	}
 
 	.card-table-actions button:hover {
-		background-color: #31363f;
+		background-color: #161a20;
+	}
+
+	.card-table-actions button:hover:disabled {
+		background-color: #24282e;
+	}
+
+	.card-table-actions .cancel-button:hover {
+		background-color: transparent;
 	}
 
 	.card-pdf-render {
@@ -406,53 +445,85 @@
 	}
 
 	.pop-up-wrapper {
-		width: 100vw;
 		justify-content: center;
 		display: flex;
 		margin-top: 15px;
 	}
 
 	.above-the-table {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	align-items: flex-start;
-	background-color: #1f232a;
-	padding: 1.25rem 1.5rem;
-	border-radius: 12px;
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-	gap: 1.5rem;
-	margin: 1.5rem 1rem;
-}
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: flex-start;
+		background-color: #161a20;
+		padding: 1.25rem 1.5rem;
+		border-radius: 12px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+		gap: 1.5rem;
+		margin: 1.5rem 1rem;
+	}
 
-.filters-wrapper {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-}
+	.filters-wrapper {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+	}
 
-.filters {
-	display: flex;
-	flex-wrap: nowrap;
-	align-items: flex-end;
-	gap: 1.25rem;
-	align-items: center;
-	padding-top: 10px;
-}
+	.filters {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: flex-end;
+		gap: 1.25rem;
+		align-items: center;
+		padding-top: 10px;
+	}
 
-.filter-heading {
-	grid-column: 1 / -1;
-	margin-bottom: 0.25rem;
-	font-size: 1.3rem;
-	font-weight: 600;
-	color: #eeeeee;
-	border-bottom: 2px solid #00adb5;
-	padding-bottom: 0.2rem;
-}
+	.filter-heading {
+		grid-column: 1 / -1;
+		margin-bottom: 0.25rem;
+		font-size: 1.3rem;
+		font-weight: 600;
+		color: #eeeeee;
+		border-bottom: 2px solid #00adb5;
+		padding-bottom: 0.2rem;
+		font-family: 'Inknut Antiqua', serif;
+	}
 
-.page-buttons {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-}
+	.page-buttons {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		font-family: 'Inknut Antiqua', serif;
+	}
+
+	.card-list-body {
+		align-items: center;
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+
+	.card-list-table {
+		width: 100%;
+		margin: 0;
+		padding: 0;
+	}
+	.card-list-table table {
+		width: 100%;
+		table-layout: fixed;
+		border-collapse: collapse;
+		margin-top: 0;
+	}
+
+	.filter-title {
+		font-family: 'Inknut Antiqua', serif;
+	}
+
+	.filter-tags {
+		margin-bottom: 15px;
+	}
+
+	.flash-message-wrapper {
+		display: block;
+		width: 100%;
+	}
 </style>

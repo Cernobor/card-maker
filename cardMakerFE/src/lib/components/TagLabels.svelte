@@ -16,7 +16,7 @@
 							activeLabels = activeLabels.filter((activeLabel) => {
 								return activeLabel.name !== label.name;
 							});
-						}}>X</button
+						}}>✖️</button
 					>
 				</li>
 			</div>

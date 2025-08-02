@@ -154,3 +154,9 @@ export const Color = {
 } as const;
 
 export type ColorType = (typeof Color)[keyof typeof Color]
+
+export interface FlashMessage {
+	id: number
+	message: string
+	color: ColorType
+}

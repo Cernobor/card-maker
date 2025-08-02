@@ -28,10 +28,10 @@
 			currentUserId = $api.currentUser.id;
 		}
 		card = {
-			name: 'Card Name',
+			name: 'Název karty',
 			card_type_id: cardTypes[0].id,
 			user_id: currentUserId,
-			fluff: 'Card Fluff',
+			fluff: 'Fluff text',
 			effect: 'Efekt/pravidla karty',
 			in_set: false,
 			set_name: '',
@@ -41,40 +41,42 @@
 	}
 </script>
 
-<div class="cardmaker-body">
-	{#if popUpDisplayed}
-		<div in:fade={{ duration: 300 }} out:fade={{ duration: 200 }}>
-			<PopUpMessage
-				message={popUpMessage}
-				color={popUpColor}
-				bind:isDisplayed={popUpDisplayed}
-			/>
-		</div>
-	{/if}
-	{#await load()}
-		<h1>loading...</h1>
-	{:then}
-		<div>
-			<CardForm bind:card bind:cardTypes />
-		</div>
-		<div class="card-view">
-			{#if !$api.loggedIn}
-				<p class="warning">
-					Nejsi přihlášený. Pro uložení karty se přihlaš <a href="/login">zde</a>.
-				</p>
+<div class="content">
+	<h2 class="page-name">📄 Nová karta</h2>
+	<div class="cardmaker-body-wrapper">
+		<div class="cardmaker-body">
+			{#if popUpDisplayed}
+				<div in:fade={{ duration: 300 }} out:fade={{ duration: 200 }}>
+					<PopUpMessage message={popUpMessage} color={popUpColor} bind:isDisplayed={popUpDisplayed} />
+				</div>
 			{/if}
-			<Card
-			bind:card bind:this={cardComponent}
-			bind:cardTypes
-			bind:message={popUpMessage}
-			bind:messageColor={popUpColor}
-			bind:popUpDisplayed={popUpDisplayed}
-			/>
-			{#if cardComponent}
-		<DropdownButton onSave={(...args) => cardComponent.save(...args)} />
-			{/if}
+			{#await load()}
+				<h1>loading...</h1>
+			{:then}
+				<div class="card-form-container">
+					<CardForm bind:card bind:cardTypes />
+				</div>
+				<div class="card-view">
+					{#if !$api.loggedIn}
+						<p class="warning">
+							Nejsi přihlášený. Pro uložení karty se přihlaš <a href="/login">zde</a>.
+						</p>
+					{/if}
+					<Card
+						bind:card
+						bind:this={cardComponent}
+						bind:cardTypes
+						bind:message={popUpMessage}
+						bind:messageColor={popUpColor}
+						bind:popUpDisplayed
+					/>
+					{#if cardComponent}
+						<DropdownButton onSave={(...args) => cardComponent.save(...args)} />
+					{/if}
+				</div>
+			{/await}
 		</div>
-	{/await}
+	</div>
 </div>
 
 <style>

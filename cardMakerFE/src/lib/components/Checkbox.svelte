@@ -44,7 +44,7 @@
 		height: 100%;
 		border: 2px solid #00adb5;
 		border-radius: 4px;
-		background-color: #1f1f1f;
+		background-color: #24282e;
 		transition: all 0.5s ease;
 	}
 
@@ -58,7 +58,7 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -60%);
-		color: #1f1f1f;
+		color: #24282e;
 		font-size: 16px;
 	}
 </style>

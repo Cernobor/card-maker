@@ -24,6 +24,13 @@ export default class CardMakerApi {
 	public loggedIn: boolean;
 	public currentUser: UserPublic | null = null;
 
+	private storeSet: ((apiInstance: CardMakerApi) => void) | null = null;
+
+	public attachStore(setFunction: (apiInstance: CardMakerApi) => void) {
+		this.storeSet = setFunction;
+	}
+	
+
 	public constructor(api_endpoint: string) {
 		this.endpoint = api_endpoint;
 		// Get session values from store
@@ -205,14 +212,16 @@ export default class CardMakerApi {
 		await this.put('/cards/' + cardId, card);
 	}
 
-	public async deleteCard(crdiId: number, rediredcPath: string) {
+	public async deleteCard(crdiId: number, rediredcPath?: string) {
 		/**
 		 * Delete existing card with ID.
 		 *
 		 * @param cardId - ID of card to delete
 		 */
 		await this.delete('/cards/' + crdiId);
-		goto(rediredcPath);
+		if (rediredcPath) {
+			goto(rediredcPath);
+		}
 	}
 
 	public async getUsers(): Promise<UserPublic[]> {
@@ -260,6 +269,8 @@ export default class CardMakerApi {
 			username: this.currentUser.username,
 			userId: String(this.currentUser.id)
 		});
+		// ✅ Trigger reactivity
+		this.storeSet?.(this);
 	}
 
 	public logOut(rediredcPath: string) {
@@ -272,6 +283,10 @@ export default class CardMakerApi {
 		this.currentUser = null;
 		this.loggedIn = false;
 		clearSessionStorage();
+
+		// ✅ Trigger reactivity
+		this.storeSet?.(this);
+
 		if (typeof window !== 'undefined') {
 			goto(rediredcPath);
 		}
