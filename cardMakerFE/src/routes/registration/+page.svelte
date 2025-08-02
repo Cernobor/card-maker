@@ -59,32 +59,41 @@
 	}
 </script>
 
-<div class="cardmaker-body">
-	<form on:submit={handleSubmit} class="login-form">
-		<div class="login-form-item">
-			<label for="username">Uživatelské jméno</label>
-			<input
-				type="text"
-				bind:value={user.username}
-				on:blur={() => (user.username = user.username.trim())}
-				class="login-form-input"
-				required
-			/>
-		</div>
-		<div class="login-form-item">
-			<label for="password">Heslo</label>
-			<input type="password" bind:value={user.password} class="login-form-input" />
-		</div>
-		<div class="login-form-item">
-			<label for="passwordConfirm">Potvrdit heslo</label>
-			<input type="password" bind:value={passwordConfirm} class="login-form-input" />
-		</div>
-		{#if PUBLIC_USE_API_KEY==="true"}
-			<div class="login-form-item">
-				<label for="api-key">Tajný klíč</label>
-				<input type="text" bind:value={user.api_key} required class="login-form-input" />
+<div class="content">
+	<div class="cardmaker-body-wrapper">
+		<div class="cardmaker-body">
+			<div class="login-form box">
+				<form on:submit={handleSubmit} class="login-form">
+					<div class="login-form-item">
+						<label for="username">Uživatelské jméno *</label>
+						<input
+							type="text"
+							bind:value={user.username}
+							on:blur={() => (user.username = user.username.trim())}
+							class="login-form-input"
+							required
+						/>
+					</div>
+					<div class="login-form-item">
+						<label for="password">Heslo</label>
+						<input type="password" bind:value={user.password} class="login-form-input" />
+					</div>
+					<div class="login-form-item">
+						<label for="passwordConfirm">Potvrdit heslo</label>
+						<input type="password" bind:value={passwordConfirm} class="login-form-input" />
+					</div>
+					{#if PUBLIC_USE_API_KEY==="true"}
+						<div class="login-form-item">
+							<label for="api-key">Tajný klíč</label>
+							<input type="text" bind:value={user.api_key} required class="login-form-input" />
+						</div>
+					{/if}
+					<input type="submit" value="Registrovat se" class="submit-button" />
+				</form>
+				<div class="login-form-item">
+					<p>Máš už účet? <a href="/login">Přihlaš se</a>.</p>
+				</div>
 			</div>
-		{/if}
-		<input type="submit" value="Registrovat se" class="submit-button" />
-	</form>
+		</div>
+	</div>
 </div>

@@ -1,19 +1,22 @@
-<script>
+<script lang="ts">
 	import { closeModal, closeAllModals, openModal, modals } from 'svelte-modals';
 	import { api } from '$lib/stores/store';
 	import { goto } from '$app/navigation';
 
 	export let isOpen;
 	export let cardName;
-	export let cardId;
+	export let cardId: number;
 	let errorMessage = '';
 	let confirmationName = '';
 
 	function handleDelete() {
-		if (confirmationName === cardName) {
+		console.log("entered handleDelete")
+		if (confirmationName === "smazat") {
+			console.log("after smazat")
 			$api
 				.deleteCard(cardId)
 				.then(() => {
+					console.log("after delete")
 					closeAllModals();
 					goto('/card/list');
 				})
@@ -21,7 +24,7 @@
 					errorMessage = error.message;
 				});
 		} else {
-			errorMessage = 'Confirmation name does not match card name';
+			errorMessage = 'Pro potvrzení napište "smazat"';
 		}
 	}
 </script>
@@ -31,7 +34,7 @@
 		<div class="modal-contents">
 			<div class="modal-header">
 				<div class="modal-close-button">
-					<button on:click={closeModal} class="close-modal">X</button>
+					<button class="cancel-button close-modal" on:click={closeModal} >❌</button>
 				</div>
 				<div class="modal-title">
 					<h2 style="margin-top:0px">Smazat kartu</h2>
@@ -45,7 +48,7 @@
 			{/if}
                 <div class="modal-confirm">
                     <p>
-                        Určitě chcete smazat kartu <strong>{cardName}</strong>? Pro potvrzení napište název karty.
+                        Určitě chcete smazat kartu <strong>{cardName}</strong>? Pro potvrzení napište <b><i>"smazat"</i></b>.
                     </p>
                     <div>
                     <input type="text" class="text-black" style ="margin-right:15px;" bind:value={confirmationName} />
@@ -68,13 +71,14 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background: rgba(193, 192, 183, 0.33);
+		background: rgba(0, 0, 0, 0.7);
+		z-index: 9999;
 	}
 
 	.modal-contents {
 		min-width: 140px;
-		padding: 16px;
-		background-color: #31363f;
+		padding: 30px;
+		background-color: #161a20;
 		color: #eeeeee;
 		border-radius: 20px;
 		border-color: #00adb5;
@@ -89,13 +93,14 @@
 		flex-direction: column;
 	}
     .modal-close-button {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
+		position: relative;
     }
 	.close-modal {
 		width: 40px;
 		height: 40px;
+		position: absolute;
+		top: -20px;
+		right: -20px;
 	}
     .modal-error {
         color: orangered;
@@ -106,13 +111,16 @@
         align-items: center;
     }
 
-	h2 {
-		text-align: center;
-		font-size: 24px;
-	}
-
 	p {
 		text-align: center;
-		margin-top: 16px;
+		margin: 10px;
+		margin-bottom: 15px;
+	}
+	
+	.modal-title {
+		text-align: center;
+		font-size: 24px;
+		font-family: 'Inknut Antiqua', serif;
+		line-height: 100%;
 	}
 </style>

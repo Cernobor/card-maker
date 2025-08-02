@@ -30,21 +30,27 @@
 	}
 </script>
 
-<div class="login-form">
-	<form on:submit={handleSubmit} class="login-form">
-		<div class="login-form-item">
-			<label for="username">Uživatelské jméno</label>
-			<input type="text" bind:value={user.username} class="login-form-input" required />
+<div class="content">
+	<div class="cardmaker-body-wrapper">
+		<div class="cardmaker-body">
+			<div class="login-form box">
+				<form on:submit={handleSubmit} class="login-form">
+					<div class="login-form-item">
+						<label for="username">Uživatelské jméno *</label>
+						<input type="text" bind:value={user.username} class="login-form-input" required />
+					</div>
+					<div class="login-form-item">
+						<label for="password">Heslo</label>
+						<input type="password" bind:value={user.password} class="login-form-input" />
+					</div>
+					<div class="login-form-item">
+						<input type="submit" value="Přihlásit se" class="submit-button" />
+					</div>
+				</form>
+				<div class="login-form-item">
+					<p>Nemáš ještě účet? <a href="/registration">Registruj se</a>.</p>
+				</div>
+			</div>
 		</div>
-		<div class="login-form-item">
-			<label for="password">Heslo</label>
-			<input type="password" bind:value={user.password} class="login-form-input" />
-		</div>
-		<div class="login-form-item">
-			<input type="submit" value="Přihlásit se" class="submit-button" />
-		</div>
-	</form>
-	<div class="login-form-item">
-		<p>Nemáš ještě účet? <a href="/registration">Registruj se</a>.</p>
 	</div>
 </div>

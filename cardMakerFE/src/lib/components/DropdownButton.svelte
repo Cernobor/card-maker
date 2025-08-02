@@ -31,7 +31,7 @@
 	});
 
 	onDestroy(() => {
-		document.addEventListener('click', handleClickOutside);
+		document.removeEventListener('click', handleClickOutside);
 	});
 
 	function toggleMenu() {
@@ -116,19 +116,18 @@
 
 <style>
 	.button-group {
-		background-color: #31363f;
+		background-color: #24282e;
 		color: #eeeeee;
-		border-style: outset;
-		border-radius: 20px;
+		border-style: inset;
+		border-radius: 8px;
 		border-color: #00adb5;
-		font-size: 16px;
 		font-weight: 600;
 		padding: 10px;
 		border-width: 2px;
 	}
 
 	.button-group:hover {
-		background-color: #222831;
+		background-color: #161a20;
 		cursor: pointer;
 	}
 
@@ -138,6 +137,8 @@
 		background-color: transparent;
 		padding-top: 0;
 		padding-bottom: 0;
+		font-family: 'Inknut Antiqua', serif;
+		line-height: 80%;
 	}
 
 	.main-button:hover,
@@ -148,7 +149,7 @@
 	.dropdown {
 		display: flex;
 		flex-direction: column;
-		background-color: #222831;
+		background-color: #161a20;
 		padding: 10px;
 		position: absolute;
 		margin-left: 10px;
@@ -160,6 +161,7 @@
 		background-color: transparent;
 		text-align: left;
 		padding: 2px;
+		font-family: 'Montserrat', sans-serif;
 	}
 
 	.dropdown button:hover {

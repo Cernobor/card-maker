@@ -1,6 +1,15 @@
-import { PUBLIC_BASE_API_URL } from '$env/static/public';
-import CardMakerApi from '$lib/api';
 import { writable } from 'svelte/store';
-//token will be used in foture by login
-//možná nefunguje reaktivita, bude to chtít vyzkoušet
-export let api = writable(new CardMakerApi(PUBLIC_BASE_API_URL));
+import CardMakerApi from '$lib/api';
+import { PUBLIC_BASE_API_URL } from '$env/static/public';
+
+const apiInstance = new CardMakerApi(PUBLIC_BASE_API_URL);
+const { subscribe, set } = writable(apiInstance);
+
+apiInstance.attachStore(set); // ✅ This links api instance to store updates
+set(apiInstance); // initial store value
+
+export const api = {
+	subscribe,
+	set,
+	instance: apiInstance
+};

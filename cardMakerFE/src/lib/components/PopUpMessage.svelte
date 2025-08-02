@@ -1,24 +1,26 @@
 <script lang="ts">
-	import { Color, type ColorType } from '$lib/interfaces';
+	import { createEventDispatcher } from 'svelte';
+	import { type FlashMessage } from '$lib/interfaces';
 
-	export let message: string;
-	export let color: ColorType = Color.green;
-	export let isDisplayed = true;
+	export let message: FlashMessage;
+
+	const dispatch = createEventDispatcher();
 </script>
 
-<div class="pop-up" style={`background-color: ${color}`}>
+<div class="pop-up" style={`background-color: ${message.color}`}>
 	<p class="text">
-		{message}
+		{message.message}
 	</p>
-	<button class="close-message" on:click={() => (isDisplayed = false)}> ❌ </button>
+	<button class="close-message" on:click={() => dispatch('close')}> ✖️ </button>
 </div>
 
 <style>
 	.pop-up {
-		width: 80vw;
+		width: 100%;
 		border-radius: 15px;
 		padding: 1px 50px;
 		position: relative;
+		margin: 0 20px;
 	}
 
 	.close-message {

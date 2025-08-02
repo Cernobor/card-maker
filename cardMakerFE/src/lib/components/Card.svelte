@@ -95,7 +95,7 @@
 	}
 
 	function setSuccessPopUp() {
-		message = 'Karta byla úspěšně vytvořena.';
+		message = '✅ Karta byla úspěšně vytvořena.';
 		messageColor = Color.green;
 		popUpDisplayed = true;
 
@@ -105,7 +105,7 @@
 	}
 
 	function setFailPopUp() {
-		message = 'Oops, kartu se nepodařilo uložit.';
+		message = '❌ Oops, kartu se nepodařilo uložit.';
 		messageColor = Color.red;
 		popUpDisplayed = true;
 
