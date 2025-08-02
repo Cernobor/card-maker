@@ -5,3 +5,5 @@ export const load: PageLoad = ({ url }) => {
 	const cardCreated = createdParam === 'true';
 	return { cardCreated };
 };
+
+export const prerender = false;
