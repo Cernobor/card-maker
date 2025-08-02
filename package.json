@@ -1,0 +1,35 @@
+{
+  "name": "card-maker",
+  "version": "1.0.0",
+  "description": "je potřeba nastavit 2 .env files:",
+  "main": "index.js",
+  "dependencies": {
+    "atob": "^2.1.2",
+    "base64-arraybuffer": "^1.0.2",
+    "btoa": "^1.2.1",
+    "canvg": "^3.0.11",
+    "core-js": "^3.44.0",
+    "css-line-break": "^2.1.0",
+    "dompurify": "^3.2.6",
+    "fflate": "^0.8.2",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
+    "performance-now": "^2.1.0",
+    "raf": "^3.4.1",
+    "regenerator-runtime": "^0.13.11",
+    "rgbcolor": "^1.0.1",
+    "stackblur-canvas": "^2.7.0",
+    "svg-pathdata": "^6.0.3",
+    "text-segmentation": "^1.0.3",
+    "utrie": "^1.0.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
