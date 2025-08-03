@@ -32,8 +32,15 @@ class UserCreate(UserBase):
     """
 
     password: str
-    api_key: Optional[str]
+    api_key: Optional[str] = None
 
+
+class UserLogin(UserBase):
+    """
+    User model for and 'get_access_token' POST method.
+    """
+
+    password: str
 
 class UserPublic(UserBase):
     """
@@ -86,7 +93,7 @@ class TagBase(SQLModel):
     """
 
     name: str
-    description: Optional[str]
+    description: Optional[str] = None
 
 
 class Tag(TagBase, table=True):
@@ -112,8 +119,8 @@ class CardBase(SQLModel):
     fluff: Optional[str] = Field(max_length=4000)
     effect: Optional[str] = Field(max_length=4000)
     in_set: bool
-    set_name: Optional[str]
-    size: Optional[str]
+    set_name: Optional[str] = None
+    size: Optional[str] = None
 
 
 class CardCreate(CardBase):

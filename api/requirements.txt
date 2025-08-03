@@ -1,7 +1,7 @@
 mysql-connector-python==8.4.0
-fastapi==0.85.0
-uvicorn==0.18.2
-sqlalchemy==2.0.30
-sqlmodel==0.0.18
-pyjwt==2.8.0
-bcrypt==4.2.0
+fastapi==0.115.12
+uvicorn==0.34.0
+sqlalchemy==2.0.40
+sqlmodel==0.0.24
+pyjwt==2.10.1
+bcrypt==4.3.0
