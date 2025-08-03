@@ -10,6 +10,7 @@
 	let newTag: string = '';
 	let dropdownComponent: ChangeTagDropdown;
 	let tagsContainTagName: Function;
+	let activeLabels: Tag[] = [];
 
 	function handleAddNewTag(event: Event) {
 		/**
@@ -36,32 +37,49 @@
 	}
 
 	onMount(() => {
+		activeLabels = card.tags;
 		tagsContainTagName = (newTag: string, activeTags: Tag[]): boolean => {
 			return dropdownComponent.tagsContainTagName(newTag, activeTags);
 		};
 	});
+
+	$: if (card.tags) {
+		activeLabels = card.tags;
+	}
+
+	function handleRemoveTag(event: CustomEvent<Tag>) {
+		const labelToRemove = event.detail;
+		activeLabels = activeLabels.filter((label) => label.name !== labelToRemove.name);
+		card.tags = activeLabels; // Keep card.tags in sync if needed
+	}
 </script>
 
 <div class="tag-selector columns">
 	<div class="form-item">
 		<ChangeTagDropdown
-		bind:this={dropdownComponent}
-		bind:activeTags={card.tags}
-		bind:tags
-		inDetailTab={true}
-	/>
+			bind:this={dropdownComponent}
+			bind:activeTags={card.tags}
+			bind:tags
+			inDetailTab={true}
+		/>
 	</div>
 	<div class="form-item">
 		<label for="">Nový tag</label>
-		<input on:change={handleAddNewTag} type="text" bind:value={newTag} required on:keydown={handleKeydown} />
+		<input
+			on:change={handleAddNewTag}
+			type="text"
+			bind:value={newTag}
+			required
+			on:keydown={handleKeydown}
+		/>
 	</div>
 </div>
 <div class="tag-selector">
-	<TagLabels bind:activeLabels={card.tags} />
+	<TagLabels bind:activeLabels on:remove={handleRemoveTag} />
 </div>
 
 <style>
-		input {
+	input {
 		height: 30px;
 		border-radius: 6px;
 	}

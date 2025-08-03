@@ -190,6 +190,8 @@
 			console.log(cssClass);
 		}
 	}
+
+	$: card.tags;
 </script>
 
 <div
@@ -208,9 +210,9 @@
 		{/if}
 
 		{#if cardTypeName == 'Magický předmět'}
-			<div class="irremovable">
-				{tagsContainTagName('Neodložitelný') ? 'Neodložitelný' : ''}
-			</div>
+			{#if card.tags.find((tag) => tag.name === 'Neodložitelný')}
+				<div class="irremovable">Neodložitelný</div>
+			{/if}
 		{/if}
 	</section>
 
