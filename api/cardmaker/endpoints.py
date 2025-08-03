@@ -8,7 +8,6 @@ from typing import Annotated, List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from fastapi.security import HTTPBasicCredentials
 
 from . import models, security, utils
 from .database import CardMakerDatabase
@@ -274,14 +273,13 @@ async def create_user(data: models.UserCreate):
 
 
 @router.post("/users/me")
-async def get_access_token(
-    credentials: Annotated[HTTPBasicCredentials, Depends(security.http_basic)]
-):
+async def get_access_token(data: models.UserLogin):
     """
     Generate JWT token for current user.
 
     Args:
-        credentials (HTTPBasicCredentials): username and password
+        data (models.UserLogin):
+                json request body, field are defined in models.UserLogin
 
     Returns:
         json response with status code 200:
@@ -291,7 +289,7 @@ async def get_access_token(
         HTTP 401: wrong credentials
     """
     user = await security.authenticate(
-        credentials.username, credentials.password
+        data.username, data.password
     )
     if not user:
         raise HTTPException(
