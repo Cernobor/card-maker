@@ -56,7 +56,7 @@ class Logger(object):
         stream_handler.setFormatter(formatter)
         self.logger.addHandler(stream_handler)
 
-        logfile = os.getenv("LOG_LOGFILE")
+        logfile = os.getenv("LOG_FILE")
         if logfile is not None and logfile != "":
             file_handler = logging.FileHandler(logfile)
             file_handler.setFormatter(formatter)
