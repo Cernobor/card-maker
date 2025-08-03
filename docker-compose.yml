@@ -25,6 +25,8 @@ services:
       SECRET_KEY: ${SECRET_KEY}
       API_KEY: ${API_KEY}
       USE_API_KEY: ${USE_API_KEY}
+      LOG_LEVEL: ${BACKEND_LOG_LEVEL}
+      LOG_FILE: ${BACKEND_LOG_FILE}
     depends_on:
       db:
         condition: service_healthy
