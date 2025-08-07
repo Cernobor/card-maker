@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { UserLogin, FlashMessage } from '$lib/interfaces';
+	import type { UserLogin, FlashMessage, ColorType } from '$lib/interfaces';
 	import { Color } from '$lib/interfaces';
 	import { api } from '$lib/stores/store';
 	import PopUpMessage from '$lib/components/PopUpMessage.svelte';
 	import { fade } from 'svelte/transition';
+	import { onMount } from 'svelte';
+
+	export let data: { userCreated: boolean };
 
 	if ($api.loggedIn) {
 		goto('/');
@@ -15,11 +18,10 @@
 		password: ''
 	};
 
-	// Flash messages
 	let flashMessages: FlashMessage[] = [];
 	$: flashMessages;
 
-	function pushFlash(message: string, color = Color.red) {
+	function pushFlash(message: string, color: ColorType = Color.red) {
 		const item = { message, color, id: Date.now() + Math.random() };
 		flashMessages = [...flashMessages, item];
 		// Auto-dismiss after 4s
@@ -33,6 +35,14 @@
 		user.password = '';
 		pushFlash(msg, Color.red);
 	}
+
+	onMount(() => {
+		if (data?.userCreated) {
+			pushFlash('✅ Registrace proběhla úspěšně. Teď se přihlaš.', Color.green);
+			// clear the query param so refresh won’t re-trigger the flash
+			goto('/login', { replaceState: true, noScroll: true });
+		}
+	});
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
@@ -48,7 +58,6 @@
 </script>
 
 <div class="content">
-	<!-- Flash messages -->
 	<div class="flash-message-wrapper">
 		{#each flashMessages as message (message.id)}
 			<div class="pop-up-wrapper" in:fade={{ duration: 300 }} out:fade={{ duration: 200 }}>

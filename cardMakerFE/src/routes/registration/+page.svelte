@@ -54,7 +54,7 @@
 
 		try {
 			await $api.createUser(user);
-			goto('/login');
+			goto('/login?created=true');
 		} catch (error) {
 			if (error instanceof HTTPError) {
 				if (error.code === 401) {
