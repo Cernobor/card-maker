@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { UserLogin } from '$lib/interfaces';
+	import type { UserLogin, FlashMessage } from '$lib/interfaces';
+	import { Color } from '$lib/interfaces';
 	import { api } from '$lib/stores/store';
+	import PopUpMessage from '$lib/components/PopUpMessage.svelte';
+	import { fade } from 'svelte/transition';
 
 	if ($api.loggedIn) {
 		goto('/');
@@ -12,25 +15,53 @@
 		password: ''
 	};
 
-	function wrongRegistration(alertText: string) {
+	// Flash messages
+	let flashMessages: FlashMessage[] = [];
+	$: flashMessages;
+
+	function pushFlash(message: string, color = Color.red) {
+		const item = { message, color, id: Date.now() + Math.random() };
+		flashMessages = [...flashMessages, item];
+		// Auto-dismiss after 4s
+		setTimeout(() => {
+			flashMessages = flashMessages.filter((m) => m.id !== item.id);
+		}, 4000);
+	}
+
+	function wrongLogin(msg: string) {
 		user.username = '';
 		user.password = '';
-		alert(alertText);
+		pushFlash(msg, Color.red);
 	}
 
 	async function handleSubmit(event: Event) {
+		event.preventDefault();
 		$api
 			.logIn(user)
 			.then(() => {
 				goto('/');
 			})
 			.catch(() => {
-				wrongRegistration('Nesprávné uživatelské jméno nebo heslo!');
+				wrongLogin('❌ Nesprávné uživatelské jméno nebo heslo!');
 			});
 	}
 </script>
 
 <div class="content">
+	<!-- Flash messages -->
+	<div class="flash-message-wrapper">
+		{#each flashMessages as message (message.id)}
+			<div class="pop-up-wrapper" in:fade={{ duration: 300 }} out:fade={{ duration: 200 }}>
+				<PopUpMessage
+					{message}
+					on:close={() => {
+						flashMessages = flashMessages.filter((m) => m !== message);
+					}}
+				/>
+			</div>
+		{/each}
+	</div>
+
 	<div class="cardmaker-body-wrapper">
 		<div class="cardmaker-body">
 			<div class="login-form box">
@@ -54,3 +85,15 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.pop-up-wrapper {
+		justify-content: center;
+		display: flex;
+		margin-top: 15px;
+	}
+	.flash-message-wrapper {
+		display: block;
+		width: 100%;
+	}
+</style>
