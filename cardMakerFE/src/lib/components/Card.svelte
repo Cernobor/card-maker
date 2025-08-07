@@ -4,23 +4,25 @@
 	import DOMPurify from 'isomorphic-dompurify';
 	import { goto } from '$app/navigation';
 	import { api } from '$lib/stores/store';
-	import type { CardCreate, CardGet, ColorType, Mode } from '$lib/interfaces';
+	import type { CardCreate, CardGet, Mode, FlashMessage, ColorType } from '$lib/interfaces';
 	import { cardTypeClass, Color } from '$lib/interfaces';
 	import type { CardTypeKey, CardTypeClass, CardType } from '$lib/interfaces';
 	import jsPDF from 'jspdf';
 	import { tick } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	export let mode: Mode = 'create';
 	export let card: CardCreate | CardGet;
 	export let cardId: number | null = null;
 	export let cardTypes: CardType[];
 
-	export let message: string = '';
-	export let messageColor: ColorType = Color.green;
-	export let popUpDisplayed: boolean = false;
+	// Emit flash messages to parent
+	const dispatch = createEventDispatcher<{ flash: FlashMessage }>();
+	function flash(message: string, color: ColorType) {
+		dispatch('flash', { message, color, id: Date.now() + Math.random() });
+	}
 
 	export async function save(download: boolean, format?: string, copies?: number) {
-		popUpDisplayed = false;
 		await tick();
 		if (download) {
 			await downloadCard(format, copies);
@@ -94,26 +96,6 @@
 		a.remove();
 	}
 
-	function setSuccessPopUp() {
-		message = '✅ Karta byla úspěšně vytvořena.';
-		messageColor = Color.green;
-		popUpDisplayed = true;
-
-		setTimeout(() => {
-			popUpDisplayed = false;
-		}, 4000);
-	}
-
-	function setFailPopUp() {
-		message = '❌ Oops, kartu se nepodařilo uložit.';
-		messageColor = Color.red;
-		popUpDisplayed = true;
-
-		setTimeout(() => {
-			popUpDisplayed = false;
-		}, 4000);
-	}
-
 	export async function sentCardToAPI() {
 		/**
 		 * Send POST or PUT request to API.
@@ -121,21 +103,21 @@
 		if (mode == 'create') {
 			try {
 				await $api.createCard(card);
-				setSuccessPopUp();
+				flash('✅ Karta byla úspěšně vytvořena.', Color.green);
 				goto('/card/list?created=true');
 			} catch {
-				setFailPopUp();
+				flash('❌ Oops, kartu se nepodařilo uložit.', Color.red);
 			}
 		} else if (mode == 'update') {
 			if (!cardId) {
-				setFailPopUp();
+				flash('❌ Oops, kartu se nepodařilo uložit.', Color.red);
 				return;
 			}
 			try {
 				await $api.updateCard(card, cardId);
-				setSuccessPopUp();
+				flash('✅ Karta byla úspěšně upravena.', Color.green);
 			} catch {
-				setFailPopUp();
+				flash('❌ Oops, kartu se nepodařilo uložit.', Color.red);
 			}
 		}
 	}
