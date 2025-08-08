@@ -47,3 +47,7 @@ docker-dev:
 
 docker:
 	docker-compose up -d
+
+docker-rebuild:
+	docker-compose up -d --build
+
