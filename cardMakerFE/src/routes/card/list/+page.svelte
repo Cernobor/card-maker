@@ -3,7 +3,6 @@
 	import html2canvas from 'html2canvas';
 	import jsPDF from 'jspdf';
 	import { fade } from 'svelte/transition';
-	import FilterDropdown from '$lib/components/FilterDropdown.svelte';
 	import TableRow from '$lib/components/TableRow.svelte';
 	import {
 		type CardGet,
@@ -20,6 +19,7 @@
 	import PdfPreviewModal from '$lib/components/PdfPreviewModal.svelte';
 	import PopUpMessage from '$lib/components/PopUpMessage.svelte';
 	import Filters from '$lib/components/Filters.svelte';
+	import { goto } from '$app/navigation';
 
 	function getFilteredCards(
 		allCards: CardGet[] | [],
@@ -99,14 +99,19 @@
 	let flashMessages: FlashMessage[] = [];
 	export let data: { cardCreated: boolean };
 
+	function pushFlash(message: string, color: ColorType) {
+		const item = { message, color, id: Date.now() + Math.random() };
+		flashMessages = [...flashMessages, item];
+		setTimeout(() => {
+			flashMessages = flashMessages.filter((m) => m.id !== item.id);
+		}, 4000);
+	}
+
 	onMount(() => {
 		flashMessages = [];
 		if (data.cardCreated) {
-			flashMessages = [...flashMessages, {
-				message: '✅ Karta byla úspěšně vytvořena.',
-				color: Color.green,
-				id: Date.now() + Math.random()
-			}];
+			pushFlash('✅ Karta byla úspěšně vytvořena.', Color.green);
+			goto('/card/list', { replaceState: true, noScroll: true });
 		}
 	});
 
@@ -121,11 +126,10 @@
 		);
 		const removedCount = previousCount - updatedSelectedCards.length;
 		if (removedCount > 0) {
-			flashMessages = [...flashMessages, {
-				message: `ℹ️ ${removedCount} ${removedCount === 1 ? 'karta byla' : 'karet bylo'} odstraněno z výběru kvůli filtru.`,
-				color: Color.blue,
-				id: Date.now() + Math.random()
-			}];
+			pushFlash(
+				`ℹ️ ${removedCount} ${removedCount === 1 ? 'karta byla' : 'karet bylo'} odstraněno z výběru kvůli filtru.`,
+				Color.blue
+			);
 		}
 
 		selectedCards = updatedSelectedCards;

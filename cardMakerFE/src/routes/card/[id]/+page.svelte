@@ -3,7 +3,6 @@
 	import { fade } from 'svelte/transition';
 	import CardDeleteModal from '$lib/components/CardDeleteModal.svelte';
 	import { api } from '$lib/stores/store';
-	/** @type {import('./$types').PageData} */
 	import Card from '$lib/components/Card.svelte';
 	import CardForm from '$lib/components/CardForm.svelte';
 	import {
@@ -11,7 +10,8 @@
 		type CardCreate,
 		type CardType,
 		type Mode,
-		type FlashMessage
+		type FlashMessage,
+		type ColorType
 	} from '$lib/interfaces';
 	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 	import DropdownButton from '$lib/components/DropdownButton.svelte';
@@ -27,10 +27,15 @@
 	let flashMessages: FlashMessage[] = [];
 	$: flashMessages;
 
+	function pushFlash(message: string, color: ColorType) {
+		const item = { message, color, id: Date.now() + Math.random() };
+		flashMessages = [...flashMessages, item];
+		setTimeout(() => {
+			flashMessages = flashMessages.filter((m) => m.id !== item.id);
+		}, 4000);
+	}
+
 	async function loadCard() {
-		/**
-		 * Load and initialize card from database.
-		 */
 		const cardData = await $api.getCard(data.cardId);
 		cardTypes = await $api.getCardTypes();
 		if (!cardData) {
@@ -66,8 +71,8 @@
 				<div class="card-view">
 					{#if !$api.loggedIn}
 						<p class="warning">
-							Nejsi přihlášený. Pro uložení změn či smazání karty se přihlaš <a href="/login">zde</a
-							>.
+							Nejsi přihlášený. Pro uložení změn či smazání karty se přihlaš
+							<a href="/login">zde</a>.
 						</p>
 					{/if}
 					<Card
@@ -76,14 +81,7 @@
 						bind:this={cardComponent}
 						bind:cardTypes
 						bind:cardId={data.cardId}
-						on:flash={(e) => {
-							// e.detail is { message, color, id }
-							flashMessages = [...flashMessages, e.detail];
-							// Optional auto-dismiss (matches your other page if you want it):
-							setTimeout(() => {
-								flashMessages = flashMessages.filter((m) => m.id !== e.detail.id);
-							}, 4000);
-						}}
+						on:flash={(e) => pushFlash(e.detail.message, e.detail.color)}
 					/>
 					{#if cardComponent}
 						<DropdownButton onSave={(...args) => cardComponent.save(...args)} />

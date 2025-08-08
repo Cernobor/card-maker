@@ -19,13 +19,17 @@
 	let currentUserId: number | null = null;
 
 	let flashMessages: FlashMessage[] = [];
-
 	$: flashMessages;
 
+	function pushFlash(message: string, color: ColorType) {
+		const item = { message, color, id: Date.now() + Math.random() };
+		flashMessages = [...flashMessages, item];
+		setTimeout(() => {
+			flashMessages = flashMessages.filter((m) => m.id !== item.id);
+		}, 4000);
+	}
+
 	async function load() {
-		/***
-		 * Get card types and initialize an empty card.
-		 */
 		cardTypes = await $api.getCardTypes();
 		if (!cardTypes) {
 			throw new Error('Cannot get card types!');
@@ -79,10 +83,7 @@
 						bind:card
 						bind:this={cardComponent}
 						bind:cardTypes
-						on:flash={(e) => {
-							// e.detail is { message, color, id }
-							flashMessages = [...flashMessages, e.detail];
-						}}
+						on:flash={(e) => pushFlash(e.detail.message, e.detail.color)}
 					/>
 					{#if cardComponent}
 						<DropdownButton onSave={(...args) => cardComponent.save(...args)} />
