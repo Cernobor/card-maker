@@ -24,6 +24,12 @@
 		const input = event.target as HTMLInputElement;
 		search = input.value.trim();
 	}
+
+function handleRemoveTag(event: CustomEvent<Tag>) {
+	const labelToRemove = event.detail;
+	const tags = activeTags.filter((label) => label.name !== labelToRemove.name);
+	activeTags = tags;
+}
 </script>
 
 <div class="above-the-table">
@@ -46,7 +52,7 @@
 			<FilterDropdown bind:selected={selectedAuthor} filterName="Autor" options={users} />
 			<FilterDropdown bind:selected={selectedType} filterName="Typ karty" options={types} />
 			<ChangeTagDropdown bind:tags bind:activeTags />
-			<TagLabels bind:activeLabels={activeTags} />
+			<TagLabels bind:activeLabels={activeTags} on:remove={handleRemoveTag} />
 		</div>
 	</div>
 
