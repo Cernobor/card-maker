@@ -137,9 +137,10 @@ export const cardTypeClass = {
 	'Lokace-small': 'card-location-small',
 	'Lokace-medium': 'card-location-medium',
 	'Lokace-large': 'card-location-large',
-	'Zaříkadlo': 'card-spell',
-	'Recept': 'card-recipe',
-
+	'Zaříkadlo-small': 'card-spell',
+	'Recept-small': 'card-recipe',
+	'Zaříkadlo-large': 'card-spell-large',
+	'Recept-large': 'card-recipe-large',
 } as const;
 
 export type CardTypeKey = keyof typeof cardTypeClass;

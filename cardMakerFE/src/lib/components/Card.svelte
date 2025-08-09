@@ -164,7 +164,15 @@
 				cardTypeName = currentCardType.name;
 
 				cssClass = cardTypeClass[cardTypeNameClass as CardTypeKey];
-			} else {
+			} else if (currentCardType.name === "Zaříkadlo" || currentCardType.name === "Recept") {
+				if (!card.size) {
+					card.size = "small";
+				}
+				cardTypeNameClass = currentCardType.name + "-" + card.size;
+				cardTypeName = currentCardType.name;
+
+				cssClass = cardTypeClass[cardTypeNameClass as CardTypeKey];
+			}else {
 				cardTypeName = currentCardType.name;
 				cssClass = cardTypeClass[cardTypeName as CardTypeKey];
 			}
@@ -222,11 +230,13 @@
 		width: calc(95mm);
 		height: calc(75mm);
 		border: 2mm solid black;
+		font-size: 10pt;
 	}
 	.card-free-aspect {
 		width: calc(75mm);
 		height: calc(95mm);
 		border: 2mm solid black;
+		font-size: 10pt;
 	}
 	.card-location-large {
 		height: 7in;
@@ -244,14 +254,28 @@
 		font-size: 12pt;
 	}
 	.card-recipe {
-		width: calc(105mm);
-		height: calc(115mm);
+		width: calc(75mm);
+		height: calc(100mm);
 		border: 2mm solid black;
+		font-size: 10pt;
 	}
 	.card-spell {
-		width: calc(105mm);
-		height: calc(115mm);
+		width: calc(75mm);
+		height: calc(100mm);
 		border: 2mm solid black;
+		font-size: 10pt;
+	}
+	.card-recipe-large {
+		width: calc(120mm);
+		height: calc(100mm);
+		border: 2mm solid black;
+		font-size: 10pt;
+	}
+	.card-spell-large {
+		width: calc(120mm);
+		height: calc(100mm);
+		border: 2mm solid black;
+		font-size: 10pt;
 	}
 	.card-header {
 		display: flex;
