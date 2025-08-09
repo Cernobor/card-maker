@@ -128,11 +128,11 @@
 		 * @param text - text to be filtered
 		 */
 		text = text
-			.replace('$uhurus', '<p class="lingua-prima">A</p>')
-			.replace('$donozoros', '<p class="lingua-prima">B</p>')
-			.replace('$zalaras', '<p class="lingua-prima">C</p>')
-			.replace('$miniris', '<p class="lingua-prima">D</p>')
-			.replace('$tenemenes', '<p class="lingua-prima">E</p>');
+			.replace(/\$uhurus/g, '<span class="lingua-prima">A</span>')
+			.replace(/\$donozoros/g, '<span class="lingua-prima">B</span>')
+			.replace(/\$zalaras/g, '<span class="lingua-prima">C</span>')
+			.replace(/\$miniris/g, '<span class="lingua-prima">D</span>')
+			.replace(/\$tenemenes/g, '<span class="lingua-prima">E</span>');
 
 		return text;
 	}
