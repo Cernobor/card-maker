@@ -313,7 +313,7 @@
 	}
 	.card-fluff {
 		font-style: italic;
-		font-weight: lighter;
+		/* font-weight: lighter; */
 	}
 	.card-set {
 		text-align: center;
