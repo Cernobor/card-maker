@@ -88,7 +88,7 @@
 		</div>
 
 		<div class="box">
-			{#if currentCardType.name == 'Lokace'}
+			{#if currentCardType.name == 'Lokace' || currentCardType.name == 'Recept' || currentCardType.name == 'Zaříkadlo'}
 				<div>
 					<label for="sizes">Velikost karty:</label>
 					<div class="sizes" id="sizes">
@@ -101,6 +101,7 @@
 								value="small"
 							/> malá
 						</label>
+						{#if currentCardType.name == 'Lokace'}
 						<label>
 							<input
 								checked={card.size === 'medium'}
@@ -110,6 +111,7 @@
 								value="medium"
 							/> střední
 						</label>
+						{/if}
 						<label>
 							<input
 								checked={card.size === 'large'}
