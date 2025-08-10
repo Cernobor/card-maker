@@ -48,28 +48,28 @@
 		const pdf = new jsPDF({ orientation: pageOrientation, unit: 'mm', format: 'a4' });
 		const pageWidth = cardTypeName === 'Lokace' ? 297 : 210;
 		const pageHeight = cardTypeName === 'Lokace' ? 210 : 297;
-		const margin = 5;
+		const margin = 1;
 
 		const capture = document.querySelector('#capture') as HTMLElement;
 		const PX_TO_MM = 25.4 / 96;
 		const width = capture.offsetWidth * PX_TO_MM;
 		const height = capture.offsetHeight * PX_TO_MM;
 
-		let x = margin;
-		let y = margin;
+		let x = 5*margin;
+		let y = 5*margin;
 		let rowHeight = 0;
 
 		for (let copy = 0; copy < copies; copy++) {
-			if (x + width + margin > pageWidth) {
-				x = margin;
+			if (x + width + 5*margin > pageWidth) {
+				x = 5*margin;
 				y += rowHeight + margin;
 				rowHeight = 0;
 			}
 
-			if (y + height + margin > pageHeight) {
+			if (y + height + 5*margin > pageHeight) {
 				pdf.addPage();
-				x = margin;
-				y = margin;
+				x = 5*margin;
+				y = 5*margin;
 				rowHeight = 0;
 			}
 

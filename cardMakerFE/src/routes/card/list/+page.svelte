@@ -177,10 +177,10 @@
 		const pdf = new jsPDF({ orientation: pageOrientation, unit: 'mm', format: 'a4' });
 		const pageWidth = locationInCards ? 297 : 210;
 		const pageHeight = locationInCards ? 210 : 297;
-		const margin = 5;
+		const margin = 1;
 
-		let x = margin;
-		let y = margin;
+		let x = 5*margin;
+		let y = 5*margin;
 		let rowHeight = 0;
 
 		for (const card of cards) {
@@ -200,16 +200,16 @@
 				const width = el.offsetWidth * PX_TO_MM;
 				const height = el.offsetHeight * PX_TO_MM;
 
-				if (x + width + margin > pageWidth) {
-					x = margin;
+				if (x + width + 5*margin > pageWidth) {
+					x = 5*margin;
 					y += rowHeight + margin;
 					rowHeight = 0;
 				}
 
-				if (y + height + margin > pageHeight) {
+				if (y + height + 5*margin > pageHeight) {
 					pdf.addPage();
-					x = margin;
-					y = margin;
+					x = 5*margin;
+					y = 5*margin;
 					rowHeight = 0;
 				}
 
