@@ -44,9 +44,10 @@
 	}
 
 	function createPdfFromImage(imgData: string, copies: number): void {
-		const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
-		const pageWidth = 297;
-		const pageHeight = 210;
+		const pageOrientation = cardTypeName === 'Lokace' ? "l" : "p";
+		const pdf = new jsPDF({ orientation: pageOrientation, unit: 'mm', format: 'a4' });
+		const pageWidth = cardTypeName === 'Lokace' ? 297 : 210;
+		const pageHeight = cardTypeName === 'Lokace' ? 210 : 297;
 		const margin = 5;
 
 		const capture = document.querySelector('#capture') as HTMLElement;

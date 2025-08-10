@@ -11,7 +11,10 @@
 		type Tag,
 		type ColorType,
 		Color,
-		type FlashMessage
+		type FlashMessage,
+
+		cardTypeClass
+
 	} from '$lib/interfaces';
 	import { api } from '$lib/stores/store';
 	import Card from '$lib/components/Card.svelte';
@@ -161,9 +164,19 @@
 		isBusy = true;
 		await tick();
 
-		const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
-		const pageWidth = 297;
-		const pageHeight = 210;
+		const locationCardTtype = types.filter(t => {
+			return t.name === "Lokace"
+		})[0];
+
+		const locationInCards = cards.filter(c => {
+			console.log(c.card_type_id);
+			return c.card_type_id === locationCardTtype.id;
+		}).length > 0;
+
+		const pageOrientation = locationInCards ? "l" : "p";
+		const pdf = new jsPDF({ orientation: pageOrientation, unit: 'mm', format: 'a4' });
+		const pageWidth = locationInCards ? 297 : 210;
+		const pageHeight = locationInCards ? 210 : 297;
 		const margin = 5;
 
 		let x = margin;
